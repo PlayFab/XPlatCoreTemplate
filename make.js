@@ -1,8 +1,8 @@
 var path = require("path");
 
 // Making resharper less noisy - These are defined in Generate.js
-if (typeof (getCompiledTemplate) === "undefined") getCompiledTemplate = function () { };
-if (typeof (templatizeTree) === "undefined") templatizeTree = function () { };
+if (typeof getCompiledTemplate === "undefined") getCompiledTemplate = function () { };
+if (typeof templatizeTree === "undefined") templatizeTree = function () { };
 
 var hardCodedTemporaryVersionNumber = "3.11.190520"; // This version number will be hard coded and fixed here until we connect genConfig.json properly in all dest repos
 
@@ -27,7 +27,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir);
     for (var a = 0; a < apis.length; a++)
         makeApiFiles(apis[a], sourceDir, apiOutputDir);
-}
+};
 
 function makeApiFiles(api, sourceDir, apiOutputDir) {
     var locals = {
@@ -50,7 +50,7 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
 
     var apihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.h.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "Api.h"), apihTemplate(locals));
-    
+
     var iapihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.h.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "InstanceApi.h"), iapihTemplate(locals));
 
@@ -91,7 +91,7 @@ function getSortedClasses(datatypes) {
         }
         addedTypes.add(datatype.name);
         sortedClasses.push(datatype);
-    }
+    };
 
     for (var typeIdx in datatypes) // Add all types and their dependencies
         addType(datatypes[typeIdx]);
@@ -236,26 +236,26 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
         var output;
         if (isInstanceApi) {
             output = tabbing + "auto apiSettings = this->GetSettings();\n"
-            + tabbing + "if (apiSettings == nullptr)\n"
-            + tabbing + "{\n"
-            + tabbing + "    if (PlayFabSettings::titleId.length() > 0)\n"
-            + tabbing + "    {\n"
-            + tabbing + "        request.TitleId = PlayFabSettings::titleId;\n"
-            + tabbing + "    }\n"
-            + tabbing + "}\n"
-            + tabbing + "else\n"
-            + tabbing + "{\n"
-            + tabbing + "    if (apiSettings->titleId.length() > 0)\n"
-            + tabbing + "    {\n"
-            + tabbing + "        request.TitleId = apiSettings->titleId;\n"
-            + tabbing + "    }\n"
-            + tabbing + "}\n";
+                + tabbing + "if (apiSettings == nullptr)\n"
+                + tabbing + "{\n"
+                + tabbing + "    if (PlayFabSettings::titleId.length() > 0)\n"
+                + tabbing + "    {\n"
+                + tabbing + "        request.TitleId = PlayFabSettings::titleId;\n"
+                + tabbing + "    }\n"
+                + tabbing + "}\n"
+                + tabbing + "else\n"
+                + tabbing + "{\n"
+                + tabbing + "    if (apiSettings->titleId.length() > 0)\n"
+                + tabbing + "    {\n"
+                + tabbing + "        request.TitleId = apiSettings->titleId;\n"
+                + tabbing + "    }\n"
+                + tabbing + "}\n";
         }
         else {
             output = tabbing + "if (PlayFabSettings::titleId.length() > 0)\n"
-            + tabbing + "{\n"
-            + tabbing + "    request.TitleId = PlayFabSettings::titleId;\n"
-            + tabbing + "}\n";
+                + tabbing + "{\n"
+                + tabbing + "    request.TitleId = PlayFabSettings::titleId;\n"
+                + tabbing + "}\n";
         }
 
         return output;

@@ -1,1 +1,1 @@
-This is a file from XPlatXboxCoreTemplates.
+This is a file from XPlatCoreTemplate repo.
