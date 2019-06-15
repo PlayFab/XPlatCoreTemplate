@@ -1,6 +1,9 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
 #include "TestAppPch.h"
+
+#ifndef PLAYFAB_PLATFORM_PLAYSTATION // FIXME PS4: Compile errors when binding pointer-to-member callbacks w/std::uniqe_ptr params
+
 #include <playfab/PlayFabClientInstanceApi.h>
 #include <playfab/PlayFabSettings.h>
 #include "TestContext.h"
@@ -125,3 +128,5 @@ namespace PlayFabUnit
         multiUser2ClientApi = nullptr;
     }
 }
+
+#endif  // PLAYFAB_PLATFORM_PLAYSTATION

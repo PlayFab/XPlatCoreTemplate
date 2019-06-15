@@ -1,5 +1,6 @@
 #include <stdafx.h>
 
+#ifndef PLAYFAB_PLATFORM_PLAYSTATION // FIXME PS4: Compile errors when binding pointer-to-member callbacks w/std::uniqe_ptr params
 <%- getApiDefine(api) %>
 
 #include <playfab/PlayFab<%- api.name %>InstanceApi.h>
@@ -195,3 +196,6 @@ namespace PlayFab
 }
 
 #endif
+#endif
+
+#pragma warning (enable: 4100) // formal parameters are part of a public interface

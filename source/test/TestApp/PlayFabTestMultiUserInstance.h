@@ -2,6 +2,7 @@
 
 #pragma once
 
+#ifndef PLAYFAB_PLATFORM_PLAYSTATION // FIXME PS4: Compile errors when binding pointer-to-member callbacks w/std::uniqe_ptr params
 #include "TestCase.h"
 
 namespace PlayFab
@@ -49,3 +50,5 @@ namespace PlayFabUnit
             void ClassTearDown() override;
     };
 }
+
+#endif
