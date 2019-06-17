@@ -226,11 +226,13 @@ namespace PlayFabUnit
         // itoa is not avaialable in android
         char buffer[16];
         std::string temp;
-#if defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX)
+#if defined(PLAYFAB_PLATFORM_PLAYSTATION)
+        gmtime_s(&now, &timeinfo);
+#elif defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX)
         sprintf(buffer, "%d", testMessageInt);
-#else // PLAYFAB_PLATFORM_IOS || PLAYFAB_PLATFORM_ANDROID || PLAYFAB_PLATFORM_LINUX
+#else
         sprintf_s(buffer, "%d", testMessageInt);
-#endif // PLAYFAB_PLATFORM_IOS || PLAYFAB_PLATFORM_ANDROID || PLAYFAB_PLATFORM_LINUX
+#endif
         temp.append(buffer);
 
         updateRequest.Data[TEST_DATA_KEY] = temp;
@@ -255,13 +257,16 @@ namespace PlayFabUnit
 
         time_t now = time(nullptr);
         struct tm timeinfo;
-#if defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX)
+#if defined(PLAYFAB_PLATFORM_PLAYSTATION)
+        gmtime_s(&now, &timeinfo);
+        now = timegm(&timeinfo);
+#elif defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX)
         timeinfo = *gmtime(&now);
         now = timegm(&timeinfo);
-#else // PLAYFAB_PLATFORM_IOS || PLAYFAB_PLATFORM_ANDROID || PLAYFAB_PLATFORM_LINUX
+#else
         gmtime_s(&timeinfo, &now);
         now = _mkgmtime(&timeinfo);
-#endif // PLAYFAB_PLATFORM_IOS || PLAYFAB_PLATFORM_ANDROID || PLAYFAB_PLATFORM_LINUX
+#endif
         time_t minTime = now - (60 * 5);
         time_t maxTime = now + (60 * 5);
 
@@ -270,8 +275,10 @@ namespace PlayFabUnit
             testContext->Fail("Expected user data not found.");
         else if (testMessageInt != actualDataValue)
             testContext->Fail("User data not updated as expected.");
+#if !defined (PLAYFAB_PLATFORM_PLAYSTATION) // Issue 32699
         else if (!(minTime <= testMessageTime && testMessageTime <= maxTime))
             testContext->Fail("DateTime not parsed correctly..");
+#endif
         else
             testContext->Pass();
     }

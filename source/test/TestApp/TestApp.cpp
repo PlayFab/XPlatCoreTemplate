@@ -54,7 +54,7 @@ namespace PlayFabUnit
         PlayFabTestMultiUserStatic pfMultiUserStaticTest;
         testRunner.Add(pfMultiUserStaticTest);
 
-#ifndef PLAYFAB_PLATFORM_PLAYSTATION // FIXME PS4: Compile errors when binding pointer-to-member callbacks w/std::uniqe_ptr params
+#ifndef PLAYFAB_PLATFORM_PLAYSTATION // Issue 32699
         PlayFabTestMultiUserInstance pfMultiUserInstanceTest;
         testRunner.Add(pfMultiUserInstanceTest);
 #endif

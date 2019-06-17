@@ -2,7 +2,7 @@
 
 #pragma once
 
-#ifndef PLAYFAB_PLATFORM_PLAYSTATION // FIXME PS4: Compile errors when binding pointer-to-member callbacks w/std::uniqe_ptr params
+#ifndef PLAYFAB_PLATFORM_PLAYSTATION // Issue 32699
 #include "TestCase.h"
 
 namespace PlayFab
