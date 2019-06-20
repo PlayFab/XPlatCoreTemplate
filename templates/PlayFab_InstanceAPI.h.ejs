@@ -8,6 +8,7 @@
 #include <playfab/PlayFab<%- api.name %>DataModels.h>
 #include <memory>
 
+#ifndef PLAYFAB_PLATFORM_PLAYSTATION // Issue 32699
 namespace PlayFab
 {
     /// <summary>
@@ -57,4 +58,5 @@ if (hasClientOptions) { %>
     };
 }
 
+#endif
 #endif
