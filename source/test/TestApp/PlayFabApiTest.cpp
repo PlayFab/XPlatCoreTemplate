@@ -72,7 +72,7 @@ namespace PlayFabUnit
                 else
                     testContext->Fail("Returned error is different from expected");
             },
-                &testContext);
+            &testContext);
     }
 
     /// CLIENT API
