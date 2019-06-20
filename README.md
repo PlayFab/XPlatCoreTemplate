@@ -1,2 +1,2 @@
-# XPlatXboxTemplates
-The template files for the Xbox specific XPlat build
+# XPlatCoreTemplate
+The core template files for the XPlat build
