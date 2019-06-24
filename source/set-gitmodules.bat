@@ -12,6 +12,7 @@ if exist ".git" (
 
 pushd "external/jsoncpp"
 git checkout 2baad4923e6d9a7e09982cfa4b1c5fd0b67ebd87
+git reset --hard 2baad4923e6d9a7e09982cfa4b1c5fd0b67ebd87
 if /I "%ERRORLEVEL%" neq "0" (
 exit /B %ERRORLEVEL%
 )
