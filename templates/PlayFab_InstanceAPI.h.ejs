@@ -47,7 +47,7 @@ namespace PlayFab
 <% } %>
         // ------------ Generated result handlers
 <% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx];
-%>        void On<%- apiCall.name %>Result(int httpCode, std::string result, std::unique_ptr<CallRequestContainerBase> reqContainer);
+%>        void On<%- apiCall.name %>Result(int httpCode, std::string result, std::shared_ptr<CallRequestContainerBase> reqContainer);
 <% }
 if (hasClientOptions) { %>
         // Private, Client-Specific
