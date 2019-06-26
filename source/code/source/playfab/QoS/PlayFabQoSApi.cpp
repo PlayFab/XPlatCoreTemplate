@@ -41,7 +41,7 @@ namespace PlayFab
             }
         }
 
-        void OnWriteEventsResult(int httpCode, std::string result, std::unique_ptr<CallRequestContainerBase> reqContainer)
+        void OnWriteEventsResult(int httpCode, std::string result, std::shared_ptr<CallRequestContainerBase> reqContainer)
         {
             CallRequestContainer& container = static_cast<CallRequestContainer&>(*reqContainer);
 
