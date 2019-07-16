@@ -41,7 +41,7 @@ namespace PlayFab
             }
         }
 
-        void OnWriteEventsResult(int, std::string result, std::unique_ptr<CallRequestContainerBase> reqContainer)
+        void OnWriteEventsResult(int, std::string result, std::shared_ptr<CallRequestContainerBase> reqContainer)
         {
             CallRequestContainer& container = static_cast<CallRequestContainer&>(*reqContainer);
 
@@ -73,18 +73,12 @@ namespace PlayFab
             std::unordered_map<std::string, std::string> headers;
             headers.emplace("X-EntityToken", request.authenticationContext == nullptr ? PlayFabSettings::entityToken : request.authenticationContext->entityToken);
 
-            // auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
-            //     "/Event/WriteTelemetryEvents",
-            //     headers,
-            //     jsonAsString,
-            //     OnWriteEventsResult,
-            //     customData));
-            auto reqContainer = std::make_unique<CallRequestContainer>(
+            auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
                 "/Event/WriteTelemetryEvents",
                 headers,
                 jsonAsString,
                 OnWriteEventsResult,
-                customData);
+                customData));
 
             reqContainer->successCallback = std::shared_ptr<void>((callback == nullptr) ? nullptr : new ProcessApiCallback<WriteEventsResponse>(callback));
             reqContainer->errorCallback = errorCallback;
