@@ -186,20 +186,20 @@ function getPropertyDefinition(tabbing, property, datatype) {
 function getPropertyFromJson(tabbing, property, datatype) {
     var safePropName = getPropertySafeName(property);
     if (property.jsontype === "Object" && property.actualtype === "object")
-        return tabbing + safePropName + " = input[\"" + safePropName + "\"];";
+        return tabbing + safePropName + " = input[\"" + property.name + "\"];";
     if (property.jsontype === "Object")
-        return tabbing + "FromJsonUtilO(input[\"" + safePropName + "\"], " + safePropName + ");";
+        return tabbing + "FromJsonUtilO(input[\"" + property.name + "\"], " + safePropName + ");";
     if (property.isenum && (property.collection || property.optional))
-        return tabbing + "FromJsonUtilE(input[\"" + safePropName + "\"], " + safePropName + ");";
+        return tabbing + "FromJsonUtilE(input[\"" + property.name + "\"], " + safePropName + ");";
     if (property.isenum)
-        return tabbing + "FromJsonEnum(input[\"" + safePropName + "\"], " + safePropName + ");";
+        return tabbing + "FromJsonEnum(input[\"" + property.name + "\"], " + safePropName + ");";
     if (property.actualtype === "DateTime")
-        return tabbing + "FromJsonUtilT(input[\"" + safePropName + "\"], " + safePropName + ");";
+        return tabbing + "FromJsonUtilT(input[\"" + property.name + "\"], " + safePropName + ");";
     if (property.actualtype === "String")
-        return tabbing + "FromJsonUtilS(input[\"" + safePropName + "\"], " + safePropName + ");";
+        return tabbing + "FromJsonUtilS(input[\"" + property.name + "\"], " + safePropName + ");";
     var primitives = new Set(["Boolean", "int16", "uint16", "int32", "uint32", "int64", "uint64", "float", "double"]);
     if (primitives.has(property.actualtype))
-        return tabbing + "FromJsonUtilP(input[\"" + safePropName + "\"], " + safePropName + ");";
+        return tabbing + "FromJsonUtilP(input[\"" + property.name + "\"], " + safePropName + ");";
 
     throw "getPropertyFromJson: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name;
 }
