@@ -192,7 +192,7 @@ namespace PlayFabUnit
         eventApi = std::make_shared<PlayFabEventAPI*>(new PlayFabEventAPI()); // create Event API instance
 
         // adjust some pipeline settings
-        auto pipeline = std::dynamic_pointer_cast<PlayFab::PlayFabEventPipeline>((*eventApi)->GetEventRouter()->GetPipelines().at(PlayFab::EventPipelineKey::PlayFabTelemetry)); // get OneDS pipeline
+        auto pipeline = std::dynamic_pointer_cast<PlayFab::PlayFabEventPipeline>((*eventApi)->GetEventRouter()->GetPipelines().at(PlayFab::EventPipelineKey::PlayFabTelemetry)); // get non-playstream pipeline
         auto settings = pipeline->GetSettings(); // get pipeline's settings
         settings->maximalBatchWaitTime = 2; // incomplete batch expiration in seconds
         settings->maximalNumberOfItemsInBatch = 3; // number of events in a batch
