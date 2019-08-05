@@ -110,9 +110,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabPlatformMacros.h" />
-    <ClInclude Include="$(SdkSourceDir)\include\playfab\OneDSWinHttpPlugin.h" />
-    <ClInclude Include="$(SdkSourceDir)\include\playfab\OneDSEventsApi.h" />
-    <ClInclude Include="$(SdkSourceDir)\include\playfab\OneDSEventPipeline.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabAuthenticationContext.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabApiSettings.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabBaseModel.h" />
@@ -120,7 +117,6 @@
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>Api.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>InstanceApi.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>DataModels.h" /><% } %>
-    <ClInclude Include="$(SdkSourceDir)\include\playfab\OneDSEventsDataModels.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabEvent.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabEventApi.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabEventBuffer.h" />
@@ -145,9 +141,6 @@
     <ClInclude Include="$(SdkSourceDir)\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="$(SdkSourceDir)\source\playfab\OneDSWinHttpPlugin.cpp" />
-    <ClCompile Include="$(SdkSourceDir)\source\playfab\OneDSEventsApi.cpp" />
-    <ClCompile Include="$(SdkSourceDir)\source\playfab\OneDSEventPipeline.cpp" />
     <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFabAuthenticationContext.cpp" />
     <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFabApiSettings.cpp" />
 <% for(var i in apis) { var api = apis[i];%>
