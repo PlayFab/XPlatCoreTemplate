@@ -163,7 +163,7 @@ namespace PlayFab
                 return -1;
             }
 
-            return recvfrom(s, buf, buflen, 0, (struct sockaddr *) &siOther, &slen);
+            return recvfrom(s, buf, buflen, MSG_OOB, (struct sockaddr *) &siOther, &slen);
         }
 
         int XPlatSocket::GetLastErrorCode()
