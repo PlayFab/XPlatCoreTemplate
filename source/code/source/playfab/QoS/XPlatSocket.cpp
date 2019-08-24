@@ -163,7 +163,33 @@ namespace PlayFab
                 return -1;
             }
 
-            return recvfrom(s, buf, buflen, MSG_OOB, (struct sockaddr *) &siOther, &slen);
+            TIMEVAL timeout;
+            timeout.tv_sec = 1;
+            timeout.tv_usec = 100000;
+
+            fd_set socketSet;
+            SOCKET listenSocket;
+            bind(listenSocket, (struct sockaddr *) &siOther, sizeof(siOther));
+
+            FD_ZERO(&socketSet);
+            FD_CLR(0, &socketSet);
+            FD_SET(listenSocket, &socketSet);
+
+            int selectResult = select(0, &socketSet, nullptr, nullptr, &timeout);
+            if (selectResult > 0)
+            {
+                // 0 indicates we timed out, so we shouldn't block on recvfrom
+                return recvfrom(s, buf, buflen, 0, (struct sockaddr *) &siOther, &slen);
+            }
+            else
+            {
+                if (selectResult < 0)
+                {
+                    return WSAGetLastError();
+                }
+
+                return selectResult;
+            }
         }
 
         int XPlatSocket::GetLastErrorCode()
