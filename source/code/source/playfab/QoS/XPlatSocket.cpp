@@ -163,31 +163,29 @@ namespace PlayFab
                 return -1;
             }
 
-            TIMEVAL timeout;
-            timeout.tv_sec = 1;
-            timeout.tv_usec = 100000;
-
             fd_set socketSet;
-            SOCKET listenSocket;
-            bind(listenSocket, (struct sockaddr *) &siOther, sizeof(siOther));
 
             FD_ZERO(&socketSet);
             FD_CLR(0, &socketSet);
-            FD_SET(listenSocket, &socketSet);
+            FD_SET(s, &socketSet);
 
-            int selectResult = select(0, &socketSet, nullptr, nullptr, &timeout);
+            int selectResult = select(1, &socketSet, nullptr, nullptr, &timeOutVal);
+
             if (selectResult > 0)
             {
-                // 0 indicates we timed out, so we shouldn't block on recvfrom
-                return recvfrom(s, buf, buflen, 0, (struct sockaddr *) &siOther, &slen);
+                auto recvResult = recvfrom(s, buf, buflen, 0, (struct sockaddr *) &siOther, &slen);
+                if (recvResult < 0)
+                {
+                    return platformSpecificError();
+                }
+                return recvResult;
             }
             else
             {
                 if (selectResult < 0)
                 {
-                    return WSAGetLastError();
+                    return platformSpecificError();
                 }
-
                 return selectResult;
             }
         }
@@ -212,5 +210,13 @@ namespace PlayFab
 
             return !initialized;
         }
+        unsigned int XPlatSocket::platformSpecificError()
+        {
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+            return WSAGetLastError();
+#endif
+            return errno;
+        }
+
     }
 }
