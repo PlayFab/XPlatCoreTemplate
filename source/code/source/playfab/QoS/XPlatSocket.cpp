@@ -81,12 +81,12 @@ namespace PlayFab
                 return -1;
             }
 
-#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
-            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO | SO_SNDTIMEO, (char*)&timeoutMs, sizeof(timeoutMs));
-#else
             // Input timeout is in milliseconds
             // tv_usec takes microseconds, hence convert the input milliseconds to microseconds
             timeOutVal.tv_usec = timeoutMs * 1000;
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO | SO_SNDTIMEO, (char*)&timeoutMs, sizeof(timeoutMs));
+#else
             return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&timeOutVal, sizeof(struct timeval));
 #endif
         }
@@ -168,7 +168,8 @@ namespace PlayFab
             FD_CLR(0, &socketSet);
             FD_SET(s, &socketSet);
 
-            int selectResult = select(1, &socketSet, nullptr, nullptr, &timeOutVal);
+            auto fd_max = s+1;
+            int selectResult = select(fd_max, &socketSet, nullptr, nullptr, &timeOutVal);
 
             if (selectResult > 0)
             {
