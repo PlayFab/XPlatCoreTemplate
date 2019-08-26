@@ -86,9 +86,8 @@ namespace PlayFab
 #else
             // Input timeout is in milliseconds
             // tv_usec takes microseconds, hence convert the input milliseconds to microseconds
-            struct timeval tv;
-            tv.tv_usec = timeoutMs * 1000;
-            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&tv, sizeof(struct timeval));
+            timeOutVal.tv_usec = timeoutMs * 1000;
+            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&timeOutVal, sizeof(struct timeval));
 #endif
         }
 
