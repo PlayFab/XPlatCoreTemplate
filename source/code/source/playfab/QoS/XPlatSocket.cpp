@@ -214,8 +214,9 @@ namespace PlayFab
         {
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
             return WSAGetLastError();
-#endif
+#else
             return errno;
+#endif
         }
 
     }
