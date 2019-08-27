@@ -87,7 +87,7 @@ namespace PlayFab
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
             return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO | SO_SNDTIMEO, (char*)&timeoutMs, sizeof(timeoutMs));
 #else
-            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *)&timeOutVal, sizeof(struct timeval));
+            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, static_cast<struct timeval *>(&timeOutVal), sizeof(struct timeval));
 #endif
         }
 
@@ -180,12 +180,12 @@ namespace PlayFab
                 }
                 return recvResult;
             }
+            else if (selectResult < 0)
+            {
+                return platformSpecificError();
+            }
             else
             {
-                if (selectResult < 0)
-                {
-                    return platformSpecificError();
-                }
                 return selectResult;
             }
         }
