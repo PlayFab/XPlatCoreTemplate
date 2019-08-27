@@ -85,9 +85,9 @@ namespace PlayFab
             // tv_usec takes microseconds, hence convert the input milliseconds to microseconds
             timeOutVal.tv_usec = timeoutMs * 1000;
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
-            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO | SO_SNDTIMEO, (char*)&timeoutMs, sizeof(timeoutMs));
+            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO | SO_SNDTIMEO, reinterpret_cast<const char*>(&timeoutMs), sizeof(timeoutMs));
 #else
-            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, static_cast<struct timeval *>(&timeOutVal), sizeof(struct timeval));
+            return setsockopt(s, SOL_SOCKET, SO_RCVTIMEO, (struct timeval *) &timeOutVal, sizeof(struct timeval));
 #endif
         }
 
