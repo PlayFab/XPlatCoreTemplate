@@ -27,7 +27,7 @@ namespace PlayFab
         this->eventContents.EventNamespace = eventNamespace;
     }
 
-    void PlayFabEvent::SetEntity(const PlayFabInternal::EventsModels::EntityKey& entity)
+    void PlayFabEvent::SetEntity(const EventsModels::EntityKey& entity)
     {
         this->eventContents.Entity = entity;
     }
