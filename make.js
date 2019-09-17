@@ -4,13 +4,10 @@ var path = require("path");
 if (typeof getCompiledTemplate === "undefined") getCompiledTemplate = function () { };
 if (typeof templatizeTree === "undefined") templatizeTree = function () { };
 
-var hardCodedTemporaryVersionNumber = "3.11.190520"; // This version number will be hard coded and fixed here until we connect genConfig.json properly in all dest repos
-
 exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     console.log("Generating Combined api from: " + sourceDir + " to: " + apiOutputDir);
 
     var extraDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;";
-    sdkGlobals.sdkVersion = hardCodedTemporaryVersionNumber;
 
     var locals = {
         apis: apis,
