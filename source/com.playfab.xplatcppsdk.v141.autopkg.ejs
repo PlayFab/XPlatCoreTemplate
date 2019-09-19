@@ -24,40 +24,35 @@ nuget {
         tags: { PlayFab, Baas, Paas, JSON, REST, HTTP, SSL, API, cloud, liveops, game, gamedev, native };
     };
     
-    dependencies {
-        // This node defines any outside items which may be needed to consume this package.
-        packages : {
-            // This is a list of other NuGet packages required to use this package.
-            // Each item follows the format "<pkg_name>/<version>"
-            com.playfab.xplatcppsdkJSON.v141/1.1.8
-        };
-    }
-
     files {
-        include: {
-            "external\jsoncpp\include\**\*.h"
+        json += {
+            #destination = ${d_include}json;
+            "external\jsoncpp\include\json\**\*.h";
         };
 
-        nestedInclude: {
+        inc += {
             #destination = ${d_include}playfab;
-            "code\include\playfab\**\*.h"
+            "code\include\playfab\**\*.h";
         };
 
         [x64,v141,release] {
             lib: {
                 build\Windows\x64\Release\XPlatCppWindows\XPlatCppWindows.lib; 
+                external\jsoncpp-build\x64\Release\lib_json.lib;
             }
         };
 
         [x64,v141,debug] {
             lib: {
                 build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.lib;
+                external\jsoncpp-build\x64\Debug\lib_json.lib;
             }
         };
 
         other: {
             #destination: ${d_lib};
-            build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.pdb
+            build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.pdb;
+            external\jsoncpp-build\x64\Debug\lib_json.pdb;
         };
     };
 
