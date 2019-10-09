@@ -10,7 +10,7 @@
 #include <mutex>
 #include <atomic>
 
-#include <json/value.h>
+#include <json/json.h>
 #include <playfab/PlayFabIXHR2HttpRequest.h>
 
 namespace PlayFab
