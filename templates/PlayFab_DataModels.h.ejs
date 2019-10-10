@@ -11,7 +11,7 @@ namespace PlayFab
     {
         // <%- api.name %> Enums<%
 for (var enumIdx = 0; enumIdx < enumtypes.length; enumIdx++) { var enumtype = enumtypes[enumIdx]; %>
-        enum <%- enumtype.name %>
+        enum class <%- enumtype.name %>
         {
             <% for(var i=0; i<enumtype.enumvalues.length-1; i++) { var enumval = enumtype.enumvalues[i] %><%- enumtype.name %><%- enumval.name %>,
             <% } %><%- enumtype.name %><%- enumtype.enumvalues[enumtype.enumvalues.length-1].name %>
