@@ -20,14 +20,14 @@ for (var enumIdx = 0; enumIdx < enumtypes.length; enumIdx++) { var enumtype = en
         inline void ToJsonEnum(const <%- enumtype.name %> input, Json::Value& output)
         {
 <% for(var i=0; i<enumtype.enumvalues.length; i++) { var enumval = enumtype.enumvalues[i]
-%>            if (input == <%- enumtype.name %><%- enumval.name %>) output = Json::Value("<%- enumval.name %>");
+%>            if (input == <%- enumtype.name %>::<%- enumtype.name %><%- enumval.name %>) output = Json::Value("<%- enumval.name %>");
 <% } %>        }
         inline void FromJsonEnum(const Json::Value& input, <%- enumtype.name %>& output)
         {
             if (!input.isString()) return;
             const std::string& inputStr = input.asString();
 <% for(var i=0; i<enumtype.enumvalues.length; i++) { var enumval = enumtype.enumvalues[i]
-%>            if (inputStr == "<%- enumval.name %>") output = <%- enumtype.name %><%- enumval.name %>;
+%>            if (inputStr == "<%- enumval.name %>") output = <%- enumtype.name %>::<%- enumtype.name %><%- enumval.name %>;
 <% } %>        }
 <% } %>
         // <%- api.name %> Classes<%

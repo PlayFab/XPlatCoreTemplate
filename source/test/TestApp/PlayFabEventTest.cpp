@@ -106,7 +106,7 @@ namespace PlayFabUnit
                     "in the batch #" + std::to_string(pfResponse->batchNumber) + " "
                     "of " + std::to_string(pfResponse->batch->size()) + " events. "
                     "HTTP code: " + std::to_string(pfResponse->playFabError->HttpCode) +
-                    ", app error code: " + std::to_string(pfResponse->playFabError->ErrorCode) + "\n";
+                    ", app error code: " + std::to_string(static_cast<int>(pfResponse->playFabError->ErrorCode)) + "\n";
 
                 // Keep track of the highest batch number.
                 eventBatchMax = (pfResponse->batchNumber > eventBatchMax) ? pfResponse->batchNumber : eventBatchMax;
@@ -119,7 +119,7 @@ namespace PlayFabUnit
                     "in the batch #" + std::to_string(pfResponse->batchNumber) + " "
                     "of " + std::to_string(pfResponse->batch->size()) + " events. "
                     "HTTP code: " + std::to_string(pfResponse->playFabError->HttpCode) +
-                    ", app error code: " + std::to_string(pfResponse->playFabError->ErrorCode) +
+                    ", app error code: " + std::to_string(static_cast<int>(pfResponse->playFabError->ErrorCode)) +
                     ", HTTP status: " + pfResponse->playFabError->HttpStatus +
                     ", Message: " + pfResponse->playFabError->ErrorMessage +
                     "\n";
