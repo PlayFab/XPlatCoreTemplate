@@ -185,7 +185,7 @@ namespace PlayFabUnit
 
         std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
 
-        (*api)->EmitEvent(std::move(MakeEvent(0, PlayFabEventType::Default)),
+        (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
             [&testContext]
             (std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)
             { if(testContext.activeState != TestActiveState::COMPLETE){ testContext.Pass("Lambda Function Callback Succeeded.");}});
@@ -197,7 +197,7 @@ namespace PlayFabUnit
 
         std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
 
-        (*api)->EmitEvent(std::move(MakeEvent(0, PlayFabEventType::Default)),
+        (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
         std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
     }
 
