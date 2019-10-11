@@ -106,7 +106,7 @@ namespace PlayFabUnit
                     "in the batch #" + std::to_string(pfResponse->batchNumber) + " "
                     "of " + std::to_string(pfResponse->batch->size()) + " events. "
                     "HTTP code: " + std::to_string(pfResponse->playFabError->HttpCode) +
-                    ", app error code: " + std::to_string(pfResponse->playFabError->ErrorCode) + "\n";
+                    ", app error code: " + std::to_string(static_cast<int>(pfResponse->playFabError->ErrorCode)) + "\n";
 
                 // Keep track of the highest batch number.
                 eventBatchMax = (pfResponse->batchNumber > eventBatchMax) ? pfResponse->batchNumber : eventBatchMax;
@@ -119,7 +119,7 @@ namespace PlayFabUnit
                     "in the batch #" + std::to_string(pfResponse->batchNumber) + " "
                     "of " + std::to_string(pfResponse->batch->size()) + " events. "
                     "HTTP code: " + std::to_string(pfResponse->playFabError->HttpCode) +
-                    ", app error code: " + std::to_string(pfResponse->playFabError->ErrorCode) +
+                    ", app error code: " + std::to_string(static_cast<int>(pfResponse->playFabError->ErrorCode)) +
                     ", HTTP status: " + pfResponse->playFabError->HttpStatus +
                     ", Message: " + pfResponse->playFabError->ErrorMessage +
                     "\n";
@@ -185,7 +185,7 @@ namespace PlayFabUnit
 
         std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
 
-        (*api)->EmitEvent(std::move(MakeEvent(0, PlayFabEventType::Default)),
+        (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
             [&testContext]
             (std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)
             { if(testContext.activeState != TestActiveState::COMPLETE){ testContext.Pass("Lambda Function Callback Succeeded.");}});
@@ -197,7 +197,7 @@ namespace PlayFabUnit
 
         std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
 
-        (*api)->EmitEvent(std::move(MakeEvent(0, PlayFabEventType::Default)),
+        (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
         std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
     }
 
