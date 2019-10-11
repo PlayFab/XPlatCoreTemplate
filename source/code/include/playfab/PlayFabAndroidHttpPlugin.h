@@ -49,8 +49,8 @@ namespace PlayFab
             
             enum class State:int
             {
-                None = 0,
-                Pending = RequestTask::None,
+                None,
+                Pending = (int)RequestTask::State::None,
                 Requesting,
                 Finished
             };
