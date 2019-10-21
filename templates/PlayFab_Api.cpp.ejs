@@ -29,8 +29,8 @@ namespace PlayFab
 <% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx]; %>
     void PlayFab<%- api.name %>API::<%- apiCall.name %>(
         <%- apiCall.request %>& request,
-        ProcessApiCallback<<%- apiCall.result %>> callback,
-        ErrorCallback errorCallback,
+        const ProcessApiCallback<<%- apiCall.result %>>& callback,
+        const ErrorCallback& errorCallback,
         void* customData
     )
     {
@@ -60,7 +60,7 @@ namespace PlayFab
         }
     }
 
-    void PlayFab<%- api.name %>API::On<%- apiCall.name %>Result(int httpCode, std::string result, std::shared_ptr<CallRequestContainerBase> reqContainer)
+    void PlayFab<%- api.name %>API::On<%- apiCall.name %>Result(int httpCode, const std::string& result, const std::shared_ptr<CallRequestContainerBase>& reqContainer)
     {
         CallRequestContainer& container = static_cast<CallRequestContainer&>(*reqContainer);
 
@@ -98,7 +98,7 @@ namespace PlayFab
         }
     }
 <% } %>
-    bool PlayFab<%- api.name %>API::ValidateResult(PlayFabResultCommon& resultCommon, CallRequestContainer& container)
+    bool PlayFab<%- api.name %>API::ValidateResult(PlayFabResultCommon& resultCommon, const CallRequestContainer& container)
     {
         if (container.errorWrapper.HttpCode == 200)
         {
