@@ -54,7 +54,7 @@ namespace PlayFab
             {
                 return *dynamic_cast<CallRequestContainer*>(requestContainer.get());
             }
-            std::string GetRequestContainerUrl()
+            std::string GetRequestContainerUrl() const
             {
                 return requestContainer->GetUrl();
             }
