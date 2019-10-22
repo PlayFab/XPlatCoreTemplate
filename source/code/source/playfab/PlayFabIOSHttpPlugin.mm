@@ -272,8 +272,7 @@ namespace PlayFab
 
     std::string PlayFabIOSHttpPlugin::GetUrl(const RequestTask& requestTask) const
     {
-        CallRequestContainer& requestContainer = requestTask.RequestContainer();
-        return PlayFabSettings::GetUrl(requestContainer.GetUrl(), PlayFabSettings::requestGetParams);
+        return PlayFabSettings::GetUrl(requestTask.GetRequestContainerUrl(), PlayFabSettings::requestGetParams);
     }
 
     void PlayFabIOSHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask, void* urlRequest)
@@ -291,7 +290,7 @@ namespace PlayFab
         return false;
     }
 
-    void PlayFabIOSHttpPlugin::ProcessResponse(const RequestTask& requestTask, const int httpCode)
+    void PlayFabIOSHttpPlugin::ProcessResponse(RequestTask& requestTask, const int httpCode)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
         Json::CharReaderBuilder jsonReaderFactory;

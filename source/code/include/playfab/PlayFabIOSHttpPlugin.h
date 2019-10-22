@@ -32,7 +32,7 @@ namespace PlayFab
         virtual std::string GetUrl(const RequestTask& requestTask) const;
         virtual void SetPredefinedHeaders(const RequestTask& requestTask, void* urlRequest);
         virtual bool GetBinaryPayload(RequestTask& requestTask, void*& payload, size_t& payloadSize) const;
-        virtual void ProcessResponse(const RequestTask& requestTask, const int httpCode);
+        virtual void ProcessResponse(RequestTask& requestTask, const int httpCode);
         virtual void HandleResults(RequestTask& requestTask);
 
         struct RequestImpl;
@@ -53,6 +53,10 @@ namespace PlayFab
             CallRequestContainer& RequestContainer()
             {
                 return *dynamic_cast<CallRequestContainer*>(requestContainer.get());
+            }
+            std::string GetRequestContainerUrl()
+            {
+                return requestContainer->GetUrl();
             }
             void Cancel();
             std::atomic<State> state;
