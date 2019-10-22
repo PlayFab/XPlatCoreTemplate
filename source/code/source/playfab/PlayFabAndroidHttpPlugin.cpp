@@ -656,7 +656,7 @@ namespace PlayFab
         return false;
     }
 
-    void PlayFabAndroidHttpPlugin::ProcessResponse(const RequestTask& requestTask, const int httpCode)
+    void PlayFabAndroidHttpPlugin::ProcessResponse(RequestTask& requestTask, const int httpCode)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
         Json::CharReaderBuilder jsonReaderFactory;
