@@ -58,6 +58,10 @@ namespace PlayFab
             {
                 return *dynamic_cast<CallRequestContainer*>(requestContainer.get());
             }
+            std::string GetRequestContainerUrl() const
+            {
+                return requestContainer->GetUrl();
+            }
             std::atomic<State> state;
             std::unique_ptr<CallRequestContainerBase> requestContainer;
             std::unique_ptr<PlayFabAndroidHttpPlugin::RequestImpl> impl;
