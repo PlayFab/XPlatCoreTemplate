@@ -612,8 +612,6 @@ namespace PlayFab
 
     void PlayFabAndroidHttpPlugin::SetHeader(const RequestTask& requestTask, const char* name, const char* value)
     {
-        CallRequestContainer& requestContainer = requestTask.RequestContainer();
-
         JNIEnv* jniEnv = requestTask.impl->JniEvn();
         if (jniEnv == nullptr)
         {
