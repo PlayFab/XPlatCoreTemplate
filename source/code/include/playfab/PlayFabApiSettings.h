@@ -24,6 +24,6 @@ namespace PlayFab
 #endif
 
         PlayFabApiSettings();
-        std::string GetUrl(const std::string& urlPath, const std::map<std::string, std::string>& getParams);
+        std::string GetUrl(const std::string& urlPath, const std::map<std::string, std::string>& getParams) const;
     };
 }

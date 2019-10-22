@@ -270,7 +270,7 @@ namespace PlayFab
         [uploadTask resume];
     }
 
-    std::string PlayFabIOSHttpPlugin::GetUrl(RequestTask& requestTask) const
+    std::string PlayFabIOSHttpPlugin::GetUrl(const RequestTask& requestTask) const
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
         return PlayFabSettings::GetUrl(requestContainer.GetUrl(), PlayFabSettings::requestGetParams);

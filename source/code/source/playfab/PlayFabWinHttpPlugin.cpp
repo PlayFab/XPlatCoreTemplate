@@ -350,7 +350,7 @@ namespace PlayFab
         if (hSession) WinHttpCloseHandle(hSession);
     }
 
-    std::string PlayFabWinHttpPlugin::GetUrl(CallRequestContainer& reqContainer) const
+    std::string PlayFabWinHttpPlugin::GetUrl(const CallRequestContainer& reqContainer) const
     {
         return reqContainer.GetFullUrl();
     }

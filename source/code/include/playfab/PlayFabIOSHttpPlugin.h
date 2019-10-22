@@ -29,7 +29,7 @@ namespace PlayFab
         void WorkerThread();
         void ExecuteRequest(RequestTask& requestTask);
 
-        virtual std::string GetUrl(RequestTask& requestTask) const;
+        virtual std::string GetUrl(const RequestTask& requestTask) const;
         virtual void SetPredefinedHeaders(RequestTask& requestTask, void* urlRequest);
         virtual bool GetBinaryPayload(RequestTask& requestTask, void*& payload, size_t& payloadSize) const;
         virtual void ProcessResponse(RequestTask& requestTask, const int httpCode);
