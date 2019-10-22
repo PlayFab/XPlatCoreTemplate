@@ -603,7 +603,7 @@ namespace PlayFab
         return PlayFabSettings::GetUrl(requestContainer.GetUrl(), PlayFabSettings::requestGetParams);
     }
 
-    void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(RequestTask& requestTask)
+    void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask)
     {
         SetHeader(requestTask, "Accept", "application/json");
         SetHeader(requestTask, "Content-Type", "application/json; charset=utf-8");
@@ -611,7 +611,7 @@ namespace PlayFab
         SetHeader(requestTask, "X-ReportErrorAsSuccess", "true");
     }
 
-    void PlayFabAndroidHttpPlugin::SetHeader(RequestTask& requestTask, const char* name, const char* value)
+    void PlayFabAndroidHttpPlugin::SetHeader(const RequestTask& requestTask, const char* name, const char* value)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
 
@@ -657,7 +657,7 @@ namespace PlayFab
         return false;
     }
 
-    void PlayFabAndroidHttpPlugin::ProcessResponse(RequestTask& requestTask, const int httpCode)
+    void PlayFabAndroidHttpPlugin::ProcessResponse(const RequestTask& requestTask, const int httpCode)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
         Json::CharReaderBuilder jsonReaderFactory;

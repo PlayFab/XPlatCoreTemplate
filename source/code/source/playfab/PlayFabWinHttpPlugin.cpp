@@ -355,7 +355,7 @@ namespace PlayFab
         return reqContainer.GetFullUrl();
     }
 
-    void PlayFabWinHttpPlugin::SetPredefinedHeaders(CallRequestContainer& requestContainer, HINTERNET hRequest)
+    void PlayFabWinHttpPlugin::SetPredefinedHeaders(const CallRequestContainer& requestContainer, HINTERNET hRequest)
     {
         WinHttpAddRequestHeaders(hRequest, L"Accept: application/json", -1, 0);
         WinHttpAddRequestHeaders(hRequest, L"Content-Type: application/json; charset=utf-8", -1, 0);
