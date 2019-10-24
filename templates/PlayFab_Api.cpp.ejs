@@ -29,8 +29,8 @@ namespace PlayFab
 <% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx]; %>
     void PlayFab<%- api.name %>API::<%- apiCall.name %>(
         <%- apiCall.request %>& request,
-        const ProcessApiCallback<<%- apiCall.result %>>& callback,
-        const ErrorCallback& errorCallback,
+        ProcessApiCallback<<%- apiCall.result %>> callback,
+        ErrorCallback errorCallback,
         void* customData
     )
     {
