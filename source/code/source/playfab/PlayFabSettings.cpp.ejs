@@ -2,8 +2,6 @@
 
 #include <playfab/PlayFabSettings.h>
 
-#pragma warning (disable: 4100) // formal parameters are part of a public interface
-
 namespace PlayFab
 {
     const std::string PlayFabSettings::sdkVersion = "<%- sdkVersion %>";
@@ -105,5 +103,3 @@ namespace PlayFab
         return false;
     }
 }
-
-#pragma warning (default: 4100) // formal parameters are part of a public interface

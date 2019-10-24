@@ -8,8 +8,6 @@
 #include <playfab/PlayFabError.h>
 #include <memory>
 
-#pragma warning (disable: 4100) // formal parameters are part of a public interface
-
 namespace PlayFab
 {
     using namespace <%- api.name %>Models;
@@ -94,9 +92,7 @@ namespace PlayFab
 <%- getRequestActions("        ", apiCall, true) %>
         IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
         const auto requestJson = request.ToJson();
-
-        Json::FastWriter writer;
-        std::string jsonAsString = writer.write(requestJson);
+        std::string jsonAsString = requestJson.toStyledString();
 
         auto authenticationContext = request.authenticationContext == nullptr ? this->GetOrCreateAuthenticationContext() : request.authenticationContext;
         std::unordered_map<std::string, std::string> headers;
@@ -195,5 +191,3 @@ namespace PlayFab
 }
 
 #endif
-
-#pragma warning (default: 4100) // formal parameters are part of a public interface
