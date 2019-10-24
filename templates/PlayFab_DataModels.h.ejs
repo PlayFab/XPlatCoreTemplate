@@ -53,7 +53,7 @@ for (var propIdx = 0; propIdx < datatype.properties.length; propIdx++) { var pro
 
             ~<%- datatype.name %>() = default;
 
-            void FromJson(Json::Value&<%- ifHasProps(datatype, " input") %>) override
+            void FromJson(const Json::Value&<%- ifHasProps(datatype, " input") %>) override
             {
 <% for (var propIdx = 0; propIdx < datatype.properties.length; propIdx++) { var property = datatype.properties[propIdx];
 %><%- getPropertyFromJson("                ", property, datatype) %>

@@ -34,7 +34,7 @@ namespace PlayFab
         std::string UrlPath;
         Json::Value Request;
 
-        void FromJson(Json::Value& input) override;
+        void FromJson(const Json::Value& input) override;
         Json::Value ToJson() const override;
 
         std::string GenerateErrorReport() const;

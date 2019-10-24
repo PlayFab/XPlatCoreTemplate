@@ -597,13 +597,12 @@ namespace PlayFab
     }
 
 
-    std::string PlayFabAndroidHttpPlugin::GetUrl(RequestTask& requestTask) const
+    std::string PlayFabAndroidHttpPlugin::GetUrl(const RequestTask& requestTask) const
     {
-        CallRequestContainer& requestContainer = requestTask.RequestContainer();
-        return PlayFabSettings::GetUrl(requestContainer.GetUrl(), PlayFabSettings::requestGetParams);
+        return PlayFabSettings::GetUrl(requestTask.GetRequestContainerUrl(), PlayFabSettings::requestGetParams);
     }
 
-    void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(RequestTask& requestTask)
+    void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask)
     {
         SetHeader(requestTask, "Accept", "application/json");
         SetHeader(requestTask, "Content-Type", "application/json; charset=utf-8");
@@ -611,10 +610,8 @@ namespace PlayFab
         SetHeader(requestTask, "X-ReportErrorAsSuccess", "true");
     }
 
-    void PlayFabAndroidHttpPlugin::SetHeader(RequestTask& requestTask, const char* name, const char* value)
+    void PlayFabAndroidHttpPlugin::SetHeader(const RequestTask& requestTask, const char* name, const char* value)
     {
-        CallRequestContainer& requestContainer = requestTask.RequestContainer();
-
         JNIEnv* jniEnv = requestTask.impl->JniEvn();
         if (jniEnv == nullptr)
         {
