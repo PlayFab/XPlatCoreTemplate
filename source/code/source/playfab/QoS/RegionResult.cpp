@@ -2,8 +2,6 @@
 
 #include <playfab/QoS/RegionResult.h>
 
-using namespace std;
-
 namespace PlayFab
 {
     namespace QoS
