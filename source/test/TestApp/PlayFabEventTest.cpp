@@ -169,24 +169,38 @@ namespace PlayFabUnit
         EmitEvents(PlayFab::PlayFabEventType::Heavyweight, maxBatchWaitTime, maxItemsInBatch, maxBatchesInFlight);
     }
 
-    /// OneDS lightweight events (emitted individually
-    void PlayFabEventTest::OneDSEventsApi(TestContext& testContext)
+    /// EVENTS API
+    /// non-PlayStream lightweight events (emitted individually
+    ///   and processed in a background thread using event pipeline (router, batching, etc))
+    void PlayFabEventTest::LightweightEvents(TestContext& testContext)
+    {
+        eventTestContext = std::make_shared<TestContext*>(&testContext);
+
+        EmitEvents(PlayFab::PlayFabEventType::Lightweight);
+    }
+
+    void PlayFabEventTest::LambdaCallbackTest(TestContext& testContext)
+    {
         eventTestContext = std::make_shared<TestContext*>(&testContext);
 
         std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
 
-            Callback(&PlayFabEventTest::OnGetTelemetryIngestionConfig),
-            &testContext);
+        (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
+            [&testContext]
             (std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)
             { if(testContext.activeState != TestActiveState::COMPLETE){ testContext.Pass("Lambda Function Callback Succeeded.");}});
+    }
 
-    void PlayFabEventTest::OnOneDSWriteTelemetryEvents(const WriteEventsResponse&, void* customData)
-        TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+    void PlayFabEventTest::PrivateMemberCallbackTest(TestContext& testContext)
+    {
+        eventTestContext = std::make_shared<TestContext*>(&testContext);
 
         std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
 
         (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
-    void PlayFabEventTest::OnOneDSWriteTelemetryEventsFail(const PlayFabError& error, void* customData)
+        std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
+    }
+
     void PlayFabEventTest::AddTests()
     {
         // TODO: Fix whatever limitation causes this test to fail for these platforms
@@ -195,8 +209,9 @@ namespace PlayFabUnit
 #endif
         AddTest("EventsApi", &PlayFabEventTest::EventsApi);
         AddTest("HeavyweightEvents", &PlayFabEventTest::HeavyweightEvents);
+        AddTest("LightweightEvents", &PlayFabEventTest::LightweightEvents);
         AddTest("LambdaCallback", &PlayFabEventTest::LambdaCallbackTest);
-        AddTest("OneDSEventsApi", &PlayFabEventTest::OneDSEventsApi);
+        AddTest("PrivateMemberCallback", &PlayFabEventTest::PrivateMemberCallbackTest);
     }
 
     void PlayFabEventTest::ClassSetUp()

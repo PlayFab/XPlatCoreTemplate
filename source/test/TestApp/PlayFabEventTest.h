@@ -46,6 +46,7 @@ namespace PlayFabUnit
 
             void LambdaCallbackTest(TestContext& testContext);
             void PrivateMemberCallbackTest(TestContext& testContext);
+
             // State
             bool loggedIn;
             std::shared_ptr<PlayFab::PlayFabEventAPI*> eventApi;
