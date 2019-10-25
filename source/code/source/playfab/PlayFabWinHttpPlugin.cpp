@@ -190,7 +190,7 @@ namespace PlayFab
                     {
                         // Add HTTP headers
                         SetPredefinedHeaders(reqContainer, hRequest);
-                        auto headers = reqContainer.GetHeaders();
+                        auto headers = reqContainer.GetRequestHeaders();
                         if (headers.size() > 0)
                         {
                             for (auto const& obj : headers)

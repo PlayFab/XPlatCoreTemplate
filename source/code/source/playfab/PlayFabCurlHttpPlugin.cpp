@@ -128,7 +128,7 @@ namespace PlayFab
         curlHttpHeaders = curl_slist_append(curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
         curlHttpHeaders = curl_slist_append(curlHttpHeaders, "X-ReportErrorAsSuccess: true");
 
-        auto headers = reqContainer.GetHeaders();
+        auto headers = reqContainer.GetRequestHeaders();
 
         if (headers.size() > 0)
         {
