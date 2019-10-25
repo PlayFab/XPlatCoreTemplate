@@ -6,7 +6,6 @@
 #include <vector>
 #include <windows.h>
 
-#pragma warning (disable: 4100) // formal parameters are part of a public interface
 #pragma warning (disable: 4245) // Some DWORD arguments of WinHTTP API can accept -1, according to documentation
 
 namespace PlayFab
