@@ -314,7 +314,7 @@ namespace PlayFab
                                                 WINHTTP_NO_HEADER_INDEX);
                                             if (bResults)
                                             {
-                                                requestId = std::string(wideRequestIdBuffer.get(), wideRequestIdBuffer.get() + wideRequestIdLength);
+                                                requestId = std::string(wideRequestIdBuffer.get(), wideRequestIdBuffer.get() + wideRequestIdLength - 1);
                                             }
                                             else
                                             {
