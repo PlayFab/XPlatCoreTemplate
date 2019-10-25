@@ -59,8 +59,8 @@ namespace PlayFab
 
         void WriteTelemetryEvents(
             WriteEventsRequest& request,
-            const ProcessApiCallback<WriteEventsResponse>& callback,
-            const ErrorCallback& errorCallback = nullptr,
+            const ProcessApiCallback<WriteEventsResponse> callback,
+            const ErrorCallback errorCallback = nullptr,
             void* customData = nullptr
         )
         {
