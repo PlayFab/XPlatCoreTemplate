@@ -14,9 +14,9 @@ namespace PlayFab
         url(url),
         headers(headers),
         requestBody(requestBody),
+        apiSettings(settings),
         callback(callback),
-        customData(customData),
-        apiSettings(settings)
+        customData(customData)
     {
     }
 
