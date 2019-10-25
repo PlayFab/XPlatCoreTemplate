@@ -79,7 +79,7 @@ namespace PlayFab
         return fullUrl;
     }
 
-    bool PlayFabSettings::ValidateSettings(const std::string& apiAuth, const std::shared_ptr<PlayFabAuthenticationContext> authenticationContext, const std::shared_ptr<PlayFabApiSettings> apiSettings, CallRequestContainer& container)
+    bool PlayFabSettings::ValidateSettings(const std::shared_ptr<PlayFabAuthenticationContext> authenticationContext, const std::shared_ptr<PlayFabApiSettings> apiSettings, CallRequestContainer& container)
     {
         bool valid = true;
         if (PlayFabSettings::titleId.empty())

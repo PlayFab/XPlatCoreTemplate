@@ -88,8 +88,8 @@ namespace PlayFab
 <% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx]; %>
     void PlayFab<%- api.name %>InstanceAPI::<%- apiCall.name %>(
         <%- apiCall.request %>& request,
-        ProcessApiCallback<<%- apiCall.result %>> callback,
-        ErrorCallback errorCallback,
+        const ProcessApiCallback<<%- apiCall.result %>>& callback,
+        const ErrorCallback& errorCallback,
         void* customData
     )
     {
@@ -113,7 +113,7 @@ namespace PlayFab
         reqContainer->successCallback = std::shared_ptr<void>((callback == nullptr) ? nullptr : new ProcessApiCallback<<%- apiCall.result %>>(callback));
         reqContainer->errorCallback = errorCallback;
 
-        if (PlayFabSettings::ValidateSettings("<%- apiCall.auth %>", authenticationContext, this->settings, *reqContainer))
+        if (PlayFabSettings::ValidateSettings(authenticationContext, this->settings, *reqContainer))
         {
             http.MakePostRequest(std::unique_ptr<CallRequestContainerBase>(static_cast<CallRequestContainerBase*>(reqContainer.release())));
         }

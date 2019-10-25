@@ -1,5 +1,7 @@
 #include <stdafx.h>
 
+#if defined(PLAYFAB_PLATFORM_WINDOWS)
+
 #include <playfab/PlayFabWinHttpPlugin.h>
 #include <playfab/PlayFabSettings.h>
 #include <stdexcept>
@@ -191,7 +193,7 @@ namespace PlayFab
                         auto headers = reqContainer.GetHeaders();
                         if (headers.size() > 0)
                         {
-                            for (auto const &obj : headers)
+                            for (auto const& obj : headers)
                             {
                                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                                 {
@@ -356,6 +358,7 @@ namespace PlayFab
 
     void PlayFabWinHttpPlugin::SetPredefinedHeaders(const CallRequestContainer& requestContainer, HINTERNET hRequest)
     {
+        UNREFERENCED_PARAMETER(requestContainer);
         WinHttpAddRequestHeaders(hRequest, L"Accept: application/json", -1, 0);
         WinHttpAddRequestHeaders(hRequest, L"Content-Type: application/json; charset=utf-8", -1, 0);
         WinHttpAddRequestHeaders(hRequest, (L"X-PlayFabSDK: " + std::wstring(PlayFabSettings::versionString.begin(), PlayFabSettings::versionString.end())).c_str(), -1, 0);
@@ -364,6 +367,9 @@ namespace PlayFab
 
     bool PlayFabWinHttpPlugin::GetBinaryPayload(CallRequestContainer& reqContainer, LPVOID& payload, DWORD& payloadSize) const
     {
+        UNREFERENCED_PARAMETER(reqContainer);
+        UNREFERENCED_PARAMETER(payload);
+        UNREFERENCED_PARAMETER(payloadSize);
         return false;
     }
 
@@ -448,3 +454,5 @@ namespace PlayFab
         }
     }
 }
+
+#endif // defined(PLAYFAB_PLATFORM_WINDOWS)
