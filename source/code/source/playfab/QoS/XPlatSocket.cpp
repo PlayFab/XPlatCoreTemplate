@@ -1,7 +1,5 @@
 #include <stdafx.h>
 
-#pragma warning (disable: 4996)         // Suppress the warning thrown for _WINSOCK_DEPRECATED_NO_WARNINGS by the getHostByName api
-
 #include <playfab/QoS/XPlatSocket.h>
 #include <playfab/QoS/QoS.h>
 

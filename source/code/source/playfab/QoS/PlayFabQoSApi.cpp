@@ -59,16 +59,14 @@ namespace PlayFab
 
         void WriteTelemetryEvents(
             WriteEventsRequest& request,
-            const ProcessApiCallback<WriteEventsResponse>& callback,
-            const ErrorCallback& errorCallback = nullptr,
+            const ProcessApiCallback<WriteEventsResponse> callback,
+            const ErrorCallback errorCallback = nullptr,
             void* customData = nullptr
         )
         {
             IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
             const auto requestJson = request.ToJson();
-
-            Json::FastWriter writer;
-            std::string jsonAsString = writer.write(requestJson);
+            std::string jsonAsString = requestJson.toStyledString();
 
             std::unordered_map<std::string, std::string> headers;
             headers.emplace("X-EntityToken", request.authenticationContext == nullptr ? PlayFabSettings::entityToken : request.authenticationContext->entityToken);
