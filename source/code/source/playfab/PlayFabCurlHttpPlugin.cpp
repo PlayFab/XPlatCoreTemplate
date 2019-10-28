@@ -161,6 +161,8 @@ namespace PlayFab
         long curlHttpResponseCode = 0;
         curl_easy_getinfo(curlHandle, CURLINFO_RESPONSE_CODE, &curlHttpResponseCode);
 
+        reqContainer.errorWrapper.RequestId = requestContainer.GetRequestId();
+
         if (res != CURLE_OK)
         {
             reqContainer.errorWrapper.HttpCode = curlHttpResponseCode != 0 ? curlHttpResponseCode : 408;
