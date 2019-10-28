@@ -190,7 +190,7 @@ namespace PlayFab
                     {
                         // Add HTTP headers
                         SetPredefinedHeaders(reqContainer, hRequest);
-                        auto headers = reqContainer.GetHeaders();
+                        auto headers = reqContainer.GetRequestHeaders();
                         if (headers.size() > 0)
                         {
                             for (auto const& obj : headers)
@@ -314,7 +314,7 @@ namespace PlayFab
                                                 WINHTTP_NO_HEADER_INDEX);
                                             if (bResults)
                                             {
-                                                requestId = std::string(wideRequestIdBuffer.get(), wideRequestIdBuffer.get() + wideRequestIdLength);
+                                                requestId = std::string(wideRequestIdBuffer.get(), wideRequestIdBuffer.get() + wideRequestIdLength - 1);
                                             }
                                             else
                                             {
