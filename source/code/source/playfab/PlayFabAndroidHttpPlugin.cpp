@@ -561,7 +561,7 @@ namespace PlayFab
                 methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "getResponseHttpBody", "()[B");
                 if (methodId)
                 {
-                    auto responseBody = (jbyteArray)jniEnv->CallObjectMethod(httpRequestObject, methodId);
+                    jbyteArray responseBody = (jbyteArray)jniEnv->CallObjectMethod(httpRequestObject, methodId);
 
                     if (responseBody != nullptr)
                     {
