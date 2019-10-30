@@ -31,6 +31,7 @@ namespace PlayFab
 
         bool parsingSuccessful = reader->parse(reqBod, reqBod + reqBodLength, &request, &errs);
 
+        delete reader;
 
         if (parsingSuccessful)
         {
