@@ -95,14 +95,14 @@ namespace PlayFab
     {
 <%- getRequestActions("        ", apiCall, true) %>
         IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
-        const auto requestJson = request.ToJson();
+        const auto& requestJson = request.ToJson();
         std::string jsonAsString = requestJson.toStyledString();
 
-        auto authenticationContext = request.authenticationContext == nullptr ? this->GetOrCreateAuthenticationContext() : request.authenticationContext;
+        std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = request.authenticationContext == nullptr ? this->GetOrCreateAuthenticationContext() : request.authenticationContext;
         std::unordered_map<std::string, std::string> headers;
         headers.emplace(<%- getAuthParams(apiCall, true) %>);
 
-        auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
+        std::unique_ptr<CallRequestContainer> reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
             "<%- apiCall.url %>",
             headers,
             jsonAsString,
@@ -127,10 +127,10 @@ namespace PlayFab
         if (ValidateResult(outResult, container))
         {
 <%- getResultActions("            ", apiCall, true) %>
-            const auto internalPtr = container.successCallback.get();
+            const auto& internalPtr = container.successCallback.get();
             if (internalPtr != nullptr)
             {
-                const auto callback = (*static_cast<ProcessApiCallback<<%- apiCall.result %>> *>(internalPtr));
+                const auto& callback = (*static_cast<ProcessApiCallback<<%- apiCall.result %>> *>(internalPtr));
                 callback(outResult, container.GetCustomData());
             }
         }
@@ -144,7 +144,7 @@ namespace PlayFab
 
     void PlayFabClientInstanceAPI::MultiStepClientLogin(bool needsAttribution)
     {
-        auto apiSettings = this->GetSettings();
+        const auto& apiSettings = this->GetSettings();
         if (apiSettings == nullptr)
         {
             if (needsAttribution && !PlayFabSettings::disableAdvertising && PlayFabSettings::advertisingIdType.length() > 0 && PlayFabSettings::advertisingIdValue.length() > 0)

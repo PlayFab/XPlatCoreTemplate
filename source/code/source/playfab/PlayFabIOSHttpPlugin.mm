@@ -222,7 +222,7 @@ namespace PlayFab
         urlRequest.HTTPMethod = @"POST";
         SetPredefinedHeaders(requestTask, (__bridge void*)urlRequest);
 
-        auto headers = requestContainer.GetHeaders();
+        const auto& headers = requestContainer.GetRequestHeaders();
         if (headers.size() > 0)
         {
             for (auto const &obj : headers)
@@ -323,7 +323,7 @@ namespace PlayFab
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
 
-        auto callback = requestContainer.GetCallback();
+        const auto& callback = requestContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(requestContainer.responseJson.get("code", Json::Value::null).asInt(),

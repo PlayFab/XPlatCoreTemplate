@@ -128,7 +128,7 @@ namespace PlayFab
         curlHttpHeaders = curl_slist_append(curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
         curlHttpHeaders = curl_slist_append(curlHttpHeaders, "X-ReportErrorAsSuccess: true");
 
-        auto headers = reqContainer.GetRequestHeaders();
+        const auto& headers = reqContainer.GetRequestHeaders();
 
         if (headers.size() > 0)
         {
@@ -157,7 +157,7 @@ namespace PlayFab
 
         // Send
         curl_easy_setopt(curlHandle, CURLOPT_SSL_VERIFYPEER, true);
-        const auto res = curl_easy_perform(curlHandle);
+        const auto& res = curl_easy_perform(curlHandle);
         long curlHttpResponseCode = 0;
         curl_easy_getinfo(curlHandle, CURLINFO_RESPONSE_CODE, &curlHttpResponseCode);
 
@@ -209,7 +209,7 @@ namespace PlayFab
     void PlayFabCurlHttpPlugin::HandleResults(std::unique_ptr<CallRequestContainer> requestContainer)
     {
         CallRequestContainer& reqContainer = *requestContainer;
-        auto callback = reqContainer.GetCallback();
+        const auto& callback = reqContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(

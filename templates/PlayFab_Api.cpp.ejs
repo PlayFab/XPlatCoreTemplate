@@ -38,13 +38,13 @@ namespace PlayFab
     {
 <%- getRequestActions("        ", apiCall, false) %>
         IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
-        const auto requestJson = request.ToJson();
+        const auto& requestJson = request.ToJson();
         std::string jsonAsString = requestJson.toStyledString();
 
         std::unordered_map<std::string, std::string> headers;
         headers.emplace(<%- getAuthParams(apiCall, false) %>);
 
-        auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
+        std::unique_ptr<CallRequestContainer> reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
             "<%- apiCall.url %>",
             headers,
             jsonAsString,
@@ -68,10 +68,10 @@ namespace PlayFab
         if (ValidateResult(outResult, container))
         {
 <%- getResultActions("            ", apiCall, false) %>
-            const auto internalPtr = container.successCallback.get();
+            const auto& internalPtr = container.successCallback.get();
             if (internalPtr != nullptr)
             {
-                const auto callback = (*static_cast<ProcessApiCallback<<%- apiCall.result %>> *>(internalPtr));
+                const auto& callback = (*static_cast<ProcessApiCallback<<%- apiCall.result %>> *>(internalPtr));
                 callback(outResult, container.GetCustomData());
             }
         }

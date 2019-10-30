@@ -190,7 +190,7 @@ namespace PlayFab
                     {
                         // Add HTTP headers
                         SetPredefinedHeaders(reqContainer, hRequest);
-                        auto headers = reqContainer.GetRequestHeaders();
+                        const auto& headers = reqContainer.GetRequestHeaders();
                         if (headers.size() > 0)
                         {
                             for (auto const& obj : headers)
@@ -255,7 +255,7 @@ namespace PlayFab
                                         }
 
                                         // Allocate space for the buffer
-                                        auto outBuffer = std::unique_ptr<char[]>(new char[dwSize + 1]);
+                                        std::unique_ptr<char[]> outBuffer = std::unique_ptr<char[]>(new char[dwSize + 1]);
                                         if (!outBuffer)
                                         {
                                             SetErrorInfo(reqContainer, "Out of memory, failed to allocate a buffer to read a data block in HTTP response");
@@ -415,7 +415,7 @@ namespace PlayFab
     void PlayFabWinHttpPlugin::HandleResults(std::unique_ptr<CallRequestContainer> requestContainer)
     {
         CallRequestContainer& reqContainer = *requestContainer;
-        auto callback = reqContainer.GetCallback();
+        const auto& callback = reqContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(

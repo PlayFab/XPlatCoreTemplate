@@ -48,10 +48,10 @@ namespace PlayFab
             WriteEventsResponse outResult;
             if (ValidateResult(outResult, container))
             {
-                const auto internalPtr = container.successCallback.get();
+                const auto& internalPtr = container.successCallback.get();
                 if (internalPtr != nullptr)
                 {
-                    const auto callback = (*static_cast<ProcessApiCallback<WriteEventsResponse> *>(internalPtr));
+                    const auto& callback = (*static_cast<ProcessApiCallback<WriteEventsResponse> *>(internalPtr));
                     callback(outResult, container.GetCustomData());
                 }
             }
@@ -65,13 +65,13 @@ namespace PlayFab
         )
         {
             IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
-            const auto requestJson = request.ToJson();
+            const auto& requestJson = request.ToJson();
             std::string jsonAsString = requestJson.toStyledString();
 
             std::unordered_map<std::string, std::string> headers;
             headers.emplace("X-EntityToken", request.authenticationContext == nullptr ? PlayFabSettings::entityToken : request.authenticationContext->entityToken);
 
-            auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
+            std::unique_ptr<CallRequestContainer> reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
                 "/Event/WriteTelemetryEvents",
                 headers,
                 jsonAsString,
@@ -229,7 +229,7 @@ namespace PlayFab
             // Custom data received is a pointer to our api object
             PlayFabQoSApi* api = reinterpret_cast<PlayFabQoSApi*>(customData);
 
-            auto a = result.QosServers;
+            std::list<QosServer> a = result.QosServers;
             for (auto it = a.begin(); it != a.end(); ++it)
             {
                 api->regionMap[it->Region] = move(it->ServerUrl);
