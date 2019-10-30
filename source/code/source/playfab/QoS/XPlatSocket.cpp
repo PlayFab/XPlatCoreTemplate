@@ -171,7 +171,7 @@ namespace PlayFab
 
             if (selectResult > 0)
             {
-                int recvResult = recvfrom(s, buf, buflen, 0, (struct sockaddr *) &siOther, &slen);
+                size_t recvResult = recvfrom(s, buf, buflen, 0, (struct sockaddr *) &siOther, &slen);
                 if (recvResult < 0)
                 {
                     return platformSpecificError();
