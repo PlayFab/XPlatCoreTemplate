@@ -17,7 +17,7 @@ using namespace EventsModels;
 
 namespace PlayFabUnit
 {
-#if (!UNITY_IOS && !UNITY_ANDROID) && (!defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID))
+#if (!UNITY_IOS && !UNITY_ANDROID) && (!defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_SWITCH))
     /// QoS API
     void PlayFabEventTest::QosResultApi(TestContext& testContext)
     {
@@ -125,7 +125,7 @@ namespace PlayFabUnit
                     "\n";
             }
         }
-        else 
+        else
         {
             (*eventTestContext)->Fail("EmitEventCallback received an error");
         }
@@ -204,7 +204,7 @@ namespace PlayFabUnit
     void PlayFabEventTest::AddTests()
     {
         // TODO: Fix whatever limitation causes this test to fail for these platforms
-#if !defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_PLAYSTATION)
+#if !defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
         AddTest("QosResultApi", &PlayFabEventTest::QosResultApi);
 #endif
         AddTest("EventsApi", &PlayFabEventTest::EventsApi);
@@ -238,7 +238,7 @@ namespace PlayFabUnit
                 loginComplete = true;
             },
             &loggedIn);
-        
+
         // Sleep while waiting for log in to complete.
         while (!loginComplete)
         {
