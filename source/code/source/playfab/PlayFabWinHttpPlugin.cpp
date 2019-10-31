@@ -255,7 +255,7 @@ namespace PlayFab
                                         }
 
                                         // Allocate space for the buffer
-                                        std::unique_ptr<char[]> outBuffer = std::unique_ptr<char[]>(new char[dwSize + 1]);
+                                        auto outBuffer = std::unique_ptr<char[]>(new char[dwSize + 1]);
                                         if (!outBuffer)
                                         {
                                             SetErrorInfo(reqContainer, "Out of memory, failed to allocate a buffer to read a data block in HTTP response");

@@ -431,7 +431,7 @@ namespace PlayFab
 
         // Call SetUrl
         {
-            const std::string& requestUrl = GetUrl(requestTask);
+            const std::string requestUrl = GetUrl(requestTask);
 
             jmethodID methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "setUrl", "(Ljava/lang/String;)Z");
             if (methodId == nullptr)
@@ -456,7 +456,8 @@ namespace PlayFab
         SetPredefinedHeaders(requestTask);
 
         // Call SetHeader
-        const auto& headers = requestContainer.GetRequestHeaders();
+        const std::unordered_map<std::string, std::string> headers = requestContainer.GetRequestHeaders();
+        
         if (!headers.empty())
         {
             for (auto const &obj : headers)
