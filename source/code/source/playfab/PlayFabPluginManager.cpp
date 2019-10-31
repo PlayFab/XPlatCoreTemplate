@@ -28,7 +28,7 @@ namespace PlayFab
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::GetPluginInternal(const PlayFabPluginContract contract, const std::string& instanceName)
     {
         std::pair<PlayFabPluginContract, std::string> key = std::make_pair(contract, instanceName);
-        const auto& pluginEntry = plugins.find(key);
+        const auto pluginEntry = plugins.find(key);
         if (pluginEntry == plugins.end())
         {
             // Requested plugin is not in the cache, create the default one
@@ -58,7 +58,7 @@ namespace PlayFab
     void PlayFabPluginManager::SetPluginInternal(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
         std::pair<PlayFabPluginContract, std::string> key = std::make_pair(contract, instanceName);
-        const auto& pluginEntry = plugins.find(key);
+        const auto pluginEntry = plugins.find(key);
         if (pluginEntry == plugins.end())
         {
             plugins.insert({ key, std::move(plugin) });

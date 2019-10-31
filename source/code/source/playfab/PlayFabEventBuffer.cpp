@@ -35,7 +35,7 @@ namespace PlayFab
 
         // First event is just a stub which is used only to maintain the initial consistency of m_head/m_tail.
         // It is immediately considered already consumed.
-        unsigned long long index = eventIndex->load(std::memory_order_relaxed);
+        auto index = static_cast<uint64_t>(eventIndex->load(std::memory_order_relaxed));
         PlayFabEventPacket* firstEvent = CreateEventPacket(buffer, index, nullptr);
 
         tail = firstEvent;
@@ -97,7 +97,7 @@ namespace PlayFab
 
         // create an event packet, set it to the tail->next and move the tail
 
-        const unsigned long long currentEventIndex = eventIndex->fetch_add(1, std::memory_order_relaxed);
+        const auto currentEventIndex = static_cast<const uint64_t>(eventIndex->fetch_add(1, std::memory_order_relaxed));
         PlayFabEventPacket* event = CreateEventPacket(reinterpret_cast<uint8_t*>(eventStart), currentEventIndex, std::move(request));
         tailPtr->next.store(event, std::memory_order_release);
         tail = event;
