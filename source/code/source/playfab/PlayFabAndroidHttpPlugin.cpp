@@ -471,7 +471,7 @@ namespace PlayFab
 
         // Call SetBody
         {
-            const std::string& requestUrl = GetUrl(requestTask);
+            const std::string requestUrl = GetUrl(requestTask);
 
             jmethodID methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "setBody", "([B)V");
             if (methodId == nullptr)
@@ -690,7 +690,7 @@ namespace PlayFab
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
 
-        const auto& callback = requestContainer.GetCallback();
+        CallRequestContainerCallback callback = requestContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(requestContainer.responseJson.get("code", Json::Value::null).asInt(),
