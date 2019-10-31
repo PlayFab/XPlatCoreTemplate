@@ -9,6 +9,8 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
 
     var extraDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;";
 
+    sdkGlobals.sdkVersion = "3.19.191001";
+
     var locals = {
         apis: apis,
         buildIdentifier: sdkGlobals.buildIdentifier,
@@ -282,7 +284,7 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
             + "    #endif\n"
             + tabbing + "}\n"
             + tabbing + "else {\n"
-            + (isInstanceApi ? tabbing + "    auto authenticationContext = this->GetOrCreateAuthenticationContext();\n" : "")
+            + (isInstanceApi ? tabbing + "    std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = this->GetOrCreateAuthenticationContext();\n" : "")
             + tabbing + "    if (" + authContext + "entityToken.length() > 0) {\n"
             + tabbing + "        authKey = \"X-EntityToken\"; authValue = " + authContext + "entityToken;\n"
             + tabbing + "    }\n"
@@ -319,7 +321,7 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + "{\n"
             + tabbing + "    outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
             + tabbing + "    outResult.authenticationContext->clientSessionTicket = outResult.SessionTicket;\n"
-            + (isInstanceApi ? tabbing + "    auto authenticationContext = this->GetOrCreateAuthenticationContext();\n" : "")
+            + (isInstanceApi ? tabbing + "    std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = this->GetOrCreateAuthenticationContext();\n" : "")
             + tabbing + "    " + authContext + "clientSessionTicket = outResult.SessionTicket;\n"
             + tabbing + "    if (outResult.EntityToken.notNull()) {\n"
             + tabbing + "        outResult.authenticationContext->entityToken = outResult.EntityToken->EntityToken;\n"
