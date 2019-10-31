@@ -9,8 +9,6 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
 
     var extraDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;";
 
-    sdkGlobals.sdkVersion = "3.19.191001";
-
     var locals = {
         apis: apis,
         buildIdentifier: sdkGlobals.buildIdentifier,
