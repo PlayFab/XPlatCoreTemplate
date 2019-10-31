@@ -95,14 +95,14 @@ namespace PlayFab
     {
 <%- getRequestActions("        ", apiCall, true) %>
         IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
-        const auto& requestJson = request.ToJson();
+        const Json::Value requestJson = request.ToJson();
         std::string jsonAsString = requestJson.toStyledString();
 
         std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = request.authenticationContext == nullptr ? this->GetOrCreateAuthenticationContext() : request.authenticationContext;
         std::unordered_map<std::string, std::string> headers;
         headers.emplace(<%- getAuthParams(apiCall, true) %>);
 
-        std::unique_ptr<CallRequestContainer> reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
+        auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
             "<%- apiCall.url %>",
             headers,
             jsonAsString,

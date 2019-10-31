@@ -48,10 +48,10 @@ namespace PlayFab
             WriteEventsResponse outResult;
             if (ValidateResult(outResult, container))
             {
-                const auto& internalPtr = container.successCallback.get();
-                if (internalPtr != nullptr)
+                std::shared_ptr<void> internalPtr = container.successCallback;
+                if (internalPtr.get() != nullptr)
                 {
-                    const auto& callback = (*static_cast<ProcessApiCallback<WriteEventsResponse> *>(internalPtr));
+                    const auto& callback = *static_cast<ProcessApiCallback<WriteEventsResponse> *>(internalPtr.get());
                     callback(outResult, container.GetCustomData());
                 }
             }
@@ -65,13 +65,13 @@ namespace PlayFab
         )
         {
             IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
-            const auto& requestJson = request.ToJson();
+            Json::Value requestJson = request.ToJson();
             std::string jsonAsString = requestJson.toStyledString();
 
             std::unordered_map<std::string, std::string> headers;
             headers.emplace("X-EntityToken", request.authenticationContext == nullptr ? PlayFabSettings::entityToken : request.authenticationContext->entityToken);
 
-            std::unique_ptr<CallRequestContainer> reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
+            auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
                 "/Event/WriteTelemetryEvents",
                 headers,
                 jsonAsString,

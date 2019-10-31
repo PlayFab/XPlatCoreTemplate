@@ -38,7 +38,7 @@ namespace PlayFab
     {
 <%- getRequestActions("        ", apiCall, false) %>
         IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
-        const auto& requestJson = request.ToJson();
+        const Json::Value requestJson = request.ToJson();
         std::string jsonAsString = requestJson.toStyledString();
 
         std::unordered_map<std::string, std::string> headers;
