@@ -209,7 +209,7 @@ namespace PlayFab
     void PlayFabCurlHttpPlugin::HandleResults(std::unique_ptr<CallRequestContainer> requestContainer)
     {
         CallRequestContainer& reqContainer = *requestContainer;
-        const auto& callback = reqContainer.GetCallback();
+        CallRequestContainerCallback callback = reqContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(

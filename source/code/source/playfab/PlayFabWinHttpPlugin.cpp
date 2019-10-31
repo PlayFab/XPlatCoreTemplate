@@ -190,7 +190,7 @@ namespace PlayFab
                     {
                         // Add HTTP headers
                         SetPredefinedHeaders(reqContainer, hRequest);
-                        const auto& headers = reqContainer.GetRequestHeaders();
+                        const std::unordered_map<std::string, std::string> headers = reqContainer.GetRequestHeaders();
                         if (headers.size() > 0)
                         {
                             for (auto const& obj : headers)
@@ -415,7 +415,7 @@ namespace PlayFab
     void PlayFabWinHttpPlugin::HandleResults(std::unique_ptr<CallRequestContainer> requestContainer)
     {
         CallRequestContainer& reqContainer = *requestContainer;
-        const auto& callback = reqContainer.GetCallback();
+        const std::unordered_map<std::string, std::string> callback = reqContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(

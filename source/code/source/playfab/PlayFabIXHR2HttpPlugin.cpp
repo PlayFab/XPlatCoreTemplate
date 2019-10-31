@@ -127,7 +127,7 @@ namespace PlayFab
         reportErrorAsSuccessHeader.wstrHeaderValue = L"true";
         headers.push_back(std::move(reportErrorAsSuccessHeader));
 
-        const auto& reqHeaders = reqContainer.GetHeaders();
+        const std::unordered_map<std::string, std::string> reqHeaders = reqContainer.GetHeaders();
 
         if (reqHeaders.size() > 0)
         {
@@ -174,8 +174,8 @@ namespace PlayFab
 
         const HRESULT res = postEventRequest.GetResult();
         const DWORD status = postEventRequest.GetStatus();
-        const auto& response = postEventRequest.GetData();
-        const auto& responseRequestId = postEventRequest.GetResponseRequestId();
+        const std::wstring response = postEventRequest.GetData();
+        const std::wstring responseRequestId = postEventRequest.GetResponseRequestId();
 
         reqContainer.responseString = std::string(response.begin(), response.end());
         reqContainer.errorWrapper.RequestId = std::string(responseRequestId.begin(), responseRequestId.end());
@@ -233,7 +233,7 @@ namespace PlayFab
     void PlayFabIXHR2HttpPlugin::HandleResults(std::unique_ptr<CallRequestContainer> requestContainer)
     {
         CallRequestContainer& reqContainer = *requestContainer;
-        const auto& callback = reqContainer.GetCallback();
+        CallRequestContainerCallback callback = reqContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(
