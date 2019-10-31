@@ -415,7 +415,7 @@ namespace PlayFab
     void PlayFabWinHttpPlugin::HandleResults(std::unique_ptr<CallRequestContainer> requestContainer)
     {
         CallRequestContainer& reqContainer = *requestContainer;
-        const std::unordered_map<std::string, std::string> callback = reqContainer.GetCallback();
+        CallRequestContainerCallback callback = reqContainer.GetCallback();
         if (callback != nullptr)
         {
             callback(
