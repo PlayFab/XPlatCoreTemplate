@@ -127,10 +127,10 @@ namespace PlayFab
         if (ValidateResult(outResult, container))
         {
 <%- getResultActions("            ", apiCall, true) %>
-            const auto& internalPtr = container.successCallback.get();
-            if (internalPtr != nullptr)
+            std::shared_ptr<void> internalPtr = container.successCallback;
+            if (internalPtr.get() != nullptr)
             {
-                const auto& callback = (*static_cast<ProcessApiCallback<<%- apiCall.result %>> *>(internalPtr));
+                const auto& callback = *static_cast<ProcessApiCallback<<%- apiCall.result %>> *>(internalPtr.get());
                 callback(outResult, container.GetCustomData());
             }
         }
@@ -144,7 +144,7 @@ namespace PlayFab
 
     void PlayFabClientInstanceAPI::MultiStepClientLogin(bool needsAttribution)
     {
-        const auto& apiSettings = this->GetSettings();
+        std::shared_ptr<PlayFab::PlayFabApiSettings> apiSettings = this->GetSettings();
         if (apiSettings == nullptr)
         {
             if (needsAttribution && !PlayFabSettings::disableAdvertising && PlayFabSettings::advertisingIdType.length() > 0 && PlayFabSettings::advertisingIdValue.length() > 0)
