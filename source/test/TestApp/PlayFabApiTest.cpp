@@ -48,7 +48,7 @@ namespace PlayFabUnit
         request.CreateAccount = true;
 
         // store current (valid) title id
-        auto validTitleId = PlayFabSettings::titleId;
+        const std::string validTitleId = PlayFabSettings::titleId;
 
         // set invalid title id
         PlayFabSettings::titleId = "";
