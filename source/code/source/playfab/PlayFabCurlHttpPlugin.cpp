@@ -138,8 +138,8 @@ namespace PlayFab
             if (offset != std::string::npos)
             {
                 // Trim any whitespace
-                requestId.erase(0, offset);
                 requestId.erase(requestId.find_last_not_of(whitespace) + 1);
+                requestId.erase(0, offset);
                 // Save it
                 reqContainer.SetRequestId(requestId);
                 reqContainer.errorWrapper.RequestId = requestId;
