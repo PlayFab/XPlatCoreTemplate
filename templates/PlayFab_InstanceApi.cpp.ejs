@@ -100,8 +100,9 @@ namespace PlayFab
 
         std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = request.authenticationContext == nullptr ? this->GetOrCreateAuthenticationContext() : request.authenticationContext;
         std::unordered_map<std::string, std::string> headers;
-        headers.emplace(<%- getAuthParams(apiCall, true) %>);
-
+<% if (hasAuthParams(apiCall)) {
+%>        headers.emplace(<%- getAuthParams(apiCall, true) %>);
+<% } %>
         auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
             "<%- apiCall.url %>",
             headers,
