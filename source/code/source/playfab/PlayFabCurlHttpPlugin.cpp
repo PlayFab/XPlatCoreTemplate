@@ -115,12 +115,13 @@ namespace PlayFab
     constexpr char requestIdHeaderKey[] = "X-RequestId: ";
     size_t HeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata)
     {
+        size_t headerLen = _countof(requestIdHeaderKey) - 1;
         CallRequestContainer& reqContainer = *static_cast<CallRequestContainer*>(userdata);
         // If this header starts with the key we expect
-        if (buffer == strstr(buffer, requestIdHeaderKey))
+        if (strncasecmp(buffer, requestIdHeaderKey, headerLen) == 0)
         {
             // The value is the requestId
-            reqContainer.SetRequestId(std::string(buffer + _countof(requestIdHeaderKey) - 1, nitems - _countof(requestIdHeaderKey) - 1));
+            reqContainer.SetRequestId(std::string(buffer + headerLen, nitems - headerLen - 2));
             reqContainer.errorWrapper.RequestId = reqContainer.GetRequestId();
         }
         return nitems * size; // The return expected by curl for this callback
