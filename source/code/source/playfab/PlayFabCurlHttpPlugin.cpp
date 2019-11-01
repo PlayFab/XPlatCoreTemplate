@@ -113,22 +113,26 @@ namespace PlayFab
     }
 
     constexpr char requestIdHeaderKey[] = "X-RequestId:";
+    constexpr size_t requestIdheaderKeyLen = _countof(requestIdHeaderKey) - 1;
     constexpr char whitespace[] = "\t\n\v\f\r ";
     size_t HeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata)
     {
-        size_t headerKeyLen = _countof(requestIdHeaderKey) - 1;
         CallRequestContainer& reqContainer = *static_cast<CallRequestContainer*>(userdata);
         // If this header-line is long enough, and the header starts with the key we expect
-        if ((nitems > headerKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, headerKeyLen) == 0))
+        if ((nitems > requestIdheaderKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, requestIdheaderKeyLen) == 0))
         {
             // The value is the requestId
-            std::string requestId = std::string(buffer + headerKeyLen, nitems - headerKeyLen);
-            // Trim any whitespace
-            requestId.erase(0, requestId.find_first_not_of(whitespace));
-            requestId.erase(requestId.find_last_not_of(whitespace) + 1);
-            // Save it
-            reqContainer.SetRequestId(requestId);
-            reqContainer.errorWrapper.RequestId = requestId;
+            std::string requestId = std::string(buffer + requestIdheaderKeyLen, nitems - requestIdheaderKeyLen);
+            auto offset = requestId.find_first_not_of(whitespace);
+            if (offset != std::string::npos)
+            {
+                // Trim any whitespace
+                requestId.erase(0, offset);
+                requestId.erase(requestId.find_last_not_of(whitespace) + 1);
+                // Save it
+                reqContainer.SetRequestId(requestId);
+                reqContainer.errorWrapper.RequestId = requestId;
+            }
         }
         return nitems * size; // The return expected by curl for this callback
     }
