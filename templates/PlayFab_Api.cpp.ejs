@@ -42,8 +42,9 @@ namespace PlayFab
         std::string jsonAsString = requestJson.toStyledString();
 
         std::unordered_map<std::string, std::string> headers;
-        headers.emplace(<%- getAuthParams(apiCall, false) %>);
-
+<% if (hasAuthParams(apiCall)) {
+%>        headers.emplace(<%- getAuthParams(apiCall, false) %>);
+<% } %>
         auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
             "<%- apiCall.url %>",
             headers,

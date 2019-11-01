@@ -40,6 +40,7 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
         getRequestActions: getRequestActions,
         getResultActions: getResultActions,
         hasClientOptions: getAuthMechanisms([api]).includes("SessionTicket"),
+        hasAuthParams: hasAuthParams,
         ifHasProps: ifHasProps,
         sdkVersion: sdkGlobals.sdkVersion,
         sortedClasses: getSortedClasses(api.datatypes)
@@ -108,18 +109,25 @@ function getApiDefine(api) {
     return "#ifndef DISABLE_PLAYFABENTITY_API";
 }
 
+function hasAuthParams(apiCall) {
+    try {
+        getAuthParams(apiCall, true);
+    } catch (err) {
+        return false;
+    }
+    return true;
+}
+
 function getAuthParams(apiCall, isInstanceApi) {
     if (apiCall.url === "/Authentication/GetEntityToken")
         return "authKey, authValue";
     switch (apiCall.auth) {
-        case "None": return "\"\", \"\"";
         case "EntityToken": return "\"X-EntityToken\", request.authenticationContext == nullptr ? " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "entityToken : request.authenticationContext->entityToken";
         case "SessionTicket": return "\"X-Authorization\", request.authenticationContext == nullptr ? " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "clientSessionTicket : request.authenticationContext->clientSessionTicket";
         case "SecretKey": return "\"X-SecretKey\", request.authenticationContext == nullptr ? " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "developerSecretKey : request.authenticationContext->developerSecretKey";
     }
-    throw "getAuthParams: Unknown auth type: " + apiCall.auth + " for " + apiCall.name;
+    throw Error("getAuthParams: Unknown auth type: " + apiCall.auth + " for " + apiCall.name);
 }
-
 function getBaseType(datatype) {
     if (datatype.className.toLowerCase().endsWith("request"))
         return "PlayFabRequestCommon";
@@ -161,7 +169,7 @@ function getPropertyCppType(property, datatype, needOptional) {
         return isOptional ? "Boxed<time_t>" : "time_t";
     else if (property.isenum)
         return isOptional ? ("Boxed<" + property.actualtype + ">") : property.actualtype;
-    throw "getPropertyCppType: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name;
+    throw Error("getPropertyCppType: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name);
 }
 
 function getPropertyDefinition(tabbing, property, datatype) {
@@ -177,7 +185,7 @@ function getPropertyDefinition(tabbing, property, datatype) {
     } else if (property.collection === "map") {
         return tabbing + "std::map<std::string, " + cppType + "> " + safePropName + ";";
     }
-    throw "getPropertyDefinition: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name;
+    throw Error("getPropertyDefinition: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name);
 }
 
 function getPropertyFromJson(tabbing, property, datatype) {
@@ -198,7 +206,7 @@ function getPropertyFromJson(tabbing, property, datatype) {
     if (primitives.has(property.actualtype))
         return tabbing + "FromJsonUtilP(input[\"" + property.name + "\"], " + safePropName + ");";
 
-    throw "getPropertyFromJson: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name;
+    throw Error("getPropertyFromJson: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name);
 }
 
 function getPropertyToJson(tabbing, property, datatype) {
@@ -219,7 +227,7 @@ function getPropertyToJson(tabbing, property, datatype) {
     if (primitives.has(property.actualtype))
         return tabbing + "Json::Value each_" + safePropName + "; ToJsonUtilP(" + safePropName + ", each_" + safePropName + "); output[\"" + property.name + "\"] = each_" + safePropName + ";";
 
-    throw "getPropertyToJson: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name;
+    throw Error("getPropertyToJson: Unknown property type: " + property.actualtype + " for " + property.name + " in " + datatype.name);
 }
 
 function getPropertySafeName(property) {
