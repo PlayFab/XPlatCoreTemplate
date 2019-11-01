@@ -87,6 +87,8 @@ namespace PlayFab
         return std::make_shared<PlayFabAndroidHttpPlugin>();
 #elif defined(PLAYFAB_PLATFORM_PLAYSTATION)
         return std::make_shared<PlayFabPS4HttpPlugin>();
+#elif defined(PLAYFAB_PLATFORM_SWITCH)
+        return std::make_shared<PlayFabCurlHttpPlugin>();
 #else
         return std::make_shared<PlayFabCurlHttpPlugin>();
 #endif // PLAYFAB_PLATFORM_XBOX
