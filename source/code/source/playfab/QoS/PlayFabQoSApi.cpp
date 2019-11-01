@@ -229,10 +229,9 @@ namespace PlayFab
             // Custom data received is a pointer to our api object
             PlayFabQoSApi* api = reinterpret_cast<PlayFabQoSApi*>(customData);
 
-            std::list<QosServer> a = result.QosServers;
-            for (auto it = a.begin(); it != a.end(); ++it)
+            for(const QosServer& server :result.QosServers)
             {
-                api->regionMap[it->Region] = move(it->ServerUrl);
+                api->regionMap[server.Region] = move(server.ServerUrl);
             }
 
             api->listQosServersCompleted = true;
