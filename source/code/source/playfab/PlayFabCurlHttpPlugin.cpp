@@ -116,13 +116,13 @@ namespace PlayFab
     constexpr char whitespace[] = "\t\n\v\f\r ";
     size_t HeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata)
     {
-        size_t headerLen = _countof(requestIdHeaderKey) - 1;
+        size_t headerKeyLen = _countof(requestIdHeaderKey) - 1;
         CallRequestContainer& reqContainer = *static_cast<CallRequestContainer*>(userdata);
         // If this header-line is long enough, and the header starts with the key we expect
-        if ((nitems > headerLen) && (strncasecmp(buffer, requestIdHeaderKey, headerLen) == 0))
+        if ((nitems > headerKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, headerKeyLen) == 0))
         {
             // The value is the requestId
-            std::string requestId = std::string(buffer + headerLen, nitems - headerLen);
+            std::string requestId = std::string(buffer + headerKeyLen, nitems - headerKeyLen);
             // Trim any whitespace
             requestId.erase(0, requestId.find_first_not_of(whitespace));
             requestId.erase(requestId.find_last_not_of(whitespace) + 1);
