@@ -6,7 +6,12 @@
 
 #include <stdexcept>
 
-#define _countof(array) (sizeof(array) / sizeof(array[0]))
+#ifndef _countof
+template <typename _CountofType, size_t _SizeOfArray>
+char(*__countof_helper(_CountofType(&_Array)[_SizeOfArray]))[_SizeOfArray];
+
+#define _countof(_Array) (sizeof(*__countof_helper(_Array)) + 0)
+#endif
 
 namespace PlayFab
 {
@@ -118,6 +123,12 @@ namespace PlayFab
     size_t HeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata)
     {
         CallRequestContainer& reqContainer = *static_cast<CallRequestContainer*>(userdata);
+        if (!reqContainer.errorWrapper.RequestId.empty())
+        {
+            // For now, we only care about the RequestId header
+            return nitems * size; // The return expected by curl for this callback
+        }
+
         // If this header-line is long enough, and the header starts with the key we expect
         if ((nitems > requestIdheaderKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, requestIdheaderKeyLen) == 0))
         {
