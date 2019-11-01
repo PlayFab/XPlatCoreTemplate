@@ -231,7 +231,7 @@ namespace PlayFab
 
             for(const QosServer& server :result.QosServers)
             {
-                api->regionMap[server.Region] = move(server.ServerUrl);
+                api->regionMap[server.Region] = server.ServerUrl;
             }
 
             api->listQosServersCompleted = true;
