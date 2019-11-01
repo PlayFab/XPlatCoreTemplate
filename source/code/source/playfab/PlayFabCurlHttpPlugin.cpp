@@ -112,17 +112,23 @@ namespace PlayFab
         } // UNLOCK httpRequestMutex
     }
 
-    constexpr char requestIdHeaderKey[] = "X-RequestId: ";
+    constexpr char requestIdHeaderKey[] = "X-RequestId:";
+    constexpr char whitespace[] = "\t\n\v\f\r ";
     size_t HeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata)
     {
         size_t headerLen = _countof(requestIdHeaderKey) - 1;
         CallRequestContainer& reqContainer = *static_cast<CallRequestContainer*>(userdata);
-        // If this header starts with the key we expect
-        if (strncasecmp(buffer, requestIdHeaderKey, headerLen) == 0)
+        // If this header-line is long enough, and the header starts with the key we expect
+        if ((nitems > headerLen) && (strncasecmp(buffer, requestIdHeaderKey, headerLen) == 0))
         {
             // The value is the requestId
-            reqContainer.SetRequestId(std::string(buffer + headerLen, nitems - headerLen - 2));
-            reqContainer.errorWrapper.RequestId = reqContainer.GetRequestId();
+            std::string requestId = std::string(buffer + headerLen, nitems - headerLen);
+            // Trim any whitespace
+            requestId.erase(0, requestId.find_first_not_of(whitespace));
+            requestId.erase(requestId.find_last_not_of(whitespace) + 1);
+            // Save it
+            reqContainer.SetRequestId(requestId);
+            reqContainer.errorWrapper.RequestId = requestId;
         }
         return nitems * size; // The return expected by curl for this callback
     }
