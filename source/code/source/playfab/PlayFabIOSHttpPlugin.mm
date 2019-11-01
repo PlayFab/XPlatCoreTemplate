@@ -223,6 +223,7 @@ namespace PlayFab
         SetPredefinedHeaders(requestTask, (__bridge void*)urlRequest);
 
         const auto& headers = requestContainer.GetRequestHeaders();
+
         if (headers.size() > 0)
         {
             for (auto const &obj : headers)
@@ -297,6 +298,8 @@ namespace PlayFab
         std::unique_ptr<Json::CharReader> jsonReader(jsonReaderFactory.newCharReader());
         JSONCPP_STRING jsonParseErrors;
         const bool parsedSuccessfully = jsonReader->parse(requestContainer.responseString.c_str(), requestContainer.responseString.c_str() + requestContainer.responseString.length(), &requestContainer.responseJson, &jsonParseErrors);
+
+        requestContainer.errorWrapper.RequestId = requestContainer.GetRequestId();
 
         if (parsedSuccessfully)
         {
