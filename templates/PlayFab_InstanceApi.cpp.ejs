@@ -79,7 +79,9 @@ namespace PlayFab
     void PlayFab<%- api.name %>InstanceAPI::ForgetAllCredentials()
     {
         if (this->authContext == nullptr)
+        {
             return;
+        }
 
         this->authContext->ForgetAllCredentials();
     }
@@ -152,11 +154,17 @@ namespace PlayFab
             {
                 AttributeInstallRequest request;
                 if (PlayFabSettings::advertisingIdType == PlayFabSettings::AD_TYPE_IDFA)
+                {
                     request.Idfa = PlayFabSettings::advertisingIdValue;
+                }
                 else if (PlayFabSettings::advertisingIdType == PlayFabSettings::AD_TYPE_ANDROID_ID)
+                {
                     request.Adid = PlayFabSettings::advertisingIdValue;
+                }
                 else
+                {
                     return;
+                }
                 AttributeInstall(request, nullptr, nullptr);
             }
         }
@@ -166,11 +174,17 @@ namespace PlayFab
             {
                 AttributeInstallRequest request;
                 if (apiSettings->advertisingIdType == PlayFabSettings::AD_TYPE_IDFA)
+                {
                     request.Idfa = apiSettings->advertisingIdValue;
+                }
                 else if (apiSettings->advertisingIdType == PlayFabSettings::AD_TYPE_ANDROID_ID)
+                {
                     request.Adid = apiSettings->advertisingIdValue;
+                }
                 else
+                {
                     return;
+                }
                 AttributeInstall(request, nullptr, nullptr);
             }
         }
@@ -187,9 +201,14 @@ namespace PlayFab
         else // Process the error case
         {
             if (PlayFabSettings::globalErrorHandler != nullptr)
+            {
                 PlayFabSettings::globalErrorHandler(container.errorWrapper, container.GetCustomData());
+            }
+
             if (container.errorCallback != nullptr)
+            {
                 container.errorCallback(container.errorWrapper, container.GetCustomData());
+            }
             return false;
         }
     }
