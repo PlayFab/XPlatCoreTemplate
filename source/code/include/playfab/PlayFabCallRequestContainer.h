@@ -6,7 +6,7 @@
 namespace PlayFab
 {
     /// <summary>
-    /// Internal PlayFabHttp container for each api call
+    /// Internal PlayFabHttp container for each API call
     /// </summary>
     class CallRequestContainer : public CallRequestContainerBase
     {
@@ -15,11 +15,13 @@ namespace PlayFab
             const std::unordered_map<std::string, std::string>& headers,
             const std::string& requestBody,
             CallRequestContainerCallback callback,
-            void* customData = nullptr,
-            std::shared_ptr<PlayFabApiSettings> apiSettings = nullptr);
+            std::shared_ptr<PlayFabApiSettings> apiSettings,
+            std::shared_ptr<PlayFabAuthenticationContext> context,
+            void* customData);
 
         virtual ~CallRequestContainer() override;
         std::string GetFullUrl() const;
+        virtual bool ValidateSettings() override;
 
         // TODO: clean up these public variables with setters/getters when you have the chance.
 

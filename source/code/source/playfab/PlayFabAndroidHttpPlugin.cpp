@@ -247,6 +247,11 @@ namespace PlayFab
 
     void PlayFabAndroidHttpPlugin::MakePostRequest(std::unique_ptr<CallRequestContainerBase> requestContainer)
     {
+        if (!requestContainer->ValidateSettings())
+        {
+            return;
+        }
+
         std::shared_ptr<RequestTask> requestTask = nullptr;
         try
         {
@@ -275,7 +280,7 @@ namespace PlayFab
     {
         if (PlayFabSettings::threadedCallbacks)
         {
-            throw std::runtime_error("You should not call Update() when PlayFabSettings::threadedCallbacks == true");
+            throw PlayFabException(PlayFabExceptionCode::ThreadMisuse, "You should not call Update() when PlayFabSettings::threadedCallbacks == true");
         }
 
         std::shared_ptr<RequestTask> requestTask = nullptr;
@@ -600,7 +605,7 @@ namespace PlayFab
 
     std::string PlayFabAndroidHttpPlugin::GetUrl(const RequestTask& requestTask) const
     {
-        return PlayFabSettings::GetUrl(requestTask.GetRequestContainerUrl(), PlayFabSettings::requestGetParams);
+        return PlayFabSettings::GetUrl(requestTask.GetRequestContainerUrl(), PlayFabSettings::staticSettings->requestGetParams);
     }
 
     void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask)

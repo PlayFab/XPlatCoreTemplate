@@ -27,8 +27,9 @@ namespace PlayFab
             const std::unordered_map<std::string, std::string>& headers,
             std::string requestBody,
             CallRequestContainerCallback callback,
-            void* customData = nullptr,
-            std::shared_ptr<PlayFabApiSettings> apiSettings = nullptr);
+            std::shared_ptr<PlayFabApiSettings> apiSettings,
+            std::shared_ptr<PlayFabAuthenticationContext> context,
+            void* customData);
 
         virtual ~CallRequestContainerBase() = default;
 
@@ -38,6 +39,7 @@ namespace PlayFab
         void SetRequestId(const std::string& newRequestId);
         std::string GetRequestBody() const;
         std::shared_ptr<PlayFabApiSettings> GetApiSettings() const;
+        std::shared_ptr<PlayFabAuthenticationContext> GetContext() const;
 
         /// <summary>
         /// This function is meant to handle logic of calling the error callback or success
@@ -45,13 +47,15 @@ namespace PlayFab
         CallRequestContainerCallback GetCallback() const;
 
         void* GetCustomData() const;
+        virtual bool ValidateSettings() = 0;
 
     protected:
         std::string url;
         std::unordered_map<std::string, std::string> requestHeaders;
         std::string requestBody;
         std::string requestId;
-        std::shared_ptr<PlayFabApiSettings> apiSettings;
+        std::shared_ptr<PlayFabApiSettings> m_settings;
+        std::shared_ptr<PlayFabAuthenticationContext> m_context;
         CallRequestContainerCallback callback;
 
         // I never own this, I can never destroy it

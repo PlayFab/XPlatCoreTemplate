@@ -9,9 +9,10 @@ namespace PlayFab
         const std::unordered_map<std::string, std::string>& headers,
         const std::string& requestBody,
         CallRequestContainerCallback callback,
-        void* customData,
-        std::shared_ptr<PlayFabApiSettings> settings) :
-        CallRequestContainerBase(url, headers, requestBody, callback, customData, settings),
+        std::shared_ptr<PlayFabApiSettings> settings,
+        std::shared_ptr<PlayFabAuthenticationContext> context,
+        void* customData) :
+        CallRequestContainerBase(url, headers, requestBody, callback, settings, context, customData),
         finished(false),
         responseString(""),
         responseJson(Json::Value::null),
@@ -43,13 +44,30 @@ namespace PlayFab
 
     std::string CallRequestContainer::GetFullUrl() const
     {
-        if (apiSettings == nullptr)
+        return m_settings->GetUrl(this->GetUrl());
+    }
+
+    bool CallRequestContainer::ValidateSettings()
+    {
+        bool valid = true;
+        if (m_settings->titleId.empty())
         {
-            return PlayFabSettings::GetUrl(this->GetUrl(), PlayFabSettings::requestGetParams);
+            errorWrapper.HttpCode = 0;
+            errorWrapper.HttpStatus = "Client-side validation failure";
+            errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorInvalidParams;
+            errorWrapper.ErrorName = errorWrapper.HttpStatus;
+            errorWrapper.ErrorMessage = "PlayFabSettings::staticSettings->titleId has not been set properly. It must not be empty.";
+            valid = false;
         }
-        else
-        {
-            return apiSettings->GetUrl(this->GetUrl(), PlayFabSettings::requestGetParams);
-        }
+
+        if (valid)
+            return true;
+
+        if (PlayFabSettings::globalErrorHandler != nullptr)
+            PlayFabSettings::globalErrorHandler(errorWrapper, GetCustomData());
+        if (errorCallback != nullptr)
+            errorCallback(errorWrapper, GetCustomData());
+
+        return false;
     }
 }
