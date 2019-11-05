@@ -35,8 +35,8 @@ namespace PlayFab
         const ErrorCallback errorCallback,
         void* customData
     )
-    {
-<%- getRequestActions("        ", apiCall, false) %>
+    {<%- getRequestActions("        ", apiCall, false)
+%>
         IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
         const Json::Value requestJson = request.ToJson();
         std::string jsonAsString = requestJson.toStyledString();
@@ -67,8 +67,8 @@ namespace PlayFab
 
         <%- apiCall.result %> outResult;
         if (ValidateResult(outResult, container))
-        {
-<%- getResultActions("            ", apiCall, false) %>
+        {<%- getResultActions("            ", apiCall, false)
+%>
             std::shared_ptr<void> internalPtr = container.successCallback;
             if (internalPtr.get() != nullptr)
             {
