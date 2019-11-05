@@ -86,12 +86,12 @@ namespace PlayFabUnit
     int PlayFabEventTest::eventFailCount;
     std::string PlayFabEventTest::eventFailLog;
 
-    void PlayFabEventTest::NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response)
+    void PlayFabEventTest::NonStaticEmitEventCallback(const std::shared_ptr<const PlayFab::IPlayFabEvent>& event, const std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>& response)
     {
         (*eventTestContext)->Pass("Private member called back!");
     }
     
-    void PlayFabEventTest::EmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response)
+    void PlayFabEventTest::EmitEventCallback(const std::shared_ptr<const PlayFab::IPlayFabEvent>& event, const std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>& response)
     {
         std::shared_ptr<const PlayFab::PlayFabEvent> pfEvent = std::dynamic_pointer_cast<const PlayFab::PlayFabEvent>(event);
         std::shared_ptr<const PlayFab::PlayFabEmitEventResponse> pfResponse = std::dynamic_pointer_cast<const PlayFab::PlayFabEmitEventResponse>(response);
@@ -187,7 +187,7 @@ namespace PlayFabUnit
 
         (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
             [&testContext]
-            (std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)
+            (const std::shared_ptr<const IPlayFabEvent>&, const std::shared_ptr<const IPlayFabEmitEventResponse>&)
             { if(testContext.activeState != TestActiveState::COMPLETE){ testContext.Pass("Lambda Function Callback Succeeded.");}});
     }
 

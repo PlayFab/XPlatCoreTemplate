@@ -24,7 +24,7 @@ namespace PlayFab
         /// </summary>
         void EmitEvent(std::unique_ptr<const IPlayFabEvent> event, const PlayFabEmitEventCallback callback) const;
         
-        void EmitEvent(std::unique_ptr<const IPlayFabEvent> event, std::function<void(std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)> callback) const;
+        void EmitEvent(std::unique_ptr<const IPlayFabEvent> event, std::function<void(const std::shared_ptr<const IPlayFabEvent>&, const std::shared_ptr<const IPlayFabEmitEventResponse>&)> callback) const;
 
     private:
         std::shared_ptr<IPlayFabEventRouter> eventRouter;

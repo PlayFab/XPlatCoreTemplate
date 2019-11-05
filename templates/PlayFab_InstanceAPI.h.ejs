@@ -21,9 +21,9 @@ namespace PlayFab
 
     public:
         PlayFab<%- api.name %>InstanceAPI();
-        explicit PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings);
-        explicit PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
+        explicit PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings);
+        explicit PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
         ~PlayFab<%- api.name %>InstanceAPI();
         PlayFab<%- api.name %>InstanceAPI(const PlayFab<%- api.name %>InstanceAPI& source) = delete; // disable copy
         PlayFab<%- api.name %>InstanceAPI(PlayFab<%- api.name %>InstanceAPI&&) = delete; // disable move
@@ -31,9 +31,9 @@ namespace PlayFab
         PlayFab<%- api.name %>InstanceAPI& operator=(PlayFab<%- api.name %>InstanceAPI&& other) = delete; // disable move assignment
 
         std::shared_ptr<PlayFabApiSettings> GetSettings() const;
-        void SetSettings(std::shared_ptr<PlayFabApiSettings> apiSettings);
+        void SetSettings(const std::shared_ptr<PlayFabApiSettings>& apiSettings);
         std::shared_ptr<PlayFabAuthenticationContext> GetAuthenticationContext() const;
-        void SetAuthenticationContext(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
+        void SetAuthenticationContext(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
         size_t Update();
         void ForgetAllCredentials();
 <% if (hasClientOptions) { %>

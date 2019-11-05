@@ -16,7 +16,7 @@ namespace PlayFab
             const std::string& requestBody,
             CallRequestContainerCallback callback,
             void* customData = nullptr,
-            std::shared_ptr<PlayFabApiSettings> apiSettings = nullptr);
+            const std::shared_ptr<PlayFabApiSettings>& apiSettings = nullptr);
 
         virtual ~CallRequestContainer() override;
         std::string GetFullUrl() const;

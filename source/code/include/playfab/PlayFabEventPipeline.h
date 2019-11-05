@@ -46,7 +46,7 @@ namespace PlayFab
     public:
         virtual ~IPlayFabEventPipeline() {}
         virtual void Start() {} // Start pipeline's worker thread
-        virtual void IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) = 0; // Intake an event. This method must be thread-safe.
+        virtual void IntakeEvent(const std::shared_ptr<const IPlayFabEmitEventRequest>& request) = 0; // Intake an event. This method must be thread-safe.
     };
 
     /// <summary>
@@ -55,7 +55,7 @@ namespace PlayFab
     class PlayFabEventPipeline: public IPlayFabEventPipeline
     {
     public:
-        explicit PlayFabEventPipeline(std::shared_ptr<PlayFabEventPipelineSettings> settings);
+        explicit PlayFabEventPipeline(const std::shared_ptr<PlayFabEventPipelineSettings>& settings);
         virtual ~PlayFabEventPipeline() override;
 
         PlayFabEventPipeline(const PlayFabEventPipeline& source) = delete; // disable copy
@@ -65,7 +65,7 @@ namespace PlayFab
 
         std::shared_ptr<PlayFabEventPipelineSettings> GetSettings() const;
         virtual void Start() override;
-        virtual void IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) override;
+        virtual void IntakeEvent(const std::shared_ptr<const IPlayFabEmitEventRequest>& request) override;
 
         void SetExceptionCallback(ExceptionCallback callback);
 
@@ -76,7 +76,7 @@ namespace PlayFab
         void WorkerThread();        
         void WriteEventsApiCallback(const EventsModels::WriteEventsResponse& result, void* customData);
         void WriteEventsApiErrorCallback(const PlayFabError& error, void* customData);
-        void CallbackRequest(std::shared_ptr<const IPlayFabEmitEventRequest> request, std::shared_ptr<const IPlayFabEmitEventResponse> response);
+        void CallbackRequest(const std::shared_ptr<const IPlayFabEmitEventRequest>& request, const std::shared_ptr<const IPlayFabEmitEventResponse>& response);
 
     protected:
         // PlayFab's public Events API (e.g. WriteEvents method) allows to pass only a pointer to some custom object (void* customData) that will be relayed back to its callbacks. 

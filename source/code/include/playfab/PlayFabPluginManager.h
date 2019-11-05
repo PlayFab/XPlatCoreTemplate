@@ -80,7 +80,7 @@ namespace PlayFab
 
         // Sets a custom plugin.
         // If a plugin with specified contract and optional instance name already exists, it will be replaced with specified instance.
-        static void SetPlugin(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName = "");
+        static void SetPlugin(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName = "");
 
         // Gets a plugin.
         // If a plugin with specified contract and optional instance name does not exist, it will create a new one.
@@ -92,7 +92,7 @@ namespace PlayFab
 
         // Sets a custom plugin.
         // If a plugin with specified contract and optional instance name already exists, it will be replaced with specified instance.
-        void SetPluginInstance(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName = "");
+        void SetPluginInstance(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName = "");
 
         // Sets a custom exception handler for any possible background thread exceptions
         void SetExceptionHandler(ExceptionCallback exceptionHandler);
@@ -102,7 +102,7 @@ namespace PlayFab
 
     private:
         std::shared_ptr<IPlayFabPlugin> GetPluginInternal(const PlayFabPluginContract contract, const std::string& instanceName);
-        void SetPluginInternal(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName);
+        void SetPluginInternal(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName);
 
         std::shared_ptr<IPlayFabPlugin> CreatePlayFabSerializerPlugin();
         std::shared_ptr<IPlayFabPlugin> CreatePlayFabTransportPlugin();

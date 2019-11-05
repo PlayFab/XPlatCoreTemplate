@@ -10,7 +10,7 @@ namespace PlayFab
         const std::string& requestBody,
         CallRequestContainerCallback callback,
         void* customData,
-        std::shared_ptr<PlayFabApiSettings> settings) :
+        const std::shared_ptr<PlayFabApiSettings>& settings) :
         CallRequestContainerBase(url, headers, requestBody, callback, customData, settings),
         finished(false),
         responseString(""),

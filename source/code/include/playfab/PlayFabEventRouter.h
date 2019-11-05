@@ -23,7 +23,7 @@ namespace PlayFab
     {
     public:
         virtual ~IPlayFabEventRouter() {}
-        virtual void RouteEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) const = 0; // Route an event to pipelines. This method must be thread-safe.
+        virtual void RouteEvent(const std::shared_ptr<const IPlayFabEmitEventRequest>& request) const = 0; // Route an event to pipelines. This method must be thread-safe.
         const std::unordered_map<EventPipelineKey, std::shared_ptr<IPlayFabEventPipeline>>& GetPipelines() const;
 
     protected:
@@ -37,7 +37,7 @@ namespace PlayFab
     {
     public:
         PlayFabEventRouter();
-        virtual void RouteEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) const;
+        virtual void RouteEvent(const std::shared_ptr<const IPlayFabEmitEventRequest>& request) const;
     private:
     };
 }

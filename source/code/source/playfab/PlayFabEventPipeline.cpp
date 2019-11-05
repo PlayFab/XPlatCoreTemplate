@@ -36,7 +36,7 @@ namespace PlayFab
     {
     }
 
-    PlayFabEventPipeline::PlayFabEventPipeline(std::shared_ptr<PlayFabEventPipelineSettings> settings) :
+    PlayFabEventPipeline::PlayFabEventPipeline(const std::shared_ptr<PlayFabEventPipelineSettings>& settings) :
         buffer(settings->bufferSize),
         isWorkerThreadRunning(false)
     {
@@ -71,7 +71,7 @@ namespace PlayFab
         return this->settings;
     }
 
-    void PlayFabEventPipeline::IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request)
+    void PlayFabEventPipeline::IntakeEvent(const std::shared_ptr<const IPlayFabEmitEventRequest>& request)
     {
         try
         {
@@ -335,7 +335,7 @@ namespace PlayFab
         }
     }
 
-    void PlayFabEventPipeline::CallbackRequest(std::shared_ptr<const IPlayFabEmitEventRequest> request, std::shared_ptr<const IPlayFabEmitEventResponse> response)
+    void PlayFabEventPipeline::CallbackRequest(const std::shared_ptr<const IPlayFabEmitEventRequest>& request, const std::shared_ptr<const IPlayFabEmitEventResponse>& response)
     {
         const auto& playFabEmitRequest = std::dynamic_pointer_cast<const PlayFabEmitEventRequest>(request);
 

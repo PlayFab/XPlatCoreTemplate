@@ -40,7 +40,7 @@ namespace PlayFab
             static void WriteEventsSuccessCallBack(const PlayFab::EventsModels::WriteEventsResponse& result, void*);
             static void WriteEventsFailureCallBack(const PlayFab::PlayFabError& error, void*);
 
-            static PingResult GetQoSResultForRegion(std::shared_ptr<QoSSocket> socket);
+            static PingResult GetQoSResultForRegion(const std::shared_ptr<QoSSocket>& socket);
 
         private:
             const int numOfPingIterations = NUM_OF_PING_ITERATIONS; // Number of pings to do to each server, to calculate an average latency.

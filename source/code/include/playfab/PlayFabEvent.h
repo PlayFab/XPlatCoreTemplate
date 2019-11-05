@@ -91,7 +91,7 @@ namespace PlayFab
 
     // A callback that can be used in asynchronous emit event operations that take IPlayFabEvent as a parameter
     // and return back an IPlayFabEmitEventResponse. The callback procedure must be thread-safe.
-    using PlayFabEmitEventCallback = void(*)(std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>);
+    using PlayFabEmitEventCallback = void(*)(const std::shared_ptr<const IPlayFabEvent>&, const std::shared_ptr<const IPlayFabEmitEventResponse>&);
 
     /// <summary>
     /// PlayFab-specific implementation of an emit event request
@@ -101,7 +101,7 @@ namespace PlayFab
     public:
         std::shared_ptr<const PlayFabEvent> event; // a pointer to the user's event object itself
         PlayFabEmitEventCallback callback; // user's callback function to return the final result of emit event operation after event is completely sent out or any error occurred
-        std::function<void(std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)> stdCallback; // same as EventCallback but can be used with member variables if needed.
+        std::function<void(const std::shared_ptr<const IPlayFabEvent>&, const std::shared_ptr<const IPlayFabEmitEventResponse>&)> stdCallback; // same as EventCallback but can be used with member variables if needed.
     };
 
     /// <summary>

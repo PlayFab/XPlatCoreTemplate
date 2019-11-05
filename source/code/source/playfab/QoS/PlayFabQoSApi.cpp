@@ -409,7 +409,7 @@ namespace PlayFab
         // Parameters : Configured socket to ping
         // Return : The ping result
         // Note that the function eat any exceptions thrown to it.
-        PingResult PlayFabQoSApi::GetQoSResultForRegion(shared_ptr<QoSSocket> socket)
+        PingResult PlayFabQoSApi::GetQoSResultForRegion(const shared_ptr<QoSSocket>& socket)
         {
             // Ping a data center and return the ping time
             try

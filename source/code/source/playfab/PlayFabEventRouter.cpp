@@ -17,7 +17,7 @@ namespace PlayFab
         this->pipelines.emplace(EventPipelineKey::PlayFabTelemetry, std::make_shared<PlayFabEventPipeline>(std::make_shared<PlayFabEventPipelineSettings>(PlayFabEventPipelineType::PlayFabTelemetry)));
     }
 
-    void PlayFabEventRouter::RouteEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) const
+    void PlayFabEventRouter::RouteEvent(const std::shared_ptr<const IPlayFabEmitEventRequest>& request) const
     {
         // only events based on PlayFabEmitEventRequest are supported by default pipelines
         const PlayFabEmitEventRequest* pfRequestPtr = dynamic_cast<const PlayFabEmitEventRequest*>(request.get());

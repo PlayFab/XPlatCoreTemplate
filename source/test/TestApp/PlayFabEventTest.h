@@ -59,8 +59,8 @@ namespace PlayFabUnit
 
             // Utility
             void EmitEvents(PlayFab::PlayFabEventType eventType, int maxBatchWaitTime=2, int maxItemsInBatch=3, int maxBatchesInFlight=10);
-            static void EmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
-            void NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
+            static void EmitEventCallback(const std::shared_ptr<const PlayFab::IPlayFabEvent>& event, const std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>& response);
+            void NonStaticEmitEventCallback(const std::shared_ptr<const PlayFab::IPlayFabEvent>& event, const std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>& response);
 
             template<typename T> std::function<void(const T&, void*)> Callback(void(PlayFabEventTest::*func)(const T&, void*))
             {

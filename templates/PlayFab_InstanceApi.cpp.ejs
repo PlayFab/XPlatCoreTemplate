@@ -20,17 +20,17 @@ namespace PlayFab
     {
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings)
     {
         this->settings = std::move(apiSettings);
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         this->authContext = std::move(authenticationContext);
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         this->settings = std::move(apiSettings);
         this->authContext = std::move(authenticationContext);
@@ -45,7 +45,7 @@ namespace PlayFab
         return this->settings;
     }
 
-    void PlayFab<%- api.name %>InstanceAPI::SetSettings(std::shared_ptr<PlayFabApiSettings> apiSettings)
+    void PlayFab<%- api.name %>InstanceAPI::SetSettings(const std::shared_ptr<PlayFabApiSettings>& apiSettings)
     {
         this->settings = std::move(apiSettings);
     }
@@ -55,7 +55,7 @@ namespace PlayFab
         return this->authContext;
     }
 
-    void PlayFab<%- api.name %>InstanceAPI::SetAuthenticationContext(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    void PlayFab<%- api.name %>InstanceAPI::SetAuthenticationContext(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         this->authContext = std::move(authenticationContext);
     }
