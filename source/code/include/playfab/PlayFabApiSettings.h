@@ -20,6 +20,12 @@ namespace PlayFab
 #endif
 
         PlayFabApiSettings();
+        PlayFabApiSettings(const PlayFabApiSettings& other) = delete;
+        PlayFabApiSettings(PlayFabApiSettings&& other) = delete;
+        PlayFabApiSettings& operator=(const PlayFabApiSettings& other) = delete;
+        PlayFabApiSettings& operator=(PlayFabApiSettings&& other) = delete;
+        ~PlayFabApiSettings() = default;
+
         std::string GetUrl(const std::string& urlPath) const;
     };
 }

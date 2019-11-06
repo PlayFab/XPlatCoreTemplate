@@ -24,6 +24,12 @@ namespace PlayFab
         std::string entityToken; // User's entity token. Entity tokens are required by all Entity API methods.
 
         PlayFabAuthenticationContext();
+        PlayFabAuthenticationContext(const PlayFabAuthenticationContext& other) = delete;
+        PlayFabAuthenticationContext(PlayFabAuthenticationContext&& other) = delete;
+        PlayFabAuthenticationContext& operator=(const PlayFabAuthenticationContext& other) = delete;
+        PlayFabAuthenticationContext& operator=(PlayFabAuthenticationContext&& other) = delete;
+        ~PlayFabAuthenticationContext() = default;
+
         void HandlePlayFabLogin(const std::string& setPlayFabId, const std::string& setClientSessionTicket, const std::string& setEntityId, const std::string& setEntityType, const std::string& setEntityToken);
         void ForgetAllCredentials();
     };
