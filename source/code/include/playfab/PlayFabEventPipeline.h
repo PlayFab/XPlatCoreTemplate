@@ -89,7 +89,6 @@ namespace PlayFab
 
     private:
         std::shared_ptr<PlayFabEventPipelineSettings> settings;
-        std::shared_ptr<PlayFabAuthenticationContext> context;
         PlayFabEventBuffer buffer;
         std::thread workerThread;
         std::atomic<bool> isWorkerThreadRunning;
