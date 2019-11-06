@@ -20,7 +20,7 @@ namespace PlayFab
             next(nullptr),
             eventIndex(index),
             timestamp(std::time(nullptr)), // current time
-            eventRequest(std::move(request))
+            eventRequest(request)
         {
         }
         ~PlayFabEventPacket() {};

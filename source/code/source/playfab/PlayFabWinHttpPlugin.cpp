@@ -210,7 +210,7 @@ namespace PlayFab
                         if (!GetBinaryPayload(reqContainer, payload, payloadSize))
                         {
                             // set string payload if binary wasn't provided
-                            requestBody = std::move(reqContainer.GetRequestBody());
+                            requestBody = reqContainer.GetRequestBody();
                             payloadSize = (DWORD)requestBody.size();
                             payload = const_cast<char*>(requestBody.c_str());
                         }

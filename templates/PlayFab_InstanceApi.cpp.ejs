@@ -22,18 +22,18 @@ namespace PlayFab
 
     PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings)
     {
-        this->settings = std::move(apiSettings);
+        this->settings = apiSettings;
     }
 
     PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
     {
-        this->authContext = std::move(authenticationContext);
+        this->authContext = authenticationContext;
     }
 
     PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
     {
-        this->settings = std::move(apiSettings);
-        this->authContext = std::move(authenticationContext);
+        this->settings = apiSettings;
+        this->authContext = authenticationContext;
     }
 
     PlayFab<%- api.name %>InstanceAPI::~PlayFab<%- api.name %>InstanceAPI()
@@ -47,7 +47,7 @@ namespace PlayFab
 
     void PlayFab<%- api.name %>InstanceAPI::SetSettings(std::shared_ptr<PlayFabApiSettings> apiSettings)
     {
-        this->settings = std::move(apiSettings);
+        this->settings = apiSettings;
     }
 
     std::shared_ptr<PlayFabAuthenticationContext> PlayFab<%- api.name %>InstanceAPI::GetAuthenticationContext() const
@@ -57,7 +57,7 @@ namespace PlayFab
 
     void PlayFab<%- api.name %>InstanceAPI::SetAuthenticationContext(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
     {
-        this->authContext = std::move(authenticationContext);
+        this->authContext = authenticationContext;
     }
 
     std::shared_ptr<PlayFabAuthenticationContext> PlayFab<%- api.name %>InstanceAPI::GetOrCreateAuthenticationContext()

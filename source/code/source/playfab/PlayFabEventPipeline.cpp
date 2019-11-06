@@ -40,7 +40,7 @@ namespace PlayFab
         buffer(settings->bufferSize),
         isWorkerThreadRunning(false)
     {
-        this->settings = std::move(settings);
+        this->settings = settings;
         this->batch.reserve(this->settings->maximalNumberOfItemsInBatch);
         this->batchesInFlight.reserve(this->settings->maximalNumberOfBatchesInFlight);
         this->Start();
@@ -111,7 +111,7 @@ namespace PlayFab
             playFabEmitEventResponse->emitEventResult = emitResult;
 
             // call an emit event callback
-            CallbackRequest(playFabEmitRequest, std::move(playFabEmitEventResponse));
+            CallbackRequest(playFabEmitRequest, playFabEmitEventResponse);
         }
         catch (...)
         {
@@ -153,7 +153,7 @@ namespace PlayFab
                     case Result::Success:
                     {
                         // add an event to batch
-                        this->batch.push_back(std::move(request));
+                        this->batch.push_back(request);
 
                         // if batch is full
                         if (this->batch.size() >= this->settings->maximalNumberOfItemsInBatch)
@@ -230,7 +230,7 @@ namespace PlayFab
 
         // add batch to flight tracking map
         void* customData = reinterpret_cast<void*>(batchCounter); // used to track batches across asynchronous Events API
-        this->batchesInFlight[customData] = std::move(this->batch);
+        this->batchesInFlight[customData] = this->batch;
         batchCounter++;
 
         this->batch.clear(); // batch vector will be reused
@@ -267,7 +267,7 @@ namespace PlayFab
             }
             else
             {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(foundBatchIterator->second)));
+                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(foundBatchIterator->second));
 
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
@@ -284,7 +284,7 @@ namespace PlayFab
                     playFabEmitEventResponse->batchNumber = reinterpret_cast<size_t>(customData);
 
                     // call an emit event callback
-                    CallbackRequest(playFabEmitRequest, std::move(playFabEmitEventResponse));
+                    CallbackRequest(playFabEmitRequest, playFabEmitEventResponse);
                 }
 
                 // remove the batch from tracking map
@@ -309,7 +309,7 @@ namespace PlayFab
             }
             else
             {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(foundBatchIterator->second)));
+                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(foundBatchIterator->second));
 
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
@@ -322,7 +322,7 @@ namespace PlayFab
                     playFabEmitEventResponse->batchNumber = reinterpret_cast<size_t>(customData);
 
                     // call an emit event callback
-                    CallbackRequest(playFabEmitRequest, std::move(playFabEmitEventResponse));
+                    CallbackRequest(playFabEmitRequest, playFabEmitEventResponse);
                 }
 
                 // remove the batch from tracking map
@@ -341,12 +341,12 @@ namespace PlayFab
 
         if(playFabEmitRequest->callback != nullptr)
         {
-            playFabEmitRequest->callback(playFabEmitRequest->event, std::move(response));
+            playFabEmitRequest->callback(playFabEmitRequest->event, response);
         }
 
         if(playFabEmitRequest->stdCallback != nullptr)
         {
-            playFabEmitRequest->stdCallback(playFabEmitRequest->event, std::move(response));
+            playFabEmitRequest->stdCallback(playFabEmitRequest->event, response);
         }
     }
 }
