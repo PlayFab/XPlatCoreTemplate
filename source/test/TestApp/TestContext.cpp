@@ -109,7 +109,10 @@ namespace PlayFabUnit
     void TestContext::Fail(std::string message)
     {
         if (message.empty())
+        {
             message = "fail";
+        }
+        
         EndTest(TestFinishState::FAILED, message);
         // TODO: Throw "assert" exception
     }

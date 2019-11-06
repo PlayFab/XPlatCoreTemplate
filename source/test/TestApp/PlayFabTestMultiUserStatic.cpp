@@ -102,13 +102,19 @@ namespace PlayFabUnit
     {
         // Wait for both users to become logged in.
         if (multiUser1PlayFabId.empty() || multiUser2PlayFabId.empty())
+        {
             return;
+        }
 
         // Once retreived, each user should have a unique ID.
         if (multiUser1PlayFabId == multiUser2PlayFabId)
+        {
             testContext.Fail("User 1 PlayFabId (" + multiUser1PlayFabId + ") should not match User 2 PlayFabId (" + multiUser2PlayFabId + ")");
+        }
         else
+        {
             testContext.Pass();
+        }
     }
 
     void PlayFabTestMultiUserStatic::ClassTearDown()

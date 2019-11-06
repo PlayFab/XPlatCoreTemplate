@@ -201,7 +201,7 @@ namespace PlayFabUnit
             [&testContext]
             (std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)
             {
-                if(testContext.activeState != TestActiveState::COMPLETE)
+                if (testContext.activeState != TestActiveState::COMPLETE)
                 {
                     testContext.Pass("Lambda Function Callback Succeeded.");
                 }

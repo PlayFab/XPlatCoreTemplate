@@ -25,7 +25,9 @@ namespace PlayFabUnit
     void TestRunner::Add(TestCase& testCase)
     {
         if (TestActiveState::PENDING != suiteState)
+        {
             return;
+        }
 
         // Add the tests from the given test case.
         std::shared_ptr<TestList*> testCaseTests = testCase.GetTests();
@@ -36,7 +38,9 @@ namespace PlayFabUnit
     {
         // Mark the test suite as active.
         if (TestActiveState::PENDING == suiteState)
+        {
             suiteState = TestActiveState::ACTIVE;
+        }
 
         // Run the tests.
         for (auto testsIter = suiteTests.begin(); testsIter != suiteTests.end(); ++testsIter)
@@ -54,7 +58,9 @@ namespace PlayFabUnit
 
             test->testCase->SetUp(*test);
             if (TestActiveState::ACTIVE == test->activeState)
+            {
                 test->testFunc(*test);
+            }
 
             // Tick the test.
             while (TestActiveState::ACTIVE == test->activeState)
@@ -121,11 +127,17 @@ namespace PlayFabUnit
                 testEndTime = test->endTime;
 
                 if (TestFinishState::PASSED == test->finishState)
+                {
                     testsPassedCount += 1;
+                }
                 else if (TestFinishState::SKIPPED == test->finishState)
+                {
                     testsSkippedCount += 1;
+                }
                 else
+                {
                     testsFailedCount += 1;
+                }
             }
             else
             {
@@ -135,14 +147,18 @@ namespace PlayFabUnit
 
             // Line for each test report
             if (suiteTests.begin() != testIter)
+            {
                 summaryStream << "\n";
+            }
 
             TimeValueMs testDurationMs = TestTimeDelta<TimeValueMs>(test->startTime, test->endTime);
             summaryStream << std::setw(10) << testDurationMs.count() << " ms";
             summaryStream << " - " << ToString(test->finishState);
             summaryStream << " - " << test->testName;
             if (!test->testResultMsg.empty())
+            {
                 summaryStream << " - " << test->testResultMsg;
+            }
         }
 
         summaryStream << "\n Testing complete:  ";
@@ -157,12 +173,19 @@ namespace PlayFabUnit
     void TestRunner::ManageTestCase(TestCase* newTestCase, TestCase* oldTestCase)
     {
         if (newTestCase == oldTestCase)
+        {
             return;
+        }
 
         if (nullptr != oldTestCase)
+        {
             oldTestCase->ClassTearDown();
+        }
+
         if (nullptr != newTestCase)
+        {
             newTestCase->ClassSetUp();
+        }
 
         suiteTestCase = newTestCase;
     }
