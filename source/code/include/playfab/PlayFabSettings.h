@@ -16,14 +16,16 @@ namespace PlayFab
         static const std::string buildIdentifier;
         static const std::string versionString;
 
-        static std::string productionEnvironmentURL;
-        static ErrorCallback globalErrorHandler;
-
-        static std::shared_ptr<PlayFabApiSettings> staticSettings;
-        static std::shared_ptr<PlayFabAuthenticationContext> staticPlayer;
-
         // Control whether all callbacks are threaded or whether the user manually controls callback timing from their main-thread
         static bool threadedCallbacks;
+        // Used to override the PlayFab endpoint url - Not typical
+        static std::string productionEnvironmentURL;
+        // Used to receive a callback for every failed PlayFab API call - Parallel to the individual error callbacks
+        static ErrorCallback globalErrorHandler;
+
+        // The pointers to these objects should be const as they should always be fixed, but the contents are still mutable
+        static const std::shared_ptr<PlayFabApiSettings> staticSettings;
+        static const std::shared_ptr<PlayFabAuthenticationContext> staticPlayer;
 
 #ifndef DISABLE_PLAYFABCLIENT_API
         static const std::string AD_TYPE_IDFA;
