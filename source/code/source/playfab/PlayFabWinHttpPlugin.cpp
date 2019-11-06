@@ -346,9 +346,20 @@ namespace PlayFab
         HandleCallback(std::move(requestContainer));
 
         // Close any open handles
-        if (hRequest) WinHttpCloseHandle(hRequest);
-        if (hConnect) WinHttpCloseHandle(hConnect);
-        if (hSession) WinHttpCloseHandle(hSession);
+        if (hRequest)
+        {
+            WinHttpCloseHandle(hRequest);
+        }
+
+        if (hConnect)
+        {
+            WinHttpCloseHandle(hConnect);
+        }
+
+        if (hSession)
+        {
+            WinHttpCloseHandle(hSession);
+        }
     }
 
     std::string PlayFabWinHttpPlugin::GetUrl(const CallRequestContainer& reqContainer) const

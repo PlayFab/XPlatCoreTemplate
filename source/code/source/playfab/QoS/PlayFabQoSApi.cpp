@@ -34,9 +34,14 @@ namespace PlayFab
             else // Process the error case
             {
                 if (PlayFabSettings::globalErrorHandler != nullptr)
+                {
                     PlayFabSettings::globalErrorHandler(container.errorWrapper, container.GetCustomData());
+                }
+                
                 if (container.errorCallback != nullptr)
+                {
                     container.errorCallback(container.errorWrapper, container.GetCustomData());
+                }
                 return false;
             }
         }

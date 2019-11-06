@@ -65,10 +65,13 @@ namespace PlayFab
         bool firstParam = true;
         for (auto const& paramPair : getParams)
         {
-            if (firstParam) {
+            if (firstParam)
+            {
                 fullUrl += "?";
                 firstParam = false;
-            } else {
+            }
+            else
+            {
                 fullUrl += "&";
             }
             fullUrl += paramPair.first;
@@ -93,12 +96,19 @@ namespace PlayFab
         }
 
         if (valid)
+        {
             return true;
+        }
 
         if (PlayFabSettings::globalErrorHandler != nullptr)
+        {
             PlayFabSettings::globalErrorHandler(container.errorWrapper, container.GetCustomData());
+        }
+
         if (container.errorCallback != nullptr)
+        {
             container.errorCallback(container.errorWrapper, container.GetCustomData());
+        }
 
         return false;
     }
