@@ -12,13 +12,15 @@ namespace PlayFab
         std::shared_ptr<PlayFabApiSettings> settings,
         std::shared_ptr<PlayFabAuthenticationContext> context,
         void* customData) :
-        CallRequestContainerBase(url, headers, requestBody, callback, settings, context, customData),
+        CallRequestContainerBase(url, headers, requestBody, callback, customData),
         finished(false),
         responseString(""),
         responseJson(Json::Value::null),
         errorWrapper(),
         successCallback(nullptr),
-        errorCallback(nullptr)
+        errorCallback(nullptr),
+        m_settings(settings),
+        m_context(context)
     {
         errorWrapper.UrlPath = url;
 
@@ -45,6 +47,16 @@ namespace PlayFab
     std::string CallRequestContainer::GetFullUrl() const
     {
         return m_settings->GetUrl(this->GetUrl());
+    }
+
+    std::shared_ptr<PlayFabApiSettings> CallRequestContainer::GetApiSettings() const
+    {
+        return this->m_settings;
+    }
+
+    std::shared_ptr<PlayFabAuthenticationContext> CallRequestContainer::GetContext() const
+    {
+        return this->m_context;
     }
 
     bool CallRequestContainer::ValidateSettings()

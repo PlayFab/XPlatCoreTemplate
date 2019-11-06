@@ -91,36 +91,35 @@ namespace PlayFab
 
     void PlayFabIOSHttpPlugin::MakePostRequest(std::unique_ptr<CallRequestContainerBase> requestContainer)
     {
-        if (!requestContainer->ValidateSettings())
+        CallRequestContainer* container = dynamic_cast<CallRequestContainer*>(requestContainer.get());
+        if (container != nullptr && container->ValidateSettings())
         {
-            return;
-        }
-
-        std::shared_ptr<RequestTask> requestTask = nullptr;
-        try
-        {
-            requestTask = std::make_shared<RequestTask>();
-            requestTask->Initialize(requestContainer);
-        }
-        catch (const std::exception& ex)
-        {
-            PlayFabPluginManager::GetInstance().HandleException(ex);
-        }
-        catch (...)
-        {
-
-        }
-        if(requestTask != nullptr)
-        { // LOCK httpRequestMutex
-            std::unique_lock<std::mutex> lock(httpRequestMutex);
-            requestTask->state = RequestTask::State::Pending;
-            pendingRequests.push_back(std::move(requestTask));
-            if(workerThread == nullptr)
+            std::shared_ptr<RequestTask> requestTask = nullptr;
+            try
             {
-                threadRunning = true;
-                workerThread = std::make_unique<std::thread>(&PlayFabIOSHttpPlugin::WorkerThread, this);
+                requestTask = std::make_shared<RequestTask>();
+                requestTask->Initialize(requestContainer);
             }
-        } // UNLOCK httpRequestMutex
+            catch (const std::exception& ex)
+            {
+                PlayFabPluginManager::GetInstance().HandleException(ex);
+            }
+            catch (...)
+            {
+
+            }
+            if(requestTask != nullptr)
+            { // LOCK httpRequestMutex
+                std::unique_lock<std::mutex> lock(httpRequestMutex);
+                requestTask->state = RequestTask::State::Pending;
+                pendingRequests.push_back(std::move(requestTask));
+                if(workerThread == nullptr)
+                {
+                    threadRunning = true;
+                    workerThread = std::make_unique<std::thread>(&PlayFabIOSHttpPlugin::WorkerThread, this);
+                }
+            } // UNLOCK httpRequestMutex
+        }
     }
 
     size_t PlayFabIOSHttpPlugin::Update()

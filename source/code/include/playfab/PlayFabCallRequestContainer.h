@@ -1,5 +1,6 @@
 #pragma once
 
+#include <playfab/PlayFabApiSettings.h>
 #include <playfab/PlayFabError.h>
 #include <playfab/PlayFabCallRequestContainerBase.h>
 
@@ -21,7 +22,9 @@ namespace PlayFab
 
         virtual ~CallRequestContainer() override;
         std::string GetFullUrl() const;
-        virtual bool ValidateSettings() override;
+        std::shared_ptr<PlayFabApiSettings> GetApiSettings() const;
+        std::shared_ptr<PlayFabAuthenticationContext> GetContext() const;
+        bool ValidateSettings();
 
         // TODO: clean up these public variables with setters/getters when you have the chance.
 
@@ -31,5 +34,7 @@ namespace PlayFab
         PlayFabError errorWrapper;
         std::shared_ptr<void> successCallback;
         ErrorCallback errorCallback;
+        std::shared_ptr<PlayFabApiSettings> m_settings;
+        std::shared_ptr<PlayFabAuthenticationContext> m_context;
     };
 }
