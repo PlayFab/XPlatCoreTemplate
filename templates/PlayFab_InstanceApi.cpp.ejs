@@ -61,14 +61,18 @@ namespace PlayFab
     PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
     {
         if (authenticationContext == nullptr)
+        {
             throw PlayFabException(PlayFabExceptionCode::AuthContextRequired, "Context cannot be null, create a PlayFabAuthenticationContext for each player in advance, or get <PlayFabClientInstanceAPI>.authenticationContext");
+        }
         this->m_context = authenticationContext;
     }
 
     PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
     {
         if (authenticationContext == nullptr)
+        {
             throw PlayFabException(PlayFabExceptionCode::AuthContextRequired, "Context cannot be null, create a PlayFabAuthenticationContext for each player in advance, or get <PlayFabClientInstanceAPI>.authenticationContext");
+        }
         this->m_settings = apiSettings;
         this->m_context = authenticationContext;
     }
@@ -95,10 +99,10 @@ namespace PlayFab
 
     void PlayFab<%- api.name %>InstanceAPI::ForgetAllCredentials()
     {
-        if (this->m_context == nullptr)
-            return;
-
-        this->m_context->ForgetAllCredentials();
+        if (this->m_context != nullptr)
+        {
+            this->m_context->ForgetAllCredentials();
+        }
     }
 
     // PlayFab<%- api.name %> instance APIs
@@ -167,12 +171,15 @@ namespace PlayFab
         {
             AttributeInstallRequest request;
             if (context->advertisingIdType == PlayFabSettings::AD_TYPE_IDFA)
+            {
                 request.Idfa = context->advertisingIdValue;
+                AttributeInstall(request, nullptr, nullptr);
+            }
             else if (context->advertisingIdType == PlayFabSettings::AD_TYPE_ANDROID_ID)
+            {
                 request.Adid = context->advertisingIdValue;
-            else
-                return;
-            AttributeInstall(request, nullptr, nullptr);
+                AttributeInstall(request, nullptr, nullptr);
+            }
         }
     }
 <% } %>

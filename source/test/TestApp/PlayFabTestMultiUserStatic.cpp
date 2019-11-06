@@ -112,7 +112,9 @@ namespace PlayFabUnit
     {
         // Wait for both threads to stop
         if (!thread1Complete || !thread2Complete)
+        {
             return;
+        }
 
         // Once retrieved, each user should have a unique ID.
         if (!multiUser1Error.empty() || !multiUser2Error.empty())
@@ -125,9 +127,13 @@ namespace PlayFabUnit
         std::string multiUser2PlayFabId = multiUser2Context->playFabId;
 
         if (multiUser1PlayFabId == multiUser2PlayFabId)
+        {
             testContext.Fail("User 1 PlayFabId (" + multiUser1PlayFabId + ") should not match User 2 PlayFabId (" + multiUser2PlayFabId + ")");
+        }
         else
+        {
             testContext.Pass();
+        }
     }
 
     void PlayFabTestMultiUserStatic::TearDown(TestContext& /*testContext*/)

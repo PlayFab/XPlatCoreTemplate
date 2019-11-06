@@ -93,12 +93,15 @@ namespace PlayFab
         {
             AttributeInstallRequest request;
             if (context->advertisingIdType == PlayFabSettings::AD_TYPE_IDFA)
+            {
                 request.Idfa = context->advertisingIdValue;
+                AttributeInstall(request, nullptr, nullptr);
+            }
             else if (context->advertisingIdType == PlayFabSettings::AD_TYPE_ANDROID_ID)
+            {
                 request.Adid = context->advertisingIdValue;
-            else
-                return;
-            AttributeInstall(request, nullptr, nullptr);
+                AttributeInstall(request, nullptr, nullptr);
+            }
         }
     }
 <% } %>
