@@ -36,7 +36,7 @@ namespace PlayFabUnit
                     break;
             }
         }
-        else if(finishState == TestFinishState::FAILED) 
+        else if (finishState == TestFinishState::FAILED) 
         {
             switch (state)
             {
@@ -57,7 +57,7 @@ namespace PlayFabUnit
                     break;
             }
         }
-        else if(finishState == TestFinishState::SKIPPED)
+        else if (finishState == TestFinishState::SKIPPED)
         {
             switch (state)
             {
