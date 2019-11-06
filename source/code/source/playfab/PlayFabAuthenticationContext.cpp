@@ -23,12 +23,26 @@ namespace PlayFab
         entityToken.clear();
     }
 
-    void PlayFabAuthenticationContext::HandlePlayFabLogin(const std::string& setPlayFabId, const std::string& setClientSessionTicket, const std::string& setEntityId, const std::string& setEntityType, const std::string& setEntityToken)
+    void SetIfNotNull(const std::string& input, std::string& output)
     {
-        if (!setPlayFabId.empty()) playFabId = setPlayFabId;
-        if (!setClientSessionTicket.empty()) clientSessionTicket = setClientSessionTicket;
-        if (!setEntityId.empty()) entityId = setEntityId;
-        if (!setEntityType.empty()) entityType = setEntityType;
-        if (!setEntityToken.empty()) entityToken = setEntityToken;
+        if (!input.empty())
+        {
+            output = input;
+        }
+    }
+
+    void PlayFabAuthenticationContext::HandlePlayFabLogin(
+        const std::string& setPlayFabId,
+        const std::string& setClientSessionTicket,
+        const std::string& setEntityId,
+        const std::string& setEntityType,
+        const std::string& setEntityToken
+    )
+    {
+        SetIfNotNull(setPlayFabId, playFabId);
+        SetIfNotNull(setClientSessionTicket, clientSessionTicket);
+        SetIfNotNull(setEntityId, entityId);
+        SetIfNotNull(setEntityType, entityType);
+        SetIfNotNull(setEntityToken, entityToken);
     }
 }
