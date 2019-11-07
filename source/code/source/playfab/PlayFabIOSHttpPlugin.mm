@@ -113,6 +113,7 @@ namespace PlayFab
                 std::unique_lock<std::mutex> lock(httpRequestMutex);
                 requestTask->state = RequestTask::State::Pending;
                 pendingRequests.push_back(std::move(requestTask));
+
                 if(workerThread == nullptr)
                 {
                     threadRunning = true;
