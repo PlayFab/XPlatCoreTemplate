@@ -1,7 +1,6 @@
 #pragma once
 
 <%- getApiDefine(api) %>
-#ifndef PLAYFAB_DISABLE_STATIC_API
 
 #include <playfab/PlayFabCallRequestContainer.h>
 #include <playfab/PlayFab<%- api.name %>DataModels.h>
@@ -40,5 +39,4 @@ namespace PlayFab
     };
 }
 
-#endif // PLAYFAB_DISABLE_STATIC_API
 #endif // <%- getApiDefine(api) %>

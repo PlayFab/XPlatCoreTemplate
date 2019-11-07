@@ -59,10 +59,10 @@ namespace PlayFab
     {
     public:
         PlayFabException() = delete;
-        PlayFabException(const PlayFabException& source) = default;
+        PlayFabException(const PlayFabException& source) = delete;
         PlayFabException(PlayFabException&&) = default;
-        PlayFabException& operator=(const PlayFabException& source) = default;
-        PlayFabException& operator=(PlayFabException&& other) = default;
+        PlayFabException& operator=(const PlayFabException& source) = delete;
+        PlayFabException& operator=(PlayFabException&& other) = delete;
 
         PlayFabExceptionCode Code;
         PlayFabException(PlayFabExceptionCode code, const char* const message);

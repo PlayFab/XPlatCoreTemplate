@@ -1,7 +1,6 @@
 #include <stdafx.h>
 
 <%- getApiDefine(api) %>
-#ifndef PLAYFAB_DISABLE_STATIC_API
 
 #include <playfab/PlayFab<%- api.name %>Api.h>
 #include <playfab/PlayFabPluginManager.h>
@@ -124,7 +123,6 @@ namespace PlayFab
     }
 }
 
-#endif // PLAYFAB_DISABLE_STATIC_API
 #endif // <%- getApiDefine(api) %>
 
 #if defined(PLAYFAB_PLATFORM_WINDOWS)
