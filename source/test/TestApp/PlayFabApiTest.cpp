@@ -26,11 +26,11 @@ namespace PlayFabUnit
 
     void PlayFabApiTest::SetTitleInfo(TestTitleData& testInputs)
     {
-        PlayFabSettings::titleId = testInputs.titleId;
+        PlayFabSettings::staticSettings->titleId = testInputs.titleId;
         USER_EMAIL = testInputs.userEmail;
 
         // Verify all the inputs won't cause crashes in the tests
-        TITLE_INFO_SET = !PlayFabSettings::titleId.empty() && !USER_EMAIL.empty();
+        TITLE_INFO_SET = !PlayFabSettings::staticSettings->titleId.empty() && !USER_EMAIL.empty();
     }
 
     void PlayFabApiTest::OnErrorSharedCallback(const PlayFabError& error, void* customData)
@@ -48,34 +48,30 @@ namespace PlayFabUnit
         request.CreateAccount = true;
 
         // store current (valid) title id
-        const std::string validTitleId = PlayFabSettings::titleId;
+        const std::string validTitleId = PlayFabSettings::staticSettings->titleId;
 
         // set invalid title id
-        PlayFabSettings::titleId = "";
+        PlayFabSettings::staticSettings->titleId = "";
 
         PlayFabClientAPI::LoginWithCustomID(request,
             [&validTitleId](const LoginResult&, void* customData)
-            {
-                PlayFabSettings::titleId = validTitleId;
-                TestContext* testContext = reinterpret_cast<TestContext*>(customData);
-                testContext->Fail("Expected API call to fail on the client side");
-            },
+        {
+            PlayFabSettings::staticSettings->titleId = validTitleId;
+            TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+            testContext->Fail("Expected API call to fail on the client side");
+        },
             [&validTitleId](const PlayFabError& error, void* customData)
-            {
-                PlayFabSettings::titleId = validTitleId;
-                TestContext* testContext = reinterpret_cast<TestContext*>(customData);
-                if (error.HttpCode == 0
-                    && error.HttpStatus == "Client-side validation failure"
-                    && error.ErrorCode == PlayFabErrorCode::PlayFabErrorInvalidParams
-                    && error.ErrorName == error.HttpStatus)
-                {
-                    testContext->Pass();
-                }
-                else
-                {
-                    testContext->Fail("Returned error is different from expected");
-                }
-            },
+        {
+            PlayFabSettings::staticSettings->titleId = validTitleId;
+            TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+            if (error.HttpCode == 0
+                && error.HttpStatus == "Client-side validation failure"
+                && error.ErrorCode == PlayFabErrorCode::PlayFabErrorInvalidParams
+                && error.ErrorName == error.HttpStatus)
+                testContext->Pass();
+            else
+                testContext->Fail("Returned error is different from expected");
+        },
             &testContext);
     }
 
@@ -108,14 +104,14 @@ namespace PlayFabUnit
         }
         else
 #endif // defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_PLAYSTATION)
-        if (error.ErrorMessage.find("password") != -1)
-        {
-            testContext->Pass(error.RequestId);
-        }
-        else
-        {
-            testContext->Fail("Password error message not found: " + error.ErrorMessage);
-        }
+            if (error.ErrorMessage.find("password") != -1)
+            {
+                testContext->Pass(error.RequestId);
+            }
+            else
+            {
+                testContext->Fail("Password error message not found: " + error.ErrorMessage);
+            }
     }
 
     /// CLIENT API
@@ -197,8 +193,8 @@ namespace PlayFabUnit
     /// Test that the login call sequence sends the AdvertisingId when set
     void PlayFabApiTest::LoginWithAdvertisingId(TestContext& testContext)
     {
-        PlayFabSettings::advertisingIdType = PlayFabSettings::AD_TYPE_ANDROID_ID;
-        PlayFabSettings::advertisingIdValue = "PlayFabTestId";
+        PlayFabSettings::staticPlayer->advertisingIdType = PlayFabSettings::AD_TYPE_ANDROID_ID;
+        PlayFabSettings::staticPlayer->advertisingIdValue = "PlayFabTestId";
 
         LoginWithCustomIDRequest request;
         request.CustomId = PlayFabSettings::buildIdentifier;
@@ -212,7 +208,7 @@ namespace PlayFabUnit
 
     void PlayFabApiTest::OnLoginWithAdvertisingId(const LoginResult&, void* customData)
     {
-        // TODO: Need to wait for the NEXT api call to complete, and then test PlayFabSettings::advertisingIdType
+        // TODO: Need to wait for the NEXT api call to complete, and then test PlayFabSettings::staticPlayer->advertisingIdType
         TestContext* testContext = reinterpret_cast<TestContext*>(customData);
         testContext->Pass();
     }

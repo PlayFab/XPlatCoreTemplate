@@ -122,9 +122,9 @@ function getAuthParams(apiCall, isInstanceApi) {
     if (apiCall.url === "/Authentication/GetEntityToken")
         return "authKey, authValue";
     switch (apiCall.auth) {
-        case "EntityToken": return "\"X-EntityToken\", request.authenticationContext == nullptr ? " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "entityToken : request.authenticationContext->entityToken";
-        case "SessionTicket": return "\"X-Authorization\", request.authenticationContext == nullptr ? " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "clientSessionTicket : request.authenticationContext->clientSessionTicket";
-        case "SecretKey": return "\"X-SecretKey\", request.authenticationContext == nullptr ? " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "developerSecretKey : request.authenticationContext->developerSecretKey";
+        case "EntityToken": return "\"X-EntityToken\", context->entityToken";
+        case "SessionTicket": return "\"X-Authorization\", context->clientSessionTicket";
+        case "SecretKey": return "\"X-SecretKey\", settings->developerSecretKey";
     }
     throw Error("getAuthParams: Unknown auth type: " + apiCall.auth + " for " + apiCall.name);
 }
@@ -237,136 +237,42 @@ function getPropertySafeName(property) {
 function getRequestActions(tabbing, apiCall, isInstanceApi) {
     //TODO Bug 6594: add to this titleId check. 
     // If this titleId does not exist we should be throwing an error informing the user MUST have a titleId.
-    if (apiCall.result === "LoginResult" || apiCall.result === "RegisterPlayFabUserResult") {
-        var output;
-        if (isInstanceApi) {
-            output = tabbing + "auto apiSettings = this->GetSettings();\n"
-                + tabbing + "if (apiSettings == nullptr)\n"
-                + tabbing + "{\n"
-                + tabbing + "    if (PlayFabSettings::titleId.length() > 0)\n"
-                + tabbing + "    {\n"
-                + tabbing + "        request.TitleId = PlayFabSettings::titleId;\n"
-                + tabbing + "    }\n"
-                + tabbing + "}\n"
-                + tabbing + "else\n"
-                + tabbing + "{\n"
-                + tabbing + "    if (apiSettings->titleId.length() > 0)\n"
-                + tabbing + "    {\n"
-                + tabbing + "        request.TitleId = apiSettings->titleId;\n"
-                + tabbing + "    }\n"
-                + tabbing + "}\n";
-        }
-        else {
-            output = tabbing + "if (PlayFabSettings::titleId.length() > 0)\n"
-                + tabbing + "{\n"
-                + tabbing + "    request.TitleId = PlayFabSettings::titleId;\n"
-                + tabbing + "}\n";
-        }
-
-        return output;
-    }
-
-    if (apiCall.url === "/Authentication/GetEntityToken") {
-        var authContext;
-        if (isInstanceApi) {
-            authContext = "authenticationContext->";
-        }
-        else {
-            authContext = "PlayFabSettings::";
-        }
-
-        return tabbing + "std::string authKey, authValue;\n"
-            + tabbing + "if (request.authenticationContext != nullptr)\n"
+    if (apiCall.result === "LoginResult" || apiCall.result === "RegisterPlayFabUserResult")
+        return tabbing + "if (request.TitleId.empty())\n"
             + tabbing + "{\n"
-            + tabbing + "    if (request.authenticationContext->entityToken.length() > 0)\n"
-            + tabbing + "    {\n"
-            + tabbing + "        authKey = \"X-EntityToken\"; authValue = request.authenticationContext->entityToken;\n"
-            + tabbing + "    }\n"
-            + tabbing + "    else if (request.authenticationContext->clientSessionTicket.length() > 0)"
-            + tabbing + "    {\n"
-            + tabbing + "        authKey = \"X-Authorization\"; authValue = request.authenticationContext->clientSessionTicket;\n"
-            + tabbing + "    }\n"
-            + "    #if defined(ENABLE_PLAYFABSERVER_API) || defined(ENABLE_PLAYFABADMIN_API)\n"
-            + tabbing + "    else if (request.authenticationContext->developerSecretKey.length() > 0)\n"
-            + tabbing + "    {\n"
-            + tabbing + "        authKey = \"X-SecretKey\"; authValue = request.authenticationContext->developerSecretKey;\n"
-            + tabbing + "    }\n"
-            + "    #endif\n"
-            + tabbing + "}\n"
-            + tabbing + "else\n"
-            + tabbing + "{\n"
-            + (isInstanceApi ? tabbing + "    std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = this->GetOrCreateAuthenticationContext();\n" : "")
-            + tabbing + "    if (" + authContext + "entityToken.length() > 0)\n"
-            + tabbing + "    {\n"
-            + tabbing + "        authKey = \"X-EntityToken\"; authValue = " + authContext + "entityToken;\n"
-            + tabbing + "    }\n"
-            + tabbing + "    else if (" + authContext + "clientSessionTicket.length() > 0)\n"
-            + tabbing + "    {\n"
-            + tabbing + "        authKey = \"X-Authorization\"; authValue = " + authContext + "clientSessionTicket;\n"
-            + tabbing + "    }\n"
-            + "    #if defined(ENABLE_PLAYFABSERVER_API) || defined(ENABLE_PLAYFABADMIN_API)\n"
-            + tabbing + "    else if (" + authContext + "developerSecretKey.length() > 0)\n"
-            + tabbing + "    {\n"
-            + tabbing + "        authKey = \"X-SecretKey\"; authValue = " + authContext + "developerSecretKey;\n"
-            + tabbing + "    }\n"
-            + "    #endif\n"
+            + tabbing + "    request.TitleId = settings->titleId;\n"
             + tabbing + "}\n";
-    }
+
+    if (apiCall.url === "/Authentication/GetEntityToken")
+        return tabbing + "std::string authKey, authValue;\n" +
+            tabbing + "if (context->entityToken.length() > 0) {\n" +
+            tabbing + "    authKey = \"X-EntityToken\"; authValue = context->entityToken;\n" +
+            tabbing + "}\n" +
+            tabbing + "else if (context->clientSessionTicket.length() > 0) {\n" +
+            tabbing + "    authKey = \"X-Authorization\"; authValue = context->clientSessionTicket;\n" +
+            tabbing + "}\n" +
+            "#if defined(ENABLE_PLAYFABSERVER_API) || defined(ENABLE_PLAYFABADMIN_API)\n" +
+            tabbing + "else if (settings->developerSecretKey.length() > 0) {\n" +
+            tabbing + "    authKey = \"X-SecretKey\"; authValue = settings->developerSecretKey;\n" +
+            tabbing + "}\n" +
+            "#endif\n";
 
     return "";
 }
 
 function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.url === "/Authentication/GetEntityToken")
-        return tabbing + "if (outResult.EntityToken.length() > 0)\n"
-            + tabbing + "{\n"
-            + tabbing + "    " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "entityToken = outResult.EntityToken;\n"
-            + tabbing + "}\n";
-    if (apiCall.result === "LoginResult") {
-        var authContext;
-        if (isInstanceApi) {
-            authContext = "authenticationContext->";
-        }
-        else {
-            authContext = "PlayFabSettings::";
-        }
-
-        return tabbing + "if (outResult.SessionTicket.length() > 0)\n"
-            + tabbing + "{\n"
-            + tabbing + "    outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
-            + tabbing + "    outResult.authenticationContext->clientSessionTicket = outResult.SessionTicket;\n"
-            + (isInstanceApi ? tabbing + "    std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = this->GetOrCreateAuthenticationContext();\n" : "")
-            + tabbing + "    " + authContext + "clientSessionTicket = outResult.SessionTicket;\n"
-            + tabbing + "    if (outResult.EntityToken.notNull())\n"
-            + tabbing + "    {\n"
-            + tabbing + "        outResult.authenticationContext->entityToken = outResult.EntityToken->EntityToken;\n"
-            + tabbing + "        " + authContext + "entityToken = outResult.EntityToken->EntityToken;\n"
-            + tabbing + "    }\n"
-            + tabbing + "    MultiStepClientLogin(outResult.SettingsForUser->NeedsAttribution);\n"
-            + tabbing + "}\n";
-    }
+        return tabbing + "context->HandlePlayFabLogin(\"\", \"\", outResult.Entity->Id, outResult.Entity->Type, outResult.EntityToken);\n";
+    if (apiCall.result === "LoginResult")
+        return tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n" +
+            tabbing + "outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n" +
+            tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n" +
+            tabbing + "MultiStepClientLogin(context, outResult.SettingsForUser->NeedsAttribution);\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
-        return tabbing + "if (outResult.SessionTicket.length() > 0)\n"
-            + tabbing + "{\n"
-            + tabbing + "    " + (isInstanceApi ? "this->GetOrCreateAuthenticationContext()->" : "PlayFabSettings::") + "clientSessionTicket = outResult.SessionTicket;\n"
-            + tabbing + "    MultiStepClientLogin(outResult.SettingsForUser->NeedsAttribution);\n"
-            + tabbing + "}\n";
-    if (apiCall.result === "AttributeInstallResult") {
-        if (isInstanceApi) {
-            return tabbing + "auto apiSettings = this->GetSettings();\n"
-                + tabbing + "if (apiSettings == nullptr)\n"
-                + tabbing + "{\n"
-                + tabbing + "    PlayFabSettings::advertisingIdType += \"_Successful\";\n"
-                + tabbing + "}\n"
-                + tabbing + "else\n"
-                + tabbing + "{\n"
-                + tabbing + "    apiSettings->advertisingIdType += \"_Successful\";\n"
-                + tabbing + "}\n";
-        }
-        else {
-            return tabbing + "PlayFabSettings::advertisingIdType += \"_Successful\";\n";
-        }
-    }
+        return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            + tabbing + "MultiStepClientLogin(context, outResult.SettingsForUser->NeedsAttribution);\n";
+    if (apiCall.result === "AttributeInstallResult")
+        return tabbing + "context->advertisingIdType += \"_Successful\";\n";
 
     return "";
 }

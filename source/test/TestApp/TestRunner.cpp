@@ -14,7 +14,7 @@ namespace PlayFabUnit
 {
     static const auto TEST_TIMEOUT_DURATION = std::chrono::seconds(15);
 
-    TestRunner::TestRunner():
+    TestRunner::TestRunner() :
         suiteState(TestActiveState::PENDING),
         suiteTestCase(nullptr),
         suiteTestReport(PlayFabSettings::buildIdentifier)
@@ -43,10 +43,10 @@ namespace PlayFabUnit
         }
 
         // Run the tests.
-        for (auto testsIter = suiteTests.begin(); testsIter != suiteTests.end(); ++testsIter)
+        for (auto& suiteTest : suiteTests)
         {
             // Get the next test.
-            TestContext* test = **testsIter;
+            TestContext* test = *suiteTest;
 
             // Handle transitions between TestCases.
             ManageTestCase(test->testCase, suiteTestCase);
