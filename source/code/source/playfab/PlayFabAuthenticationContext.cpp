@@ -32,17 +32,17 @@ namespace PlayFab
     }
 
     void PlayFabAuthenticationContext::HandlePlayFabLogin(
-        const std::string& setPlayFabId,
-        const std::string& setClientSessionTicket,
-        const std::string& setEntityId,
-        const std::string& setEntityType,
-        const std::string& setEntityToken
+        const std::string& _playFabId,
+        const std::string& _clientSessionTicket,
+        const std::string& _entityId,
+        const std::string& _entityType,
+        const std::string& _entityToken
     )
     {
-        SetIfNotNull(setPlayFabId, playFabId);
-        SetIfNotNull(setClientSessionTicket, clientSessionTicket);
-        SetIfNotNull(setEntityId, entityId);
-        SetIfNotNull(setEntityType, entityType);
-        SetIfNotNull(setEntityToken, entityToken);
+        SetIfNotNull(_playFabId, playFabId);
+        SetIfNotNull(_clientSessionTicket, clientSessionTicket);
+        SetIfNotNull(_entityId, entityId);
+        SetIfNotNull(_entityType, entityType);
+        SetIfNotNull(_entityToken, entityToken);
     }
 }

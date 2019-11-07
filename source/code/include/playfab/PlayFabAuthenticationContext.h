@@ -30,7 +30,7 @@ namespace PlayFab
         PlayFabAuthenticationContext& operator=(PlayFabAuthenticationContext&& other) = delete;
         ~PlayFabAuthenticationContext() = default;
 
-        void HandlePlayFabLogin(const std::string& setPlayFabId, const std::string& setClientSessionTicket, const std::string& setEntityId, const std::string& setEntityType, const std::string& setEntityToken);
+        void HandlePlayFabLogin(const std::string& _playFabId, const std::string& _clientSessionTicket, const std::string& _entityId, const std::string& _entityType, const std::string& _entityToken);
         void ForgetAllCredentials();
     };
 }
