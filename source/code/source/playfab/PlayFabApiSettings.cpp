@@ -33,11 +33,13 @@ namespace PlayFab
         bool firstParam = true;
         for (auto const& paramPair : requestGetParams)
         {
-            if (firstParam) {
+            if (firstParam)
+            {
                 fullUrl += "?";
                 firstParam = false;
             }
-            else {
+            else
+            {
                 fullUrl += "&";
             }
             fullUrl += paramPair.first;

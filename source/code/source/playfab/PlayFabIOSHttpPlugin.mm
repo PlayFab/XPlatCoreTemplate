@@ -55,6 +55,7 @@ namespace PlayFab
         this->impl = new PlayFabIOSHttpPlugin::RequestImpl();
         return true;
     }
+
     void PlayFabIOSHttpPlugin::RequestTask::Cancel()
     {
         if(this->impl)
@@ -76,16 +77,19 @@ namespace PlayFab
         threadRunning = false;
 
         httpRequestMutex.lock();
+
         if(this->requestingTask)
         {
             this->requestingTask->Cancel();
         }
+
         if(workerThread)
         {
             httpRequestMutex.unlock();
             workerThread->join();
             httpRequestMutex.lock();
         }
+
         httpRequestMutex.unlock();
     }
 
