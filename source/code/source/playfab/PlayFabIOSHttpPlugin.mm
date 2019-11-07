@@ -106,8 +106,8 @@ namespace PlayFab
             }
             catch (...)
             {
-
             }
+
             if(requestTask != nullptr)
             { // LOCK httpRequestMutex
                 std::unique_lock<std::mutex> lock(httpRequestMutex);
