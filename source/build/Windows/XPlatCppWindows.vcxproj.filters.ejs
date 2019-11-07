@@ -36,10 +36,10 @@
       <Filter>Header Files\playfab</Filter>
     </ClInclude>
 <% for(var i in apis) { var api = apis[i];
-%>    <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>API.h">
+%>    <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>Api.h">
       <Filter>Header Files\playfab</Filter>
     </ClInclude>
-    <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>InstanceAPI.h">
+    <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>InstanceApi.h">
       <Filter>Header Files\playfab</Filter>
     </ClInclude>
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFab<%- api.name %>DataModels.h">
@@ -126,7 +126,7 @@
 %>    <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFab<%- api.name %>Api.cpp">
       <Filter>Source Files\playfab</Filter>
     </ClCompile>
-    <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFab<%- api.name %>InstanceAPI.cpp">
+    <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFab<%- api.name %>InstanceApi.cpp">
       <Filter>Source Files\playfab</Filter>
     </ClCompile>
 <% } %>    <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFabError.cpp">

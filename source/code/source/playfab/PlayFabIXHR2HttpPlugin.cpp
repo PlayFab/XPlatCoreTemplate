@@ -94,6 +94,8 @@ namespace PlayFab
 
     void PlayFabIXHR2HttpPlugin::MakePostRequest(std::unique_ptr<CallRequestContainerBase> requestContainer)
     {
+        CallRequestContainer* container = dynamic_cast<CallRequestContainer*>(requestContainer.get());
+        if (container != nullptr && container->HandleInvalidSettings())
         { // LOCK httpRequestMutex
             std::unique_lock<std::mutex> lock(httpRequestMutex);
             pendingRequests.push_back(std::move(requestContainer));
@@ -195,7 +197,7 @@ namespace PlayFab
         {
             reqContainer.errorWrapper.HttpCode = status;
             reqContainer.errorWrapper.HttpStatus = "Failed to contact server";
-            reqContainer.errorWrapper.ErrorCode = PlayFabErrorConnectionTimeout;
+            reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorConnectionTimeout;
             reqContainer.errorWrapper.ErrorName = "Failed to contact server";
             reqContainer.errorWrapper.ErrorMessage = "Failed to contact server, curl error: " + std::to_string(res);
             HandleCallback(std::move(requestContainer));
@@ -221,7 +223,7 @@ namespace PlayFab
             {
                 reqContainer.errorWrapper.HttpCode = status;
                 reqContainer.errorWrapper.HttpStatus = reqContainer.responseString;
-                reqContainer.errorWrapper.ErrorCode = PlayFabErrorConnectionTimeout;
+                reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorConnectionTimeout;
                 reqContainer.errorWrapper.ErrorName = "Failed to parse PlayFab response";
                 reqContainer.errorWrapper.ErrorMessage = jsonParseErrors;
             }
@@ -247,7 +249,7 @@ namespace PlayFab
     {
         if (PlayFabSettings::threadedCallbacks)
         {
-            throw std::runtime_error("You should not call Update() when PlayFabSettings::threadedCallbacks == true");
+            throw PlayFabException(PlayFabExceptionCode::ThreadMisuse, "You should not call Update() when PlayFabSettings::threadedCallbacks == true");
         }
 
         std::unique_ptr<CallRequestContainerBase> requestContainer = nullptr;

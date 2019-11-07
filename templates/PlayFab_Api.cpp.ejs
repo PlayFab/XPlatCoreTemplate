@@ -36,38 +36,41 @@ namespace PlayFab
         void* customData
     )
     {
+        std::shared_ptr<PlayFabAuthenticationContext> context = request.authenticationContext != nullptr ? request.authenticationContext : PlayFabSettings::staticPlayer;
+        std::shared_ptr<PlayFabApiSettings> settings = PlayFabSettings::staticSettings;
 <%- getRequestActions("        ", apiCall, false) %>
         IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
         const Json::Value requestJson = request.ToJson();
         std::string jsonAsString = requestJson.toStyledString();
 
         std::unordered_map<std::string, std::string> headers;
-        headers.emplace(<%- getAuthParams(apiCall, false) %>);
-
+<% if (hasAuthParams(apiCall)) {
+%>        headers.emplace(<%- getAuthParams(apiCall, false) %>);
+<% } %>
         auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
             "<%- apiCall.url %>",
             headers,
             jsonAsString,
             On<%- apiCall.name %>Result,
+            settings,
+            context,
             customData));
 
         reqContainer->successCallback = std::shared_ptr<void>((callback == nullptr) ? nullptr : new ProcessApiCallback<<%- apiCall.result %>>(callback));
         reqContainer->errorCallback = errorCallback;
 
-        if (PlayFabSettings::ValidateSettings(request.authenticationContext, nullptr, *reqContainer))
-        {
-            http.MakePostRequest(std::unique_ptr<CallRequestContainerBase>(static_cast<CallRequestContainerBase*>(reqContainer.release())));
-        }
+        http.MakePostRequest(std::unique_ptr<CallRequestContainerBase>(static_cast<CallRequestContainerBase*>(reqContainer.release())));
     }
 
     void PlayFab<%- api.name %>API::On<%- apiCall.name %>Result(int httpCode, const std::string& result, const std::shared_ptr<CallRequestContainerBase>& reqContainer)
     {
         CallRequestContainer& container = static_cast<CallRequestContainer&>(*reqContainer);
+        std::shared_ptr<PlayFabAuthenticationContext> context = container.GetContext();
 
         <%- apiCall.result %> outResult;
         if (ValidateResult(outResult, container))
-        {
-<%- getResultActions("            ", apiCall, false) %>
+        {<%- getResultActions("            ", apiCall, false)
+%>
             std::shared_ptr<void> internalPtr = container.successCallback;
             if (internalPtr.get() != nullptr)
             {
@@ -80,21 +83,24 @@ namespace PlayFab
     // Private PlayFabClientAPI specific
     bool PlayFabClientAPI::IsClientLoggedIn()
     {
-        return !PlayFabSettings::clientSessionTicket.empty();
+        return !PlayFabSettings::staticPlayer->clientSessionTicket.empty();
     }
 
-    void PlayFabClientAPI::MultiStepClientLogin(bool needsAttribution)
+    void PlayFabClientAPI::MultiStepClientLogin(std::shared_ptr<PlayFabAuthenticationContext> context, bool needsAttribution)
     {
-        if (needsAttribution && !PlayFabSettings::disableAdvertising && PlayFabSettings::advertisingIdType.length() > 0 && PlayFabSettings::advertisingIdValue.length() > 0)
+        if (needsAttribution && !context->disableAdvertising && context->advertisingIdType.length() > 0 && context->advertisingIdValue.length() > 0)
         {
             AttributeInstallRequest request;
-            if (PlayFabSettings::advertisingIdType == PlayFabSettings::AD_TYPE_IDFA)
-                request.Idfa = PlayFabSettings::advertisingIdValue;
-            else if (PlayFabSettings::advertisingIdType == PlayFabSettings::AD_TYPE_ANDROID_ID)
-                request.Adid = PlayFabSettings::advertisingIdValue;
-            else
-                return;
-            AttributeInstall(request, nullptr, nullptr);
+            if (context->advertisingIdType == PlayFabSettings::AD_TYPE_IDFA)
+            {
+                request.Idfa = context->advertisingIdValue;
+                AttributeInstall(request, nullptr, nullptr);
+            }
+            else if (context->advertisingIdType == PlayFabSettings::AD_TYPE_ANDROID_ID)
+            {
+                request.Adid = context->advertisingIdValue;
+                AttributeInstall(request, nullptr, nullptr);
+            }
         }
     }
 <% } %>
@@ -109,15 +115,19 @@ namespace PlayFab
         else // Process the error case
         {
             if (PlayFabSettings::globalErrorHandler != nullptr)
+            {
                 PlayFabSettings::globalErrorHandler(container.errorWrapper, container.GetCustomData());
+            }
             if (container.errorCallback != nullptr)
+            {
                 container.errorCallback(container.errorWrapper, container.GetCustomData());
+            }
             return false;
         }
     }
 }
 
-#endif
+#endif // <%- getApiDefine(api) %>
 
 #if defined(PLAYFAB_PLATFORM_WINDOWS)
 #pragma warning (default: 4100) // formal parameters are part of a public interface

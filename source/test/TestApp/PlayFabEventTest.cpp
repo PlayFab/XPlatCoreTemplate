@@ -17,7 +17,7 @@ using namespace EventsModels;
 
 namespace PlayFabUnit
 {
-#if (!UNITY_IOS && !UNITY_ANDROID) && (!defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID))
+#if (!UNITY_IOS && !UNITY_ANDROID) && (!defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_SWITCH))
     /// QoS API
     void PlayFabEventTest::QosResultApi(TestContext& testContext)
     {
@@ -26,9 +26,13 @@ namespace PlayFabUnit
         QoS::QoSResult result = api.GetQoSResult(5, 200);
 
         if (result.errorCode == 0)
+        {
             testContext.Pass();
+        }
         else
+        {
             testContext.Fail("Error Code:" + std::to_string(result.errorCode));
+        }
     }
 #endif
 
@@ -67,11 +71,13 @@ namespace PlayFabUnit
             Callback(&PlayFabEventTest::OnEventsApiFailed),
             &testContext);
     }
+
     void PlayFabEventTest::OnEventsApiSucceeded(const PlayFab::EventsModels::WriteEventsResponse&, void* customData)
     {
         TestContext* testContext = reinterpret_cast<TestContext*>(customData);
         testContext->Pass();
     }
+
     void PlayFabEventTest::OnEventsApiFailed(const PlayFab::PlayFabError& error, void* customData)
     {
         TestContext* testContext = reinterpret_cast<TestContext*>(customData);
@@ -86,11 +92,11 @@ namespace PlayFabUnit
     int PlayFabEventTest::eventFailCount;
     std::string PlayFabEventTest::eventFailLog;
 
-    void PlayFabEventTest::NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response)
+    void PlayFabEventTest::NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> /*event*/, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> /*response*/)
     {
         (*eventTestContext)->Pass("Private member called back!");
     }
-    
+
     void PlayFabEventTest::EmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response)
     {
         std::shared_ptr<const PlayFab::PlayFabEvent> pfEvent = std::dynamic_pointer_cast<const PlayFab::PlayFabEvent>(event);
@@ -125,7 +131,7 @@ namespace PlayFabUnit
                     "\n";
             }
         }
-        else 
+        else
         {
             (*eventTestContext)->Fail("EmitEventCallback received an error");
         }
@@ -135,11 +141,17 @@ namespace PlayFabUnit
         if (eventCount >= eventEmitCount)
         {
             if (eventBatchMax >= eventEmitCount)
+            {
                 (*eventTestContext)->Fail("Events did not batch:\n" + eventFailLog);
+            }
             else if (eventFailCount > 0)
+            {
                 (*eventTestContext)->Fail("Events failed delivery:\n" + eventFailLog);
+            }
             else
+            {
                 (*eventTestContext)->Pass();
+            }
         }
     }
 
@@ -188,7 +200,12 @@ namespace PlayFabUnit
         (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
             [&testContext]
             (std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)
-            { if(testContext.activeState != TestActiveState::COMPLETE){ testContext.Pass("Lambda Function Callback Succeeded.");}});
+            {
+                if (testContext.activeState != TestActiveState::COMPLETE)
+                {
+                    testContext.Pass("Lambda Function Callback Succeeded.");
+                }
+            });
     }
 
     void PlayFabEventTest::PrivateMemberCallbackTest(TestContext& testContext)
@@ -204,7 +221,7 @@ namespace PlayFabUnit
     void PlayFabEventTest::AddTests()
     {
         // TODO: Fix whatever limitation causes this test to fail for these platforms
-#if !defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_PLAYSTATION)
+#if !defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
         AddTest("QosResultApi", &PlayFabEventTest::QosResultApi);
 #endif
         AddTest("EventsApi", &PlayFabEventTest::EventsApi);
@@ -238,7 +255,7 @@ namespace PlayFabUnit
                 loginComplete = true;
             },
             &loggedIn);
-        
+
         // Sleep while waiting for log in to complete.
         while (!loginComplete)
         {
@@ -249,7 +266,9 @@ namespace PlayFabUnit
     void PlayFabEventTest::SetUp(TestContext& testContext)
     {
         if (!loggedIn)
+        {
             testContext.Skip("Not logged in to PlayFab"); // Cannot run event tests if not logged in
+        }
 
         // Reset event test values.
         eventBatchMax = 0;

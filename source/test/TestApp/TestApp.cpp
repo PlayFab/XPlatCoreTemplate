@@ -87,7 +87,9 @@ namespace PlayFabUnit
         const bool loadedSuccessfully = LoadTitleDataJson(titleJsonPtr, size);
 
         if (!loadedSuccessfully)
+        {
             return false;
+        }
 
         // Parse JSON string into output TestTitleData.
         Json::CharReaderBuilder jsonReaderFactory;
@@ -114,7 +116,7 @@ namespace PlayFabUnit
         va_start(args, format);
 #if defined(PLAYFAB_PLATFORM_PLAYSTATION)
         vsnprintf_s(message, sizeof(message), format, args);
-#elif defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX)
+#elif defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX) || defined(PLAYFAB_PLATFORM_SWITCH)
         vsnprintf(message, sizeof(message), format, args);
 #else
         _vsnprintf_s(message, sizeof(message), format, args);
@@ -155,9 +157,13 @@ namespace PlayFabUnit
     void TestApp::OnPostReportComplete(const ExecuteCloudScriptResult& result, void* /*customData*/)
     {
         if (result.Error.isNull())
+        {
             cloudResponse = "Test report submitted via cloud script: " + PlayFabSettings::buildIdentifier + ", " + cloudPlayFabId;
+        }
         else
+        {
             cloudResponse += "Error executing test report cloud script:\n" + result.Error->Error + ": " + result.Error->Message;
+        }
     }
 
     void TestApp::OnPostReportError(const PlayFabError& error, void* /*customData*/)
