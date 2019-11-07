@@ -99,6 +99,8 @@ namespace PlayFab
 
     void PlayFabWinHttpPlugin::MakePostRequest(std::unique_ptr<CallRequestContainerBase> requestContainer)
     {
+        CallRequestContainer* container = dynamic_cast<CallRequestContainer*>(requestContainer.get());
+        if (container != nullptr && container->HandleInvalidSettings())
         { // LOCK httpRequestMutex
             std::unique_lock<std::mutex> lock(httpRequestMutex);
             pendingRequests.push_back(std::move(requestContainer));
@@ -429,7 +431,7 @@ namespace PlayFab
     {
         if (PlayFabSettings::threadedCallbacks)
         {
-            throw std::runtime_error("You should not call Update() when PlayFabSettings::threadedCallbacks == true");
+            throw PlayFabException(PlayFabExceptionCode::ThreadMisuse, "You should not call Update() when PlayFabSettings::threadedCallbacks == true");
         }
 
         std::unique_ptr<CallRequestContainerBase> requestContainer = nullptr;
