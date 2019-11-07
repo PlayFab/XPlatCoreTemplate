@@ -24,7 +24,7 @@ namespace PlayFab
         std::string GetFullUrl() const;
         std::shared_ptr<PlayFabApiSettings> GetApiSettings() const;
         std::shared_ptr<PlayFabAuthenticationContext> GetContext() const;
-        bool ValidateSettings();
+        bool HandleInvalidSettings();
 
         // TODO: clean up these public variables with setters/getters when you have the chance.
 

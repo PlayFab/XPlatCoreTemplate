@@ -59,7 +59,7 @@ namespace PlayFab
         return this->m_context;
     }
 
-    bool CallRequestContainer::ValidateSettings()
+    bool CallRequestContainer::HandleInvalidSettings()
     {
         bool isValid = true;
         if (m_settings->titleId.empty())
