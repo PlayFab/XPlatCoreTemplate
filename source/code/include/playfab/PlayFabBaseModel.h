@@ -173,7 +173,7 @@ namespace PlayFab
         }
     }
 
-    inline void FromJsonUtilT(Json::Value& input, std::list<time_t>& output)
+    inline void FromJsonUtilT(const Json::Value& input, std::list<time_t>& output)
     {
         output.clear();
         if (input == Json::Value::null || !input.isArray())
@@ -200,7 +200,7 @@ namespace PlayFab
         }
     }
 
-    inline void FromJsonUtilT(Json::Value& input, std::map<std::string, time_t>& output)
+    inline void FromJsonUtilT(const Json::Value& input, std::map<std::string, time_t>& output)
     {
         output.clear();
         if (input == Json::Value::null)
