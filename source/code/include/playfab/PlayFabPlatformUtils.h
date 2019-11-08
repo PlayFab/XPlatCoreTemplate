@@ -44,7 +44,7 @@ namespace PlayFab
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
         gmtime_s(&timeInfo, &now);
 #elif defined(PLAYFAB_PLATFORM_LINUX) || defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_PLAYSTATION)
-        timeInfo = *gmtime(&input);
+        timeInfo = *gmtime(&now);
 #endif
         char buff[64];
         strftime(buff, 64, "%Y-%m-%dT%H:%M:%S.000Z", &timeInfo);
