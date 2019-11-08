@@ -4,6 +4,7 @@
 #include <functional>
 #include <list>
 #include <map>
+#include <memory>
 
 #include <playfab/PlayFabPlatformMacros.h>
 #include <playfab/PlayFabJsonHeaders.h>
