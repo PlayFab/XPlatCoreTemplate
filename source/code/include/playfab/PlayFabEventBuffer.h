@@ -16,11 +16,11 @@ namespace PlayFab
     class PlayFabEventPacket final
     {
     public:
-        PlayFabEventPacket(const uint64_t index, std::shared_ptr<const IPlayFabEmitEventRequest> request) :
+        PlayFabEventPacket(const uint64_t index, std::unique_ptr<const IPlayFabEmitEventRequest> request) :
             next(nullptr),
             eventIndex(index),
             timestamp(std::time(nullptr)), // current time
-            eventRequest(request)
+            eventRequest(std::move(request))
         {
         }
         ~PlayFabEventPacket() {};
@@ -29,7 +29,7 @@ namespace PlayFab
         uint64_t eventIndex; // the incremental index of an event
         std::time_t timestamp; // the timestamp of event packet creation
 
-        std::shared_ptr<const IPlayFabEmitEventRequest> eventRequest; // the event request
+        std::unique_ptr<const IPlayFabEmitEventRequest> eventRequest; // the event request
     };
 #pragma pack(pop)
 
@@ -67,14 +67,14 @@ namespace PlayFab
         PlayFabEventBuffer& operator=(PlayFabEventBuffer&& other) = delete; // disable move assignment
 
         // Attempts to put an event in buffer (add to the tail). This method must be thread-safe.
-        EventProducingResult TryPut(std::shared_ptr<const IPlayFabEmitEventRequest> request);
+        EventProducingResult TryPut(std::unique_ptr<const IPlayFabEmitEventRequest> request);
 
         // Attempts to take an event from buffer (update the head).
-        EventConsumingResult TryTake(std::shared_ptr<const IPlayFabEmitEventRequest>& request);
+        EventConsumingResult TryTake(std::unique_ptr<const IPlayFabEmitEventRequest>& request);
 
     private:
         // Creates (allocates and calls constructor) an event packet object in the buffer
-        PlayFabEventPacket* CreateEventPacket(uint8_t* location, const uint64_t index, std::shared_ptr<const IPlayFabEmitEventRequest> request);
+        PlayFabEventPacket* CreateEventPacket(uint8_t* location, const uint64_t index, std::unique_ptr<const IPlayFabEmitEventRequest> request);
 
         // Deletes (calls destructor) an event packet object from the buffer
         void DeleteEventPacket(PlayFabEventPacket* eventPacket);

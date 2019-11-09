@@ -17,7 +17,7 @@ namespace PlayFab
         this->pipelines.emplace(EventPipelineKey::PlayFabTelemetry, std::make_shared<PlayFabEventPipeline>(std::make_shared<PlayFabEventPipelineSettings>(PlayFabEventPipelineType::PlayFabTelemetry)));
     }
 
-    void PlayFabEventRouter::RouteEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) const
+    void PlayFabEventRouter::RouteEvent(std::unique_ptr<const IPlayFabEmitEventRequest> request) const
     {
         // only events based on PlayFabEmitEventRequest are supported by default pipelines
         const PlayFabEmitEventRequest* pfRequestPtr = dynamic_cast<const PlayFabEmitEventRequest*>(request.get());
@@ -33,7 +33,7 @@ namespace PlayFab
                         // route lightweight (and default) events to PlayFab, bypassing PlayStream
                         if (pipelineEntry.first == EventPipelineKey::PlayFabTelemetry)
                         {
-                            pipelineEntry.second->IntakeEvent(request);
+                            pipelineEntry.second->IntakeEvent(std::move(request));
                         }
                         break;
                     }
@@ -42,7 +42,7 @@ namespace PlayFab
                         // route heavyweight events to PlayFab pipeline only
                         if (pipelineEntry.first == EventPipelineKey::PlayFabPlayStream)
                         {
-                            pipelineEntry.second->IntakeEvent(request);
+                            pipelineEntry.second->IntakeEvent(std::move(request));
                         }
                         break;
                     }

@@ -224,6 +224,8 @@ namespace PlayFabUnit
         // Each thread should send 10 events
         // once all events have come back, complete the test
         //std::thread workerThread1 = std::thread(&PlayFabEventTest::WorkerThread, this);
+        eventTestContext = std::make_shared<TestContext*>(&testContext);
+        (*eventTestContext)->Pass();
     }
 
     void PlayFabEventTest::AddTests()

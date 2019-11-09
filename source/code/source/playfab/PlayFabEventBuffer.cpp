@@ -57,7 +57,7 @@ namespace PlayFab
         }
     }
 
-    PlayFabEventBuffer::EventProducingResult PlayFabEventBuffer::TryPut(std::shared_ptr<const IPlayFabEmitEventRequest> request) // This must be thread-safe
+    PlayFabEventBuffer::EventProducingResult PlayFabEventBuffer::TryPut(std::unique_ptr<const IPlayFabEmitEventRequest> request) // This must be thread-safe
     {
         SpinLock lock(atomicSpin);
 
@@ -98,14 +98,14 @@ namespace PlayFab
         // create an event packet, set it to the tail->next and move the tail
 
         uint64_t currentEventIndex = eventIndex->fetch_add(1, std::memory_order_relaxed);
-        PlayFabEventPacket* event = CreateEventPacket(reinterpret_cast<uint8_t*>(eventStart), currentEventIndex, request);
+        PlayFabEventPacket* event = CreateEventPacket(reinterpret_cast<uint8_t*>(eventStart), currentEventIndex, std::move(request));
         tailPtr->next.store(event, std::memory_order_release);
         tail = event;
 
         return EventProducingResult::Success;
     }
 
-    PlayFabEventBuffer::EventConsumingResult PlayFabEventBuffer::TryTake(std::shared_ptr<const IPlayFabEmitEventRequest>& request)
+    PlayFabEventBuffer::EventConsumingResult PlayFabEventBuffer::TryTake(std::unique_ptr<const IPlayFabEmitEventRequest>& request)
     {
         if (disabled.load(std::memory_order_consume))
         {
@@ -122,7 +122,7 @@ namespace PlayFab
         }
 
         // event is available; return its values
-        request = event->eventRequest;
+        request = std::move(event->eventRequest);
         
         // set new head (new last consumed event)
         head.store(event, std::memory_order_release);
@@ -133,10 +133,10 @@ namespace PlayFab
         return EventConsumingResult::Success;
     }
 
-    PlayFabEventPacket* PlayFabEventBuffer::CreateEventPacket(uint8_t *location, const uint64_t index, std::shared_ptr<const IPlayFabEmitEventRequest> request)
+    PlayFabEventPacket* PlayFabEventBuffer::CreateEventPacket(uint8_t *location, const uint64_t index, std::unique_ptr<const IPlayFabEmitEventRequest> request)
     {
         // Use placement new to allocate an event packet in the buffer
-        return new(location)PlayFabEventPacket(index, request);
+        return new(location)PlayFabEventPacket(index, std::move(request));
     }
 
     void PlayFabEventBuffer::DeleteEventPacket(PlayFabEventPacket* event)

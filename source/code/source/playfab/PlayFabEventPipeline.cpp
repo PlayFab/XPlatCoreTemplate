@@ -71,7 +71,7 @@ namespace PlayFab
         return this->settings;
     }
 
-    void PlayFabEventPipeline::IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request)
+    void PlayFabEventPipeline::IntakeEvent(std::unique_ptr<const IPlayFabEmitEventRequest> request)
     {
         try
         {
@@ -79,7 +79,7 @@ namespace PlayFab
             EmitEventResult emitResult;
 
             // put event into buffer
-            switch (this->buffer.TryPut(request))
+            switch (this->buffer.TryPut(std::move(request)))
             {
                 case Result::Success:
                     return;
@@ -106,12 +106,19 @@ namespace PlayFab
             }
 
             // pipeline failed to intake the event, create a response
-            std::shared_ptr<const PlayFabEmitEventRequest> playFabEmitRequest = std::dynamic_pointer_cast<const PlayFabEmitEventRequest>(request);
             auto playFabEmitEventResponse = std::make_shared<PlayFabEmitEventResponse>();
             playFabEmitEventResponse->emitEventResult = emitResult;
 
+            // TODO: since we are std::move-ing the request,
+            //  we actually lose this info to return to the user.
+            // Do users care about this object?
+            // the entire point of this callback would be for users to retry if something went wrong,
+            // but with this particular change they must re-construct the request
+            // ( BUT which request? we no longer know...)
+            std::shared_ptr<PlayFabEmitEventRequest> req;
+
             // call an emit event callback
-            CallbackRequest(playFabEmitRequest, playFabEmitEventResponse);
+            CallbackRequest(req, playFabEmitEventResponse);
         }
         catch (...)
         {
@@ -131,7 +138,7 @@ namespace PlayFab
     {
         using clock = std::chrono::steady_clock;
         using Result = PlayFabEventBuffer::EventConsumingResult;
-        std::shared_ptr<const IPlayFabEmitEventRequest> request;
+        std::unique_ptr<const IPlayFabEmitEventRequest> request;
         size_t batchCounter = 0; // used to track uniqueness of batches in the map
         std::chrono::steady_clock::time_point momentBatchStarted; // used to track when a currently assembled batch got its first event
 
@@ -153,7 +160,7 @@ namespace PlayFab
                     case Result::Success:
                     {
                         // add an event to batch
-                        this->batch.push_back(request);
+                        this->batch.push_back(std::move(request));
 
                         // if batch is full
                         if (this->batch.size() >= this->settings->maximalNumberOfItemsInBatch)

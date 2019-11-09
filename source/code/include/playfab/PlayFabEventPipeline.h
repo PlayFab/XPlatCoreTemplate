@@ -46,7 +46,7 @@ namespace PlayFab
     public:
         virtual ~IPlayFabEventPipeline() {}
         virtual void Start() {} // Start pipeline's worker thread
-        virtual void IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) = 0; // Intake an event. This method must be thread-safe.
+        virtual void IntakeEvent(std::unique_ptr<const IPlayFabEmitEventRequest> request) = 0; // Intake an event. This method must be thread-safe.
     };
 
     /// <summary>
@@ -65,7 +65,7 @@ namespace PlayFab
 
         std::shared_ptr<PlayFabEventPipelineSettings> GetSettings() const;
         virtual void Start() override;
-        virtual void IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) override;
+        virtual void IntakeEvent(std::unique_ptr<const IPlayFabEmitEventRequest> request) override;
 
         void SetExceptionCallback(ExceptionCallback callback);
 
