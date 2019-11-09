@@ -218,6 +218,14 @@ namespace PlayFabUnit
         std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
     }
 
+    void PlayFabEventTest::MutliThreadTest(TestContext& testContext)
+    {
+        //TODO: spin up X threads (2 or 10)
+        // Each thread should send 10 events
+        // once all events have come back, complete the test
+        //std::thread workerThread1 = std::thread(&PlayFabEventTest::WorkerThread, this);
+    }
+
     void PlayFabEventTest::AddTests()
     {
         // TODO: Fix whatever limitation causes this test to fail for these platforms
@@ -229,6 +237,7 @@ namespace PlayFabUnit
         AddTest("LightweightEvents", &PlayFabEventTest::LightweightEvents);
         AddTest("LambdaCallback", &PlayFabEventTest::LambdaCallbackTest);
         AddTest("PrivateMemberCallback", &PlayFabEventTest::PrivateMemberCallbackTest);
+        AddTest("MultiThreadedEvents", &PlayFabEventTest::MutliThreadTest);
     }
 
     void PlayFabEventTest::ClassSetUp()
