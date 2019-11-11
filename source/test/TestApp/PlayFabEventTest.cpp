@@ -99,7 +99,7 @@ namespace PlayFabUnit
         (*eventTestContext)->Pass("Private member called back!");
     }
 
-    void PlayFabEventTest::MyThreadingCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response)
+    void PlayFabEventTest::MyThreadingCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> /*event*/, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> /*response*/)
     {
         numEventsHeard++;
         if(numEventsHeard == numTotalThreadedEvents)
