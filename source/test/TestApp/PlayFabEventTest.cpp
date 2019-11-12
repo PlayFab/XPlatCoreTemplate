@@ -91,10 +91,21 @@ namespace PlayFabUnit
     int PlayFabEventTest::eventPassCount;
     int PlayFabEventTest::eventFailCount;
     std::string PlayFabEventTest::eventFailLog;
+    unsigned int PlayFabEventTest::numEventsHeard;
+    std::vector<std::thread> PlayFabEventTest::testThreadPool;
 
     void PlayFabEventTest::NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> /*event*/, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> /*response*/)
     {
         (*eventTestContext)->Pass("Private member called back!");
+    }
+
+    void PlayFabEventTest::MyThreadingCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> /*event*/, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> /*response*/)
+    {
+        numEventsHeard++;
+        if(numEventsHeard == numTotalThreadedEvents)
+        {
+            (*eventTestContext)->Pass("Threaded callback worked as expected!");
+        }
     }
 
     void PlayFabEventTest::EmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response)
@@ -218,14 +229,38 @@ namespace PlayFabUnit
         std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
     }
 
-    void PlayFabEventTest::MutliThreadTest(TestContext& testContext)
+    void PlayFabEventTest::GenericMultiThreadedTest(unsigned int pNumThreads, unsigned int pNumEventsPerThread)
     {
-        //TODO: spin up X threads (2 or 10)
-        // Each thread should send 10 events
-        // once all events have come back, complete the test
-        //std::thread workerThread1 = std::thread(&PlayFabEventTest::WorkerThread, this);
+        numEventsHeard = 0;
+        for (unsigned int thread = 0; thread < pNumThreads; ++thread)
+        {
+            testThreadPool.emplace_back(std::thread([pNumEventsPerThread, this](){
+                std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
+                for (unsigned int i = 0; i < pNumEventsPerThread; ++i)
+                {
+                    (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
+                        std::bind(&PlayFabEventTest::MyThreadingCallback, this, std::placeholders::_1, std::placeholders::_2));
+                }
+            }));
+        }
+    }
+
+    void PlayFabEventTest::BasicMultiThreadedTest(TestContext& testContext)
+    {
         eventTestContext = std::make_shared<TestContext*>(&testContext);
-        (*eventTestContext)->Pass();
+        GenericMultiThreadedTest(numThreads, numEventsPerThread);
+    }
+
+    void PlayFabEventTest::ManyThreadsLowEventsPerTest(TestContext& testContext)
+    {
+        eventTestContext = std::make_shared<TestContext*>(&testContext);
+        GenericMultiThreadedTest(30, 2);
+    }
+
+    void PlayFabEventTest::FewThreadsHighEventsPerTest(TestContext& testContext)
+    {
+        eventTestContext = std::make_shared<TestContext*>(&testContext);
+        GenericMultiThreadedTest(2, 15);
     }
 
     void PlayFabEventTest::AddTests()
@@ -239,7 +274,9 @@ namespace PlayFabUnit
         AddTest("LightweightEvents", &PlayFabEventTest::LightweightEvents);
         AddTest("LambdaCallback", &PlayFabEventTest::LambdaCallbackTest);
         AddTest("PrivateMemberCallback", &PlayFabEventTest::PrivateMemberCallbackTest);
-        AddTest("MultiThreadedEvents", &PlayFabEventTest::MutliThreadTest);
+        AddTest("BasicMultiThreadedTest", &PlayFabEventTest::BasicMultiThreadedTest);
+        AddTest("ManyThreadsLowEventsPerTest", &PlayFabEventTest::ManyThreadsLowEventsPerTest);
+        AddTest("FewThreadsHighEventsPerTest", &PlayFabEventTest::FewThreadsHighEventsPerTest);
     }
 
     void PlayFabEventTest::ClassSetUp()
@@ -286,6 +323,7 @@ namespace PlayFabUnit
         eventPassCount = 0;
         eventFailCount = 0;
         eventFailLog = "";
+        numEventsHeard = 0;
     }
 
     void PlayFabEventTest::Tick(TestContext& /*testContext*/)
@@ -297,6 +335,15 @@ namespace PlayFabUnit
     {
         eventTestContext = nullptr;
         eventApi = nullptr;
+
+        if (testThreadPool.size() > 0)
+        {
+            for (auto& thread : testThreadPool)
+            {
+                thread.join();
+            }
+            testThreadPool.clear();
+        }
     }
 
     void PlayFabEventTest::ClassTearDown()
