@@ -56,7 +56,7 @@ namespace PlayFabUnit
 
             // State
             bool loggedIn;
-            std::shared_ptr<PlayFab::PlayFabEventAPI> eventApi;
+            std::shared_ptr<PlayFab::PlayFabEventAPI*> eventApi;
             static std::shared_ptr<TestContext*> eventTestContext;
             static const int eventEmitCount = 6;
             static size_t eventBatchMax;
