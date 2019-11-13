@@ -64,7 +64,7 @@ namespace PlayFabUnit
             static int eventFailCount;
             static std::string eventFailLog;
 
-            static std::vector<std::thread> testThreadPool;
+            std::vector<std::thread> testThreadPool;
 
             // Utility
             void EmitEvents(PlayFab::PlayFabEventType eventType, int maxBatchWaitTime=2, int maxItemsInBatch=3, int maxBatchesInFlight=10);

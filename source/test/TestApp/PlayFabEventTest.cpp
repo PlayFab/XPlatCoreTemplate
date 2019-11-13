@@ -92,8 +92,6 @@ namespace PlayFabUnit
     int PlayFabEventTest::eventFailCount;
     std::string PlayFabEventTest::eventFailLog;
 
-    std::vector<std::thread> PlayFabEventTest::testThreadPool;
-
     void PlayFabEventTest::NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> /*event*/, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> /*response*/)
     {
         (*eventTestContext)->Pass("Private member called back!");
@@ -222,22 +220,20 @@ namespace PlayFabUnit
 
     void PlayFabEventTest::GenericMultiThreadedTest(uint32_t pNumThreads, uint32_t pNumEventsPerThread)
     {
-        uint32_t localNumEventsReturned = 0;
-        uint32_t localTotalEventsExpected = pNumThreads * pNumEventsPerThread;
+        std::atomic<uint32_t> eventsRemaining = pNumThreads * pNumEventsPerThread;
         for (uint32_t thread = 0; thread < pNumThreads; ++thread)
         {
-            testThreadPool.emplace_back([&localNumEventsReturned, localTotalEventsExpected, pNumEventsPerThread, this]() {
+            testThreadPool.emplace_back([&eventsRemaining, pNumEventsPerThread, this]() {
                 std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
                 for (uint32_t i = 0; i < pNumEventsPerThread; ++i)
                 {
                     (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
-                    [&localNumEventsReturned, pNumEventsPerThread, localTotalEventsExpected]
+                    [&eventsRemaining, pNumEventsPerThread]
                     (std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)
                     {
-                        localNumEventsReturned++;
-                        if (localNumEventsReturned == localTotalEventsExpected)
+                        if (--eventsRemaining == 0)
                         {
-                            (*eventTestContext)->Pass("Threaded callback worked as expected!");
+                            (*eventTestContext)->Pass("Threaded callback Received all events Emitted.");
                         }
                     });
                 }
