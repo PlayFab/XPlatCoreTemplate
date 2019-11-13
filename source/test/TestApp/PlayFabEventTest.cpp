@@ -277,11 +277,11 @@ namespace PlayFabUnit
 #if !defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
         AddTest("QosResultApi", &PlayFabEventTest::QosResultApi);
 #endif
-        AddTest("EventsApi", &PlayFabEventTest::EventsApi);
+        //AddTest("EventsApi", &PlayFabEventTest::EventsApi);
         AddTest("HeavyweightEvents", &PlayFabEventTest::HeavyweightEvents);
         AddTest("LightweightEvents", &PlayFabEventTest::LightweightEvents);
         AddTest("LambdaCallback", &PlayFabEventTest::LambdaCallbackTest);
-        AddTest("PrivateMemberCallback", &PlayFabEventTest::PrivateMemberCallbackTest);
+        //AddTest("PrivateMemberCallback", &PlayFabEventTest::PrivateMemberCallbackTest);
         AddTest("BasicMultiThreadedTest", &PlayFabEventTest::BasicMultiThreadedTest);
         AddTest("ManyThreadsLowEventsPerTest", &PlayFabEventTest::ManyThreadsLowEventsPerTest);
         AddTest("FewThreadsHighEventsPerTest", &PlayFabEventTest::FewThreadsHighEventsPerTest);
