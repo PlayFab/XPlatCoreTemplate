@@ -281,7 +281,7 @@ namespace PlayFabUnit
         AddTest("HeavyweightEvents", &PlayFabEventTest::HeavyweightEvents);
         AddTest("LightweightEvents", &PlayFabEventTest::LightweightEvents);
         AddTest("LambdaCallback", &PlayFabEventTest::LambdaCallbackTest);
-        //AddTest("PrivateMemberCallback", &PlayFabEventTest::PrivateMemberCallbackTest);
+        AddTest("PrivateMemberCallback", &PlayFabEventTest::PrivateMemberCallbackTest);
         AddTest("BasicMultiThreadedTest", &PlayFabEventTest::BasicMultiThreadedTest);
         AddTest("ManyThreadsLowEventsPerTest", &PlayFabEventTest::ManyThreadsLowEventsPerTest);
         AddTest("FewThreadsHighEventsPerTest", &PlayFabEventTest::FewThreadsHighEventsPerTest);
