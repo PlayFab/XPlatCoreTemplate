@@ -47,11 +47,11 @@ namespace PlayFabUnit
             void LambdaCallbackTest(TestContext& testContext);
             void PrivateMemberCallbackTest(TestContext& testContext);
 
-            void BasicMultiThreadedTest(TestContext& testContext);
-
             // We need to make sure these are able to pass within TEST_TIMEOUT_DURATION
+            void BasicMultiThreadedTest(TestContext& testContext);
             void ManyThreadsLowEventsPerTest(TestContext& testContext);
             void FewThreadsHighEventsPerTest(TestContext& testContext);
+            
             void GenericMultiThreadedTest(uint32_t pNumThreads, uint32_t pNumEventsPerThread);
 
             // State
