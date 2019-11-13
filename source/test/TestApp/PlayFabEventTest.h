@@ -49,14 +49,14 @@ namespace PlayFabUnit
 
             void BasicMultiThreadedTest(TestContext& testContext);
 
-            // We need to make sure these are able to pass within our TIMEOUT limits.
+            // We need to make sure these are able to pass within TEST_TIMEOUT_DURATION
             void ManyThreadsLowEventsPerTest(TestContext& testContext);
             void FewThreadsHighEventsPerTest(TestContext& testContext);
-            void GenericMultiThreadedTest(unsigned int pNumThreads, unsigned int pNumEventsPerThread);
+            void GenericMultiThreadedTest(uint32_t pNumThreads, uint32_t pNumEventsPerThread);
 
             // State
             bool loggedIn;
-            std::shared_ptr<PlayFab::PlayFabEventAPI*> eventApi;
+            std::shared_ptr<PlayFab::PlayFabEventAPI> eventApi;
             static std::shared_ptr<TestContext*> eventTestContext;
             static const int eventEmitCount = 6;
             static size_t eventBatchMax;
@@ -64,18 +64,12 @@ namespace PlayFabUnit
             static int eventFailCount;
             static std::string eventFailLog;
 
-            static const unsigned int numThreads = 6;
-            static const unsigned int numEventsPerThread = 5;
-            static const unsigned int numTotalThreadedEvents = numThreads * numEventsPerThread;
             static std::vector<std::thread> testThreadPool;
-            static unsigned int numEventsHeard;
 
             // Utility
             void EmitEvents(PlayFab::PlayFabEventType eventType, int maxBatchWaitTime=2, int maxItemsInBatch=3, int maxBatchesInFlight=10);
             static void EmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
             void NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
-
-            void MyThreadingCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
 
             template<typename T> std::function<void(const T&, void*)> Callback(void(PlayFabEventTest::*func)(const T&, void*))
             {
