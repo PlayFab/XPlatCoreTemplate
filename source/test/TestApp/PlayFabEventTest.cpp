@@ -223,22 +223,27 @@ namespace PlayFabUnit
         std::atomic<uint32_t> eventsRemaining = pNumThreads * pNumEventsPerThread;
         for (uint32_t thread = 0; thread < pNumThreads; ++thread)
         {
-            testThreadPool.emplace_back([&eventsRemaining, pNumEventsPerThread, this]() {
-                std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
-                for (uint32_t i = 0; i < pNumEventsPerThread; ++i)
+            testThreadPool.emplace_back(
+                [&eventsRemaining, pNumEventsPerThread, this]() 
                 {
-                    (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
-                    [&eventsRemaining, pNumEventsPerThread]
-                    (std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)
+                    std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
+                    for (uint32_t i = 0; i < pNumEventsPerThread; ++i)
                     {
-                        if (--eventsRemaining == 0)
-                        {
-                            (*eventTestContext)->Pass("Threaded callback Received all events Emitted.");
-                        }
-                    });
-                }
+                        (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
+                            [&eventsRemaining, pNumEventsPerThread]
+                            (std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)
+                            {
+                                eventsRemaining--;
+                                if (eventsRemaining == 0)
+                                {
+                                    (*eventTestContext)->Pass("Threaded callback Received all events Emitted.");
+                                }
+                            }
+                        );
+                    }
                 std::this_thread::yield();
-            });
+                }
+            );
         }
     }
 
