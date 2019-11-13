@@ -119,6 +119,7 @@ namespace PlayFab
         tm timeStruct = {};
         std::istringstream iss(timeStr);
         iss >> std::get_time(&timeStruct, "%Y-%m-%dT%T");
+        timeStruct.tm_isdst = 0;  // 0 means "not in DST".  FromJsonUtilT() assumes UTC/Zulu always.
 #if defined(PLAYFAB_PLATFORM_PLAYSTATION)
         output = mktime(&timeStruct);
 #elif defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX)
