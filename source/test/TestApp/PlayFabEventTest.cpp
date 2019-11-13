@@ -342,14 +342,11 @@ namespace PlayFabUnit
         eventTestContext = nullptr;
         eventApi = nullptr;
 
-        if (testThreadPool.size() > 0)
+        for (auto& thread : testThreadPool)
         {
-            for (auto& thread : testThreadPool)
-            {
-                thread.join();
-            }
-            testThreadPool.clear();
+            thread.join();
         }
+        testThreadPool.clear();
     }
 
     void PlayFabEventTest::ClassTearDown()
