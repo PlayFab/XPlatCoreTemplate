@@ -66,9 +66,21 @@ namespace PlayFabUnit
             request.Events.push_back(CreateEventContents("event_B_", i));
         }
 
+        // PlayFabEventsAPI::WriteEvents(request,
+        //     &PlayFabEventTest::OnEventsApiSucceeded,
+        //     &PlayFabEventTest::OnEventsApiFailed,
+        //     &testContext);
         PlayFabEventsAPI::WriteEvents(request,
-            &PlayFabEventTest::OnEventsApiSucceeded,
-            &PlayFabEventTest::OnEventsApiFailed,
+            [](const PlayFab::EventsModels::WriteEventsResponse, void* customData)
+            {
+                TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+                testContext->Pass();
+            },
+            [](const PlayFab::PlayFabError& error, void* customData)
+            {
+                TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+                testContext->Fail(error.GenerateErrorReport());
+            },
             &testContext);
     }
 
