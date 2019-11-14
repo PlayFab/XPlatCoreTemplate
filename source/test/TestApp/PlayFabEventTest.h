@@ -31,8 +31,8 @@ namespace PlayFabUnit
             /// EVENTS API
             /// Test that sends heavyweight events as a whole batch.
             void EventsApi(TestContext& testContext);
-            void OnEventsApiSucceeded(const PlayFab::EventsModels::WriteEventsResponse&, void* customData);
-            void OnEventsApiFailed(const PlayFab::PlayFabError& error, void* customData);
+            static void OnEventsApiSucceeded(const PlayFab::EventsModels::WriteEventsResponse&, void* customData);
+            static void OnEventsApiFailed(const PlayFab::PlayFabError& error, void* customData);
 
             /// EVENTS API
             /// PlayFab heavyweight events (emitted individually

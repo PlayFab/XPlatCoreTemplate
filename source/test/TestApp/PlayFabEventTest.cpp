@@ -67,8 +67,8 @@ namespace PlayFabUnit
         }
 
         PlayFabEventsAPI::WriteEvents(request,
-            Callback(&PlayFabEventTest::OnEventsApiSucceeded),
-            Callback(&PlayFabEventTest::OnEventsApiFailed),
+            &PlayFabEventTest::OnEventsApiSucceeded,
+            &PlayFabEventTest::OnEventsApiFailed,
             &testContext);
     }
 
@@ -212,7 +212,6 @@ namespace PlayFabUnit
     {
        eventTestContext = std::make_shared<TestContext*>(&testContext);
 
-        //std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
         eventApi = SetupEventTest();
 
         (*eventApi)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
@@ -278,7 +277,7 @@ namespace PlayFabUnit
 #if !defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
         AddTest("QosResultApi", &PlayFabEventTest::QosResultApi);
 #endif
-        //AddTest("EventsApi", &PlayFabEventTest::EventsApi);
+        AddTest("EventsApi", &PlayFabEventTest::EventsApi);
         AddTest("HeavyweightEvents", &PlayFabEventTest::HeavyweightEvents);
         AddTest("LightweightEvents", &PlayFabEventTest::LightweightEvents);
         AddTest("LambdaCallback", &PlayFabEventTest::LambdaCallbackTest);
