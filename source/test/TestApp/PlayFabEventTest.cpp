@@ -210,11 +210,12 @@ namespace PlayFabUnit
 
     void PlayFabEventTest::PrivateMemberCallbackTest(TestContext& testContext)
     {
-        eventTestContext = std::make_shared<TestContext*>(&testContext);
+       eventTestContext = std::make_shared<TestContext*>(&testContext);
 
-        std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
+        //std::shared_ptr<PlayFabEventAPI*> api = SetupEventTest();
+        eventApi = SetupEventTest();
 
-        (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
+        (*eventApi)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
         std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
     }
 
