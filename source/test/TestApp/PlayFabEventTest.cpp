@@ -62,7 +62,7 @@ namespace PlayFabUnit
         // send several events
         //for (int i = 0; i < 1; i++)
         //{
-            request.Events.push_back(CreateEventContents("event_A_", i));
+            request.Events.push_back(CreateEventContents("event_A_", 0));
             //request.Events.push_back(CreateEventContents("event_B_", i));
         //}
         
