@@ -60,12 +60,12 @@ namespace PlayFabUnit
         EventsModels::WriteEventsRequest request;
 
         // send several events
-        for (int i = 0; i < 2; i++)
-        {
-            request.Events.push_back(CreateEventContents("event_A_", i));
-            request.Events.push_back(CreateEventContents("event_B_", i));
-        }
-
+        // for (int i = 0; i < 2; i++)
+        // {
+             request.Events.push_back(CreateEventContents("event_A_", 0));
+        //     request.Events.push_back(CreateEventContents("event_B_", i));
+        // }
+        
         // PlayFabEventsAPI::WriteEvents(request,
         //     &PlayFabEventTest::OnEventsApiSucceeded,
         //     &PlayFabEventTest::OnEventsApiFailed,
