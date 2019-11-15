@@ -59,24 +59,17 @@ namespace PlayFabUnit
 
         EventsModels::WriteEventsRequest request;
 
+        // TODO: Bug 38165 automated builds either time out here or tests will never complete.
         // send several events
-        //for (int i = 0; i < 1; i++)
+        //for (int i = 0; i < 2; i++)
         //{
             request.Events.push_back(CreateEventContents("event_A_", 0));
             //request.Events.push_back(CreateEventContents("event_B_", i));
         //}
-        
+
         PlayFabEventsAPI::WriteEvents(request,
-            [](const PlayFab::EventsModels::WriteEventsResponse, void* customData)
-            {
-                TestContext* testContext = reinterpret_cast<TestContext*>(customData);
-                testContext->Pass();
-            },
-            [](const PlayFab::PlayFabError& error, void* customData)
-            {
-                TestContext* testContext = reinterpret_cast<TestContext*>(customData);
-                testContext->Fail(error.GenerateErrorReport());
-            },
+            Callback(&PlayFabEventTest::OnEventsApiSucceeded),
+            Callback(&PlayFabEventTest::OnEventsApiFailed),
             &testContext);
     }
 
