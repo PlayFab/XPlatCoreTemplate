@@ -234,8 +234,7 @@ namespace PlayFabUnit
                             [&eventsRemaining, pNumEventsPerThread]
                             (std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)
                             {
-                                eventsRemaining--;
-                                if (eventsRemaining == 0)
+                                if (--eventsRemaining == 0)
                                 {
                                     (*eventTestContext)->Pass("Threaded callback Received all events Emitted.");
                                 }
