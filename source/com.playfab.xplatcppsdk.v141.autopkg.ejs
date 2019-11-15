@@ -35,14 +35,14 @@ nuget {
             "code\include\playfab\**\*.h";
         };
 
-        [x64,v141,release] {
+        [x64,<%- vsVer %>,release] {
             lib: {
                 build\Windows\x64\Release\XPlatCppWindows\XPlatCppWindows.lib; 
                 external\jsoncpp-build\x64\Release\lib_json.lib;
             }
         };
 
-        [x64,v141,debug] {
+        [x64,<%- vsVer %>,debug] {
             lib: {
                 build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.lib;
                 external\jsoncpp-build\x64\Debug\lib_json.lib;
