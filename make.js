@@ -7,12 +7,16 @@ if (typeof templatizeTree === "undefined") templatizeTree = function () { };
 exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     console.log("Generating Combined api from: " + sourceDir + " to: " + apiOutputDir);
 
-    var extraDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;";
+    var libDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;";
+    var clientDefines = "";
+    var serverDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;DISABLE_PLAYFABCLIENT_API;";
 
     var locals = {
         apis: apis,
         buildIdentifier: sdkGlobals.buildIdentifier,
-        extraDefines: extraDefines,
+        clientDefines: clientDefines,
+        libDefines: libDefines,
+        serverDefines: serverDefines,
         sdkVersion: sdkGlobals.sdkVersion,
         sdkDate: sdkGlobals.sdkVersion.split(".")[2],
         sdkYear: sdkGlobals.sdkVersion.split(".")[2].substr(0, 2),
@@ -245,14 +249,17 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
 
     if (apiCall.url === "/Authentication/GetEntityToken")
         return tabbing + "std::string authKey, authValue;\n" +
-            tabbing + "if (context->entityToken.length() > 0) {\n" +
+            tabbing + "if (context->entityToken.length() > 0)\n" +
+            tabbing + "{\n" +
             tabbing + "    authKey = \"X-EntityToken\"; authValue = context->entityToken;\n" +
             tabbing + "}\n" +
-            tabbing + "else if (context->clientSessionTicket.length() > 0) {\n" +
+            tabbing + "else if (context->clientSessionTicket.length() > 0)\n" +
+            tabbing + "{\n" +
             tabbing + "    authKey = \"X-Authorization\"; authValue = context->clientSessionTicket;\n" +
             tabbing + "}\n" +
             "#if defined(ENABLE_PLAYFABSERVER_API) || defined(ENABLE_PLAYFABADMIN_API)\n" +
-            tabbing + "else if (settings->developerSecretKey.length() > 0) {\n" +
+            tabbing + "else if (settings->developerSecretKey.length() > 0)\n" +
+            tabbing + "{\n" +
             tabbing + "    authKey = \"X-SecretKey\"; authValue = settings->developerSecretKey;\n" +
             tabbing + "}\n" +
             "#endif\n";

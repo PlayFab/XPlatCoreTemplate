@@ -2,6 +2,8 @@
 
 #include "TestAppPch.h"
 
+#ifndef DISABLE_PLAYFABCLIENT_API
+
 #include <playfab/PlayFabClientInstanceApi.h>
 #include <playfab/PlayFabSettings.h>
 #include "TestContext.h"
@@ -151,3 +153,5 @@ namespace PlayFabUnit
         multiUser2ClientApi = nullptr;
     }
 }
+
+#endif
