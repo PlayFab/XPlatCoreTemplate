@@ -9,14 +9,14 @@ namespace PlayFab
 {
     typedef std::chrono::time_point<std::chrono::system_clock> TimePoint;
 
-    inline TimePoint GetPlayFabTimePointNow()
+    inline TimePoint GetTimePointNow()
     {
         return std::chrono::system_clock::now();
     }
 
     inline time_t GetPlayFabTimeTNow()
     {
-        time_t now = std::chrono::system_clock::to_time_t(GetPlayFabTimePointNow());
+        time_t now = std::chrono::system_clock::to_time_t(GetTimePointNow());
 #if defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX) || defined(PLAYFAB_PLATFORM_SWITCH)
         return static_cast<Json::Int64>(now);
 #else // PLAYFAB_PLATFORM_IOS || PLAYFAB_PLATFORM_ANDROID || PLAYFAB_PLATFORM_LINUX || PLAYFAB_PLATFORM_SWITCH
@@ -38,8 +38,6 @@ namespace PlayFab
 
     inline std::string LocalTimeTToUtcString(time_t now)
     {
-        std::string output;
-
         tm timeInfo;
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
         gmtime_s(&timeInfo, &now);
@@ -48,9 +46,8 @@ namespace PlayFab
 #endif
         char buff[64];
         strftime(buff, 64, "%Y-%m-%dT%H:%M:%S.000Z", &timeInfo);
-        output = buff;
 
-        return output;
+        return buff;
     }
 
     inline std::string LocalTimePointToUtcString(TimePoint now)
@@ -58,7 +55,7 @@ namespace PlayFab
         return LocalTimeTToUtcString(std::chrono::system_clock::to_time_t(now));
     }
 
-    inline time_t UtcStringToLocalTimeT(std::string utcString)
+    inline time_t UtcStringToLocalTimeT(const std::string& utcString)
     {
         time_t output;
         tm timeStruct = {};

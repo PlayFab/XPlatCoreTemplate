@@ -50,7 +50,7 @@ namespace PlayFabUnit
             ManageTestCase(test->testCase, suiteTestCase);
 
             // Start the test.
-            test->startTime = PlayFab::GetPlayFabTimePointNow();
+            test->startTime = PlayFab::GetTimePointNow();
             test->activeState = TestActiveState::ACTIVE;
             suiteTestReport.TestStarted();
 
@@ -63,7 +63,7 @@ namespace PlayFabUnit
             // Tick the test.
             while (TestActiveState::ACTIVE == test->activeState)
             {
-                PlayFab::TimePoint timeNow = PlayFab::GetPlayFabTimePointNow();
+                PlayFab::TimePoint timeNow = PlayFab::GetTimePointNow();
                 bool timeExpired = (timeNow - test->startTime) > TEST_TIMEOUT_DURATION;
 
                 if ((TestActiveState::READY != test->activeState) && !timeExpired) // Not finished & not timed out
@@ -85,7 +85,7 @@ namespace PlayFabUnit
             }
 
             // Tear down the test.
-            test->endTime = PlayFab::GetPlayFabTimePointNow();
+            test->endTime = PlayFab::GetTimePointNow();
             test->testCase->TearDown(*test);
             test->activeState = TestActiveState::COMPLETE;
 
@@ -108,7 +108,7 @@ namespace PlayFabUnit
     {
         std::stringstream summaryStream;
 
-        PlayFab::TimePoint timeNow = PlayFab::GetPlayFabTimePointNow();
+        PlayFab::TimePoint timeNow = PlayFab::GetTimePointNow();
         PlayFab::TimePoint testStartTime, testEndTime;
         size_t testsFinishedCount = 0, testsPassedCount = 0, testsFailedCount = 0, testsSkippedCount = 0;
 

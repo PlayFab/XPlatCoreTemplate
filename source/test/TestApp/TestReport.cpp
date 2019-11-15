@@ -44,7 +44,7 @@ namespace PlayFabUnit
     TestReport::TestReport(std::string className)
     {
         internalReport.name = className;
-        internalReport.timeStamp = PlayFab::GetPlayFabTimePointNow();
+        internalReport.timeStamp = PlayFab::GetTimePointNow();
         internalReport.tests = 0;
         internalReport.failures = 0;
         internalReport.errors = 0;
@@ -88,7 +88,7 @@ namespace PlayFabUnit
 
         // Update overall runtime.
         // TODO: Add hooks for SuiteSetUp and SuiteTearDown, so this can be estimated more accurately
-        internalReport.time = std::chrono::duration<double>(PlayFab::GetPlayFabTimePointNow() - internalReport.timeStamp).count(); // For now, update the duration on every test complete - the last one will be essentially correct
+        internalReport.time = std::chrono::duration<double>(PlayFab::GetTimePointNow() - internalReport.timeStamp).count(); // For now, update the duration on every test complete - the last one will be essentially correct
     }
 
     bool TestReport::AllTestsPassed()

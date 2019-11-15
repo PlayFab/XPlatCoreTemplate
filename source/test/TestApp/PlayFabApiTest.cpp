@@ -302,7 +302,7 @@ namespace PlayFabUnit
     {
         testMessageTime = std::chrono::system_clock::from_time_t(result.Time);
 
-        TimePoint now = GetPlayFabTimePointNow();
+        TimePoint now = GetTimePointNow();
         TimePoint minTime = now - std::chrono::minutes(5);
         TimePoint maxTime = now + std::chrono::minutes(5);
 
@@ -756,7 +756,7 @@ namespace PlayFabUnit
         entityId = "";
         entityType = "";
         testMessageInt = 0;
-        testMessageTime = PlayFab::GetPlayFabTimePointNow();
+        testMessageTime = PlayFab::GetTimePointNow();
     }
 
     void PlayFabApiTest::SetUp(TestContext& testContext)

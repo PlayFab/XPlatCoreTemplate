@@ -82,7 +82,10 @@ namespace PlayFab
     }
     inline void FromJsonUtilT(const Json::Value& input, time_t& output)
     {
-        if (input == Json::Value::null) return;
+        if (input == Json::Value::null)
+        {
+            return;
+        }
         output = UtcStringToLocalTimeT(input.asString());
     }
 
