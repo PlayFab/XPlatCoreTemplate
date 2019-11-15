@@ -39,7 +39,7 @@ namespace PlayFab
                 errorWrapper.Request = request;
             }
         }
-        catch (std::exception)
+        catch (const std::exception&)
         {
             // We can't parse the request back into a JSON::Value, so the caller won't receive it back...?
         }
