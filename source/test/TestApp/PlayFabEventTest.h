@@ -2,6 +2,8 @@
 
 #pragma once
 
+#ifndef DISABLE_PLAYFABCLIENT_API
+
 #include <functional>
 #include <string>
 #include <playfab/PlayFabEventApi.h>
@@ -90,3 +92,5 @@ namespace PlayFabUnit
             void ClassTearDown() override;
     };
 }
+
+#endif

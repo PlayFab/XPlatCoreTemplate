@@ -13,10 +13,10 @@
   <Import Project="SetDirectoryPaths.props" />
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{3E4DF9A7-08A4-4188-9C86-B60605F3710B}</ProjectGuid>
+    <ProjectGuid>{C60B7622-A3C7-4109-AB39-399662D4FA87}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TestApp</RootNamespace>
-    <ProjectName>TestApp</ProjectName>
+    <ProjectName>TestServerApp</ProjectName>
     <OutputSubDir>TestApp</OutputSubDir>
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\$(OutputSubDir)\</OutDir>
   </PropertyGroup>
@@ -61,7 +61,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32;<%- extraDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32;<%- serverDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(TestSourceDir)\TestApp;$(SdkSourceDir)\include;$(ExternalDir)\jsoncpp\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>TestAppPch.h</PrecompiledHeaderFile>
@@ -85,7 +85,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CONSOLE;WIN32;<%- extraDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;WIN32;<%- serverDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(TestSourceDir)\TestApp;$(SdkSourceDir)\include;$(ExternalDir)\jsoncpp\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>TestAppPch.h</PrecompiledHeaderFile>
@@ -117,6 +117,8 @@
     <ClInclude Include="$(TestSourceDir)\TestApp\TestReport.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\TestRunner.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\TestUtils.h" />
+    <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabApiSettings.h" />
+    <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabAuthenticationContext.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(TestSourceDir)\TestApp\TestApp.cpp" />
@@ -132,7 +134,7 @@
     <ClCompile Include="$(TestSourceDir)\TestApp\TestRunner.cpp" />
     <ClCompile Include="$(TestSourceDir)\TestApp\TestUtils.cpp" />
     <ClCompile Include="MainWin32.cpp" />
-	<ClCompile Include="TestAppWin32.cpp" />
+    <ClCompile Include="TestAppWin32.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="XPlatCppWindows.vcxproj">

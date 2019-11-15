@@ -1,6 +1,9 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
 #include "TestAppPch.h"
+
+#ifndef DISABLE_PLAYFABCLIENT_API
+
 #include <thread>
 #include <chrono>
 #include <playfab/PlayFabClientApi.h>
@@ -315,7 +318,7 @@ namespace PlayFabUnit
         // Sleep while waiting for log in to complete.
         while (!loginComplete)
         {
-            std::this_thread::sleep_for(TimeValueMs(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
     }
 
@@ -388,3 +391,5 @@ namespace PlayFabUnit
         return event;
     }
 }
+
+#endif
