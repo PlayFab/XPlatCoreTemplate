@@ -22,6 +22,10 @@ using namespace ClientModels;
 
 namespace PlayFabUnit
 {
+    // Time out if waiting for the final cloudscript submission longer than this
+    constexpr int CLOUDSCRIPT_TIMEOUT_MS = 30000;
+    constexpr int CLOUDSCRIPT_TIMEOUT_INCREMENT = 100;
+
     void TestApp::Log(const char* format, ...)
     {
         static char message[4096];
@@ -99,9 +103,9 @@ namespace PlayFabUnit
             std::bind(&TestApp::OnPostReportError, this, std::placeholders::_1, std::placeholders::_2),
             &testRunner.suiteTestReport);
 
-        for (int i = 0; i < 300; i++)
+        for (int i = 0; i < CLOUDSCRIPT_TIMEOUT_MS; i+= CLOUDSCRIPT_TIMEOUT_INCREMENT)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(CLOUDSCRIPT_TIMEOUT_INCREMENT));
             if (!cloudResponse.empty())
             {
                 break;
