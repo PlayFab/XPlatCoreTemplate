@@ -16,7 +16,7 @@ namespace PlayFab
 
     inline time_t GetPlayFabTimeTNow()
     {
-        return std::chrono::system_clock::to_time_t(GetTimePointNow());
+        return time(0);
     }
 
     inline void AppendIntToString(int value, std::string& output)
