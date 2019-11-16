@@ -234,7 +234,7 @@ namespace PlayFabUnit
                     for (uint32_t i = 0; i < pNumEventsPerThread; ++i)
                     {
                         (*api)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
-                            [&eventsRemaining, pNumEventsPerThread]
+                            [&eventsRemaining]
                             (std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)
                             {
                                 if (--eventsRemaining == 0)
