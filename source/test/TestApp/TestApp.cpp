@@ -70,8 +70,11 @@ namespace PlayFabUnit
         pfApiTest.SetTitleInfo(testInputs);
         testRunner.Add(pfApiTest);
 
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_ANDROID)
+        // These tests are only working on windows right now
         PlayFabEventTest pfEventTest;
         testRunner.Add(pfEventTest);
+#endif
 
         PlayFabTestMultiUserStatic pfMultiUserStaticTest;
         testRunner.Add(pfMultiUserStaticTest);
