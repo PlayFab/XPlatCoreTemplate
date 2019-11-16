@@ -3,7 +3,7 @@
 #ifndef DISABLE_PLAYFABENTITY_API
 
 #include <playfab/PlayFabEvent.h>
-#include <playfab/PlayFabPlatformMacros.h>
+#include <playfab/PlayFabPlatformTypes.h>
 
 namespace PlayFab
 {

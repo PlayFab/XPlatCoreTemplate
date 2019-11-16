@@ -8,6 +8,7 @@
 
 #include <playfab/PlayFabPlatformMacros.h>
 #include <playfab/PlayFabJsonHeaders.h>
+#include <playfab/PlayFabPlatformTypes.h>
 #include <playfab/PlayFabPlatformUtils.h>
 
 namespace PlayFab

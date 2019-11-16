@@ -25,6 +25,8 @@
 
 #include <playfab/PlayFabJsonHeaders.h>
 #include <playfab/PlayFabPlatformMacros.h>
+#include <playfab/PlayFabPlatformTypes.h>
+#include <playfab/PlayFabApiSettings.h>
 #include <playfab/PlayFabAuthenticationContext.h>
 
 #define UNREFERENCED_PARAMETER(P) (P)
