@@ -16,12 +16,7 @@ namespace PlayFab
 
     inline time_t GetPlayFabTimeTNow()
     {
-        time_t now = std::chrono::system_clock::to_time_t(GetTimePointNow());
-#if defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX) || defined(PLAYFAB_PLATFORM_SWITCH)
-        return static_cast<Json::Int64>(now);
-#else // PLAYFAB_PLATFORM_IOS || PLAYFAB_PLATFORM_ANDROID || PLAYFAB_PLATFORM_LINUX || PLAYFAB_PLATFORM_SWITCH
-        return now;
-#endif // PLAYFAB_PLATFORM_IOS || PLAYFAB_PLATFORM_ANDROID || PLAYFAB_PLATFORM_LINUX || PLAYFAB_PLATFORM_SWITCH
+        return std::chrono::system_clock::to_time_t(GetTimePointNow());
     }
 
     inline void AppendIntToString(int value, std::string& output)
