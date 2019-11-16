@@ -224,7 +224,7 @@ namespace PlayFabUnit
 
     void PlayFabEventTest::GenericMultiThreadedTest(uint32_t pNumThreads, uint32_t pNumEventsPerThread)
     {
-        std::atomic<uint32_t> eventsRemaining = pNumThreads * pNumEventsPerThread;
+        std::atomic<uint32_t> eventsRemaining(pNumThreads * pNumEventsPerThread);
         for (uint32_t thread = 0; thread < pNumThreads; ++thread)
         {
             testThreadPool.emplace_back(
