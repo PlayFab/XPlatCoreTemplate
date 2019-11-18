@@ -74,8 +74,8 @@ namespace PlayFabUnit
         pfApiTest.SetTitleInfo(testInputs);
         testRunner.Add(pfApiTest);
 
-#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_ANDROID)
-        // These tests are only working on windows right now
+#if !defined(PLAYFAB_PLATFORM_PLAYSTATION)
+        // These tests don't work on Playstation atm
         PlayFabEventTest pfEventTest;
         testRunner.Add(pfEventTest);
 #endif
