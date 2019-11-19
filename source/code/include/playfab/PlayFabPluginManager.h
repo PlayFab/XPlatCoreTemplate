@@ -70,31 +70,29 @@ namespace PlayFab
         PlayFabPluginManager& operator=(const PlayFabPluginManager&) = delete;
         PlayFabPluginManager& operator=(PlayFabPluginManager&&) = delete;
 
-        static const std::string defaultInstanceName;
-
         // Gets a plugin.
         // If a plugin with specified contract and optional instance name does not exist, it will create a new one.
         template <typename T>
-        static std::shared_ptr<T> GetPlugin(const PlayFabPluginContract contract, const std::string& instanceName = defaultInstanceName)
+        static std::shared_ptr<T> GetPlugin(const PlayFabPluginContract contract, const std::string& instanceName = "")
         {
             return std::static_pointer_cast<T>(GetInstance().GetPluginInternal(contract, instanceName));
         }
 
         // Sets a custom plugin.
         // If a plugin with specified contract and optional instance name already exists, it will be replaced with specified instance.
-        static void SetPlugin(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName = defaultInstnanceName);
+        static void SetPlugin(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName = "");
 
         // Gets a plugin.
         // If a plugin with specified contract and optional instance name does not exist, it will create a new one.
         template <typename T>
-        std::shared_ptr<T> GetPluginInstance(const PlayFabPluginContract contract, const std::string& instanceName = defaultInstnanceName)
+        std::shared_ptr<T> GetPluginInstance(const PlayFabPluginContract contract, const std::string& instanceName = "")
         {
             return std::static_pointer_cast<T>(GetPluginInternal(contract, instanceName));
         }
 
         // Sets a custom plugin.
         // If a plugin with specified contract and optional instance name already exists, it will be replaced with specified instance.
-        void SetPluginInstance(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName = defaultInstnanceName);
+        void SetPluginInstance(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName = "");
 
         // Sets a custom exception handler for any possible background thread exceptions
         void SetExceptionHandler(ExceptionCallback exceptionHandler);

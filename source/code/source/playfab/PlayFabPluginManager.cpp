@@ -5,7 +5,6 @@
 
 namespace PlayFab
 {
-    const std::string PlayFabPluginManager::defaultInstanceName;
 
     PlayFabPluginManager& PlayFabPluginManager::GetInstance()
     {
