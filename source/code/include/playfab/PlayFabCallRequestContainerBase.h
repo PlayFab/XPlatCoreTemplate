@@ -32,8 +32,6 @@ namespace PlayFab
 
         std::string GetUrl() const;
         std::unordered_map<std::string, std::string> GetRequestHeaders() const;
-        std::string GetRequestId() const;
-        void SetRequestId(const std::string& newRequestId);
         std::string GetRequestBody() const;
 
         /// <summary>
@@ -47,7 +45,6 @@ namespace PlayFab
         std::string url;
         std::unordered_map<std::string, std::string> requestHeaders;
         std::string requestBody;
-        std::string requestId;
         CallRequestContainerCallback callback;
 
         // I never own this, I can never destroy it

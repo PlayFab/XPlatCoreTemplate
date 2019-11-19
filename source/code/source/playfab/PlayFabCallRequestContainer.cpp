@@ -64,6 +64,16 @@ namespace PlayFab
         return this->m_context;
     }
 
+    std::string CallRequestContainer::GetRequestId() const
+    {
+        return this->requestId;
+    }
+
+    void CallRequestContainer::SetRequestId(const std::string& newRequestId)
+    {
+        this->requestId = newRequestId;
+    }
+
     bool CallRequestContainer::HandleInvalidSettings()
     {
         bool isValid = true;
