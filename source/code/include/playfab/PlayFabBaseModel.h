@@ -7,6 +7,7 @@
 #include <memory>
 
 #include <playfab/PlayFabPlatformMacros.h>
+#include <playfab/PlayFabPlatformTypes.h>
 #include <playfab/PlayFabJsonHeaders.h>
 #include <playfab/PlayFabPlatformTypes.h>
 #include <playfab/PlayFabPlatformUtils.h>
