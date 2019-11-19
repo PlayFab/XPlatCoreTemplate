@@ -23,6 +23,7 @@ for (var enumIdx = 0; enumIdx < enumtypes.length; enumIdx++) { var enumtype = en
 %>            if (input == <%- enumtype.name %>::<%- enumtype.name %><%- enumval.name %>)
             {
                 output = Json::Value("<%- enumval.name %>");
+                return;
             }
 <% } %>        }
         inline void FromJsonEnum(const Json::Value& input, <%- enumtype.name %>& output)
@@ -36,6 +37,7 @@ for (var enumIdx = 0; enumIdx < enumtypes.length; enumIdx++) { var enumtype = en
 %>            if (inputStr == "<%- enumval.name %>")
             {
                 output = <%- enumtype.name %>::<%- enumtype.name %><%- enumval.name %>;
+                return;
             }
 <% } %>        }
 <% } %>
