@@ -1,6 +1,9 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
 #include "TestAppPch.h"
+
+#ifndef DISABLE_PLAYFABCLIENT_API
+
 #include <string>
 #include <playfab/PlayFabClientApi.h>
 #include <playfab/PlayFabSettings.h>
@@ -771,3 +774,5 @@ namespace PlayFabUnit
         PlayFabSettings::ForgetAllCredentials();
     }
 }
+
+#endif

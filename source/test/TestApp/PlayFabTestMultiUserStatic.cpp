@@ -1,6 +1,9 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
 #include "TestAppPch.h"
+
+#ifndef DISABLE_PLAYFABCLIENT_API
+
 #include <playfab/PlayFabClientApi.h>
 #include <playfab/PlayFabSettings.h>
 #include "TestContext.h"
@@ -149,3 +152,5 @@ namespace PlayFabUnit
         multiUser2Context = nullptr;
     }
 }
+
+#endif
