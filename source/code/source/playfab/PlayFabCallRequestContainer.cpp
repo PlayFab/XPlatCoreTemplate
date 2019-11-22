@@ -32,11 +32,16 @@ namespace PlayFab
         const char* reqBod = requestBody.c_str();
         size_t reqBodLength = requestBody.length();
 
-        bool parsingSuccessful = reader->parse(reqBod, reqBod + reqBodLength, &request, &errs);
-
-        if (parsingSuccessful)
+        try {
+            bool parsingSuccessful = reader->parse(reqBod, reqBod + reqBodLength, &request, &errs);
+            if (parsingSuccessful)
+            {
+                errorWrapper.Request = request;
+            }
+        }
+        catch (const std::exception&)
         {
-            errorWrapper.Request = request;
+            // We can't parse the request back into a JSON::Value, so the caller won't receive it back...?
         }
     }
 
@@ -57,6 +62,16 @@ namespace PlayFab
     std::shared_ptr<PlayFabAuthenticationContext> CallRequestContainer::GetContext() const
     {
         return this->m_context;
+    }
+
+    std::string CallRequestContainer::GetRequestId() const
+    {
+        return this->requestId;
+    }
+
+    void CallRequestContainer::SetRequestId(const std::string& newRequestId)
+    {
+        this->requestId = newRequestId;
     }
 
     bool CallRequestContainer::HandleInvalidSettings()

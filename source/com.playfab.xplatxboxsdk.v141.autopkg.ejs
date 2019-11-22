@@ -55,19 +55,19 @@ nuget {
             "code\include\playfab\**\*.h"
         };
 
-        [Durango,v141,release] {
+        [Durango,<%- vsVer %>,release] {
             lib: {
                 build\Xbox\Durango\Release\XPlatXbox.lib; 
             }
         };
 
-        [Durango,v141,debug] {
+        [Durango,<%- vsVer %>,debug] {
             lib: {
                 build\Xbox\Durango\Debug\XPlatXbox.lib;
             }
         };
 
-        [Durango,v141,profile] {
+        [Durango,<%- vsVer %>,profile] {
             lib: {
                 build\Xbox\Durango\Profile\XPlatXbox.lib;
             }

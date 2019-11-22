@@ -111,7 +111,7 @@ namespace PlayFab
     void PlayFabCurlHttpPlugin::MakePostRequest(std::unique_ptr<CallRequestContainerBase> requestContainer)
     {
         CallRequestContainer* container = dynamic_cast<CallRequestContainer*>(requestContainer.get());
-        if (container != nullptr && !container->HandleInvalidSettings())
+        if (container != nullptr && container->HandleInvalidSettings())
         { // LOCK httpRequestMutex
             std::unique_lock<std::mutex> lock(httpRequestMutex);
             pendingRequests.push_back(std::move(requestContainer));

@@ -15,12 +15,17 @@
 #include "PlayFabEventTest.h"
 #include "PlayFabTestMultiUserStatic.h"
 #include "PlayFabTestMultiUserInstance.h"
+#include "PlayFabTestAlloc.h"
 
 using namespace PlayFab;
 using namespace ClientModels;
 
 namespace PlayFabUnit
 {
+    // Time out if waiting for the final cloudscript submission longer than this
+    constexpr int CLOUDSCRIPT_TIMEOUT_MS = 30000;
+    constexpr int CLOUDSCRIPT_TIMEOUT_INCREMENT = 100;
+
     void TestApp::Log(const char* format, ...)
     {
         static char message[4096];
@@ -60,14 +65,20 @@ namespace PlayFabUnit
         // Initialize the test runner/test data.
         TestRunner testRunner;
 
+        PlayFabTestAlloc allocTest;
+        testRunner.Add(allocTest);
+
 #ifndef DISABLE_PLAYFABCLIENT_API
         // Add PlayFab API tests.
         PlayFabApiTest pfApiTest;
         pfApiTest.SetTitleInfo(testInputs);
         testRunner.Add(pfApiTest);
 
+#if !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
+        // These tests don't work on all platforms atm
         PlayFabEventTest pfEventTest;
         testRunner.Add(pfEventTest);
+#endif
 
         PlayFabTestMultiUserStatic pfMultiUserStaticTest;
         testRunner.Add(pfMultiUserStaticTest);
@@ -79,6 +90,9 @@ namespace PlayFabUnit
         // Run the tests (blocks until all tests have finished).
         testRunner.Run();
 
+        // Publish the test summary to STDOUT.
+        Log("%s\n", testRunner.suiteTestSummary.c_str());
+
 #ifndef DISABLE_PLAYFABCLIENT_API
         // Publish the test report via cloud script (and wait for it to finish).
         LoginWithCustomIDRequest request;
@@ -89,17 +103,21 @@ namespace PlayFabUnit
             std::bind(&TestApp::OnPostReportError, this, std::placeholders::_1, std::placeholders::_2),
             &testRunner.suiteTestReport);
 
-        while (cloudResponse.empty())
+        for (int i = 0; i < CLOUDSCRIPT_TIMEOUT_MS; i+= CLOUDSCRIPT_TIMEOUT_INCREMENT)
         {
-            std::this_thread::sleep_for(TimeValueMs(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(CLOUDSCRIPT_TIMEOUT_INCREMENT));
+            if (!cloudResponse.empty())
+            {
+                break;
+            }
         }
 #endif
 
-        // Publish the test summary (including cloud script response) to STDOUT.
-        Log("%s\n%s\n", testRunner.suiteTestSummary.c_str(), cloudResponse.c_str());
+        // Publish the cloud script response to STDOUT.
+        Log("Cloud Response: %s\n", cloudResponse.c_str());
 
         // Return 0 (success) if all tests passed. Otherwise, return 1 (error).
-        return testRunner.AllTestsPassed() ? 0 : 1;
+        return testRunner.AllTestsPassed() && !cloudResponse.empty() ? 0 : 1;
     }
 
     bool TestApp::LoadTitleData(TestTitleData& titleData)
