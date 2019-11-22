@@ -205,7 +205,7 @@ namespace PlayFab
         long curlHttpResponseCode = 0;
         curl_easy_getinfo(curlHandle, CURLINFO_RESPONSE_CODE, &curlHttpResponseCode);
 
-        reqContainer.errorWrapper.RequestId = requestContainer.GetRequestId();
+        reqContainer.errorWrapper.RequestId = reqContainer.GetRequestId();
 
         if (res != CURLE_OK)
         {
