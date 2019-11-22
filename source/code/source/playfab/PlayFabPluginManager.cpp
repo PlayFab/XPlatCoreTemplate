@@ -17,12 +17,12 @@ namespace PlayFab
 
     void PlayFabPluginManager::SetPlugin(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        GetInstance().SetPluginInternal(std::move(plugin), contract, instanceName);
+        GetInstance().SetPluginInternal(plugin, contract, instanceName);
     }
 
     void PlayFabPluginManager::SetPluginInstance(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        SetPluginInternal(std::move(plugin), contract, instanceName);
+        SetPluginInternal(plugin, contract, instanceName);
     }
 
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::GetPluginInternal(const PlayFabPluginContract contract, const std::string& instanceName)

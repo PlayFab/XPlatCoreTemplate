@@ -26,7 +26,7 @@ namespace PlayFab
         this->eventRouter->RouteEvent(eventRequest);
     }
 
-    void PlayFabEventAPI::EmitEvent(std::unique_ptr<const IPlayFabEvent> event, std::function<void(const std::shared_ptr<const IPlayFabEvent>&, const std::shared_ptr<const IPlayFabEmitEventResponse>&)> callback) const
+    void PlayFabEventAPI::EmitEvent(std::unique_ptr<const IPlayFabEvent> event, std::function<void(std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)> callback) const
     {
         auto eventRequest = std::shared_ptr<PlayFabEmitEventRequest>(new PlayFabEmitEventRequest());
         std::shared_ptr<const IPlayFabEvent> sharedGenericEvent = std::move(event);

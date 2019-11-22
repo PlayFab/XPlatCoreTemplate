@@ -6,7 +6,7 @@
 namespace PlayFab
 {
     class CallRequestContainerBase;
-    typedef std::function<void(int, std::string, const std::shared_ptr<CallRequestContainerBase>&)> CallRequestContainerCallback;
+    typedef std::function<void(int, std::string, std::shared_ptr<CallRequestContainerBase>)> CallRequestContainerCallback;
 
     /// <summary>
     /// A base container meant for holding everything necessary to make a full HTTP request and return a response.

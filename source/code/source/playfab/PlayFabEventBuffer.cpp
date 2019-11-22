@@ -57,7 +57,7 @@ namespace PlayFab
         }
     }
 
-    PlayFabEventBuffer::EventProducingResult PlayFabEventBuffer::TryPut(const std::shared_ptr<const IPlayFabEmitEventRequest>& request) // This must be thread-safe
+    PlayFabEventBuffer::EventProducingResult PlayFabEventBuffer::TryPut(std::shared_ptr<const IPlayFabEmitEventRequest> request) // This must be thread-safe
     {
         SpinLock lock(atomicSpin);
 
@@ -133,10 +133,10 @@ namespace PlayFab
         return EventConsumingResult::Success;
     }
 
-    PlayFabEventPacket* PlayFabEventBuffer::CreateEventPacket(uint8_t *location, const uint64_t index, const std::shared_ptr<const IPlayFabEmitEventRequest>& request)
+    PlayFabEventPacket* PlayFabEventBuffer::CreateEventPacket(uint8_t *location, const uint64_t index, std::shared_ptr<const IPlayFabEmitEventRequest> request)
     {
         // Use placement new to allocate an event packet in the buffer
-        return new(location)PlayFabEventPacket(index, std::move(request));
+        return new(location)PlayFabEventPacket(index, request);
     }
 
     void PlayFabEventBuffer::DeleteEventPacket(PlayFabEventPacket* event)

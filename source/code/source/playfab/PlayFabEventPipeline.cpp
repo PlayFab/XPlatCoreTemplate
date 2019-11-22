@@ -40,7 +40,7 @@ namespace PlayFab
         buffer(settings->bufferSize),
         isWorkerThreadRunning(false)
     {
-        this->settings = std::move(settings);
+        this->settings = settings;
         this->batch.reserve(this->settings->maximalNumberOfItemsInBatch);
         this->batchesInFlight.reserve(this->settings->maximalNumberOfBatchesInFlight);
         this->Start();
@@ -71,7 +71,7 @@ namespace PlayFab
         return this->settings;
     }
 
-    void PlayFabEventPipeline::IntakeEvent(const std::shared_ptr<const IPlayFabEmitEventRequest>& request)
+    void PlayFabEventPipeline::IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request)
     {
         try
         {
@@ -335,18 +335,18 @@ namespace PlayFab
         }
     }
 
-    void PlayFabEventPipeline::CallbackRequest(const std::shared_ptr<const IPlayFabEmitEventRequest>& request, const std::shared_ptr<const IPlayFabEmitEventResponse>& response)
+    void PlayFabEventPipeline::CallbackRequest(std::shared_ptr<const IPlayFabEmitEventRequest> request, std::shared_ptr<const IPlayFabEmitEventResponse> response)
     {
         const auto& playFabEmitRequest = std::dynamic_pointer_cast<const PlayFabEmitEventRequest>(request);
 
         if (playFabEmitRequest->callback != nullptr)
         {
-            playFabEmitRequest->callback(playFabEmitRequest->event, std::move(response));
+            playFabEmitRequest->callback(playFabEmitRequest->event, response);
         }
 
         if (playFabEmitRequest->stdCallback != nullptr)
         {
-            playFabEmitRequest->stdCallback(playFabEmitRequest->event, std::move(response));
+            playFabEmitRequest->stdCallback(playFabEmitRequest->event, response);
         }
     }
 }
