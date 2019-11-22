@@ -36,11 +36,11 @@ namespace PlayFab
     {
     }
 
-    PlayFabEventPipeline::PlayFabEventPipeline(std::shared_ptr<PlayFabEventPipelineSettings> settings) :
+    PlayFabEventPipeline::PlayFabEventPipeline(const std::shared_ptr<PlayFabEventPipelineSettings>& settings) :
         buffer(settings->bufferSize),
         isWorkerThreadRunning(false)
     {
-        this->settings = std::move(settings);
+        this->settings = settings;
         this->batch.reserve(this->settings->maximalNumberOfItemsInBatch);
         this->batchesInFlight.reserve(this->settings->maximalNumberOfBatchesInFlight);
         this->Start();
@@ -341,12 +341,12 @@ namespace PlayFab
 
         if (playFabEmitRequest->callback != nullptr)
         {
-            playFabEmitRequest->callback(playFabEmitRequest->event, std::move(response));
+            playFabEmitRequest->callback(playFabEmitRequest->event, response);
         }
 
         if (playFabEmitRequest->stdCallback != nullptr)
         {
-            playFabEmitRequest->stdCallback(playFabEmitRequest->event, std::move(response));
+            playFabEmitRequest->stdCallback(playFabEmitRequest->event, response);
         }
     }
 }

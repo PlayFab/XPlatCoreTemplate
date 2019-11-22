@@ -136,7 +136,7 @@ namespace PlayFab
     PlayFabEventPacket* PlayFabEventBuffer::CreateEventPacket(uint8_t *location, const uint64_t index, std::shared_ptr<const IPlayFabEmitEventRequest> request)
     {
         // Use placement new to allocate an event packet in the buffer
-        return new(location)PlayFabEventPacket(index, std::move(request));
+        return new(location)PlayFabEventPacket(index, request);
     }
 
     void PlayFabEventBuffer::DeleteEventPacket(PlayFabEventPacket* event)

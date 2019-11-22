@@ -20,17 +20,17 @@ namespace PlayFab
     {
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings)
     {
         this->m_settings = apiSettings;
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         this->m_context = authenticationContext;
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         this->m_settings = apiSettings;
         this->m_context = authenticationContext;
@@ -41,24 +41,24 @@ namespace PlayFab
         this->m_context = std::make_shared<PlayFabAuthenticationContext>();
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings)
     {
         this->m_settings = apiSettings;
         this->m_context = std::make_shared<PlayFabAuthenticationContext>();
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         this->m_context = authenticationContext;
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         this->m_settings = apiSettings;
         this->m_context = authenticationContext;
     }
 <% } else { %>
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         if (authenticationContext == nullptr)
         {
@@ -67,7 +67,7 @@ namespace PlayFab
         this->m_context = authenticationContext;
     }
 
-    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext)
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
     {
         if (authenticationContext == nullptr)
         {

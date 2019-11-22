@@ -21,17 +21,17 @@ namespace PlayFab
     public:
 <% if( api.name === "Admin" || api.name === "Server" ) {
 %>        PlayFab<%- api.name %>InstanceAPI();
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings);
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
 <% } else if( api.name === "Client" || api.name === "Authentication" ) {
 %>        PlayFab<%- api.name %>InstanceAPI();
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings);
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
 <% } else {
-%>        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
-        PlayFab<%- api.name %>InstanceAPI(std::shared_ptr<PlayFabApiSettings> apiSettings, std::shared_ptr<PlayFabAuthenticationContext> authenticationContext);
+%>        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
 <% } %>
         ~PlayFab<%- api.name %>InstanceAPI() = default;
         PlayFab<%- api.name %>InstanceAPI(const PlayFab<%- api.name %>InstanceAPI& source) = delete; // disable copy

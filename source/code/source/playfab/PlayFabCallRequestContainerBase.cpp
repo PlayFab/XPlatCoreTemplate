@@ -5,9 +5,9 @@
 namespace PlayFab
 {
     CallRequestContainerBase::CallRequestContainerBase(
-        std::string url,
+        const std::string& url,
         const std::unordered_map<std::string, std::string>& headers,
-        std::string requestBody,
+        const std::string& requestBody,
         CallRequestContainerCallback callback,
         void* customData) :
         url(url),
