@@ -22,9 +22,9 @@ namespace PlayFab
         /// - callback is a general callback that will handle any further logic, it is always called whether a call was successful or not
         /// - customData can be any object a user expects to be associated with this particular transaction (id/hash/tag etc.). It is simply relayed to callback.
         CallRequestContainerBase(
-            std::string url,
+            const std::string& url,
             const std::unordered_map<std::string, std::string>& headers,
-            std::string requestBody,
+            const std::string& requestBody,
             CallRequestContainerCallback callback,
             void* customData = nullptr);
 

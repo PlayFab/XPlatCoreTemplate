@@ -54,7 +54,7 @@ namespace PlayFab
     class PlayFabEventPipeline: public IPlayFabEventPipeline
     {
     public:
-        explicit PlayFabEventPipeline(std::shared_ptr<PlayFabEventPipelineSettings> settings);
+        explicit PlayFabEventPipeline(const std::shared_ptr<PlayFabEventPipelineSettings>& settings);
         virtual ~PlayFabEventPipeline() override;
 
         PlayFabEventPipeline(const PlayFabEventPipeline& source) = delete; // disable copy
