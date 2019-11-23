@@ -39,6 +39,10 @@ namespace PlayFabUnit
     }
 #endif
 
+    // Time out if waiting for login
+    constexpr int CLOUDSCRIPT_TIMEOUT_MS = 10000;
+    constexpr int CLOUDSCRIPT_TIMEOUT_INCREMENT = 100;
+
     /// EVENTS API
     /// Test that sends heavyweight events as a whole batch.
     static EventContents CreateEventContents(const std::string& eventName, int i)
@@ -214,12 +218,12 @@ namespace PlayFabUnit
 
     void PlayFabEventTest::PrivateMemberCallbackTest(TestContext& testContext)
     {
-       eventTestContext = std::make_shared<TestContext*>(&testContext);
+        eventTestContext = std::make_shared<TestContext*>(&testContext);
 
         eventApi = SetupEventTest();
 
         (*eventApi)->EmitEvent(MakeEvent(0, PlayFabEventType::Default),
-        std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
+            std::bind(&PlayFabEventTest::NonStaticEmitEventCallback, this, std::placeholders::_1, std::placeholders::_2));
     }
 
     void PlayFabEventTest::GenericMultiThreadedTest(uint32_t pNumThreads, uint32_t pNumEventsPerThread)
@@ -316,9 +320,13 @@ namespace PlayFabUnit
             &loggedIn);
 
         // Sleep while waiting for log in to complete.
-        while (!loginComplete)
+        for (int i = 0; i < CLOUDSCRIPT_TIMEOUT_MS; i += CLOUDSCRIPT_TIMEOUT_INCREMENT)
         {
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+            std::this_thread::sleep_for(std::chrono::milliseconds(CLOUDSCRIPT_TIMEOUT_INCREMENT));
+            if (loginComplete)
+            {
+                break;
+            }
         }
     }
 

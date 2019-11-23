@@ -23,12 +23,12 @@ namespace PlayFab
     PlayFabEventBuffer::PlayFabEventBuffer(
         const size_t bufferSize) 
         :
+        disabled(false),
         buffMask(AdjustBufferSize(bufferSize) - 1),
         bufferArray(std::unique_ptr<uint8_t[]>(new uint8_t[buffMask + 1])),
         buffStart((uint64_t)(bufferArray.get())),
         buffEnd(buffStart + buffMask + 1),
-        eventIndex(std::shared_ptr<std::atomic<uint64_t>>(new std::atomic<uint64_t>(0))),
-        disabled(false)
+        eventIndex(std::make_shared<std::atomic<uint64_t>>(0))
     {
         uint8_t *buffer = (uint8_t*)buffStart;
         memset(buffer, 0, buffMask + 1);
@@ -136,7 +136,7 @@ namespace PlayFab
     PlayFabEventPacket* PlayFabEventBuffer::CreateEventPacket(uint8_t *location, const uint64_t index, std::shared_ptr<const IPlayFabEmitEventRequest> request)
     {
         // Use placement new to allocate an event packet in the buffer
-        return new(location)PlayFabEventPacket(index, std::move(request));
+        return new(location)PlayFabEventPacket(index, request);
     }
 
     void PlayFabEventBuffer::DeleteEventPacket(PlayFabEventPacket* event)

@@ -16,7 +16,7 @@ namespace PlayFab
     class PlayFabEventPacket final
     {
     public:
-        PlayFabEventPacket(const uint64_t index, std::shared_ptr<const IPlayFabEmitEventRequest> request) :
+        PlayFabEventPacket(const uint64_t index, const std::shared_ptr<const IPlayFabEmitEventRequest>& request) :
             next(nullptr),
             eventIndex(index),
             timestamp(std::time(nullptr)), // current time

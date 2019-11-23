@@ -16,14 +16,14 @@ namespace PlayFab
     {
     }
 
-    void PlayFabPluginManager::SetPlugin(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName)
+    void PlayFabPluginManager::SetPlugin(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        GetInstance().SetPluginInternal(std::move(plugin), contract, instanceName);
+        GetInstance().SetPluginInternal(plugin, contract, instanceName);
     }
 
-    void PlayFabPluginManager::SetPluginInstance(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName)
+    void PlayFabPluginManager::SetPluginInstance(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        SetPluginInternal(std::move(plugin), contract, instanceName);
+        SetPluginInternal(plugin, contract, instanceName);
     }
 
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::GetPluginInternal(const PlayFabPluginContract contract, const std::string& instanceName)
@@ -48,7 +48,7 @@ namespace PlayFab
         }
     }
 
-    void PlayFabPluginManager::SetPluginInternal(std::shared_ptr<IPlayFabPlugin> plugin, const PlayFabPluginContract contract, const std::string& instanceName)
+    void PlayFabPluginManager::SetPluginInternal(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
         PluginEntry& entry = FindOrCreatePluginEntry(contract, instanceName);
         entry.plugin = plugin;
