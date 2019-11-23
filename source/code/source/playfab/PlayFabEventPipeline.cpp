@@ -114,14 +114,13 @@ namespace PlayFab
 
             emitEventError->ErrorName = "PlayFabEventPipeline IntakeEvent Error";
             emitEventError->ErrorMessage = "PlayFabEventPipeline did not accept the event. Please see ErrorDetails for more information.";
-            emitEventError->ErrorCode = PlayFabErrorCode::PlayFabErrorEventNotFound;
 
             emitEventError->HttpCode = 0;
             emitEventError->HttpStatus = "None";
 
             if(emitResult == EmitEventResult::Overflow)
             {
-                emitEventError->ErrorDetails = "PlayFabEventPipeline was unable to take the event due to memory limits. Please wait for batching to complete before retrying or increase the pipeline size.";
+                emitEventError->ErrorDetails = "PlayFabEventPipeline was unable to take the event due to memory limits. Please wait for batching to complete before retrying or increase the PlayFabEventBuffer size (see its constructor)";
             }
             else if (emitResult == EmitEventResult::Disabled)
             {
