@@ -43,9 +43,8 @@ namespace PlayFab
                 throw PlayFabException(PlayFabExceptionCode::PluginAmbiguity, "This contract is not supported");
                 break;
             }
-
-            return entry.plugin;
         }
+        return entry.plugin;
     }
 
     void PlayFabPluginManager::SetPluginInternal(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
