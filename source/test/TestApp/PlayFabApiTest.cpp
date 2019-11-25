@@ -244,8 +244,7 @@ namespace PlayFabUnit
         testMessageInt = (testMessageInt + 1) % 100;
         UpdateUserDataRequest updateRequest;
 
-        std::string temp;
-        AppendIntToString(testMessageInt, temp);
+        std::string temp = std::to_string(testMessageInt);
 
         updateRequest.Data[TEST_DATA_KEY] = temp;
         PlayFabClientAPI::UpdateUserData(updateRequest,
