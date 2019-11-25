@@ -118,6 +118,7 @@ namespace PlayFab
         std::shared_ptr<IPlayFabPlugin> CreatePlayFabTransportPlugin();
 
     private:
+        std::mutex pluginsMutex;
         std::vector<PluginEntry> plugins;
         std::mutex userExceptionCallbackMutex;
         ExceptionCallback userExceptionCallback;

@@ -56,16 +56,19 @@ namespace PlayFab
 
     PlayFabPluginManager::PluginEntry& PlayFabPluginManager::FindOrCreatePluginEntry(PlayFabPluginContract contract, const std::string& instanceName)
     {
-        for (PluginEntry& pluginEntry : plugins)
-        {
-            if (pluginEntry.contract == contract &&
-                pluginEntry.name == instanceName)
+        { // LOCK pluginsMutex
+            std::unique_lock<std::mutex> lock(pluginsMutex);
+            for (PluginEntry& pluginEntry : plugins)
             {
-                return pluginEntry;
+                if (pluginEntry.contract == contract &&
+                    pluginEntry.name == instanceName)
+                {
+                    return pluginEntry;
+                }
             }
-        }
-        plugins.push_back({contract, instanceName, nullptr});
-        return plugins.back();
+            plugins.emplace_back<PluginEntry>({contract, instanceName, nullptr});
+            return plugins.back();
+        } // UNLOCK pluginsMutex
     }
 
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::CreatePlayFabSerializerPlugin()
