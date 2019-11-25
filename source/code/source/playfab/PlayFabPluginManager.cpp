@@ -5,7 +5,6 @@
 
 namespace PlayFab
 {
-
     PlayFabPluginManager& PlayFabPluginManager::GetInstance()
     {
         static PlayFabPluginManager instance;
