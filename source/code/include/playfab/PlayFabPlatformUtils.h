@@ -49,7 +49,7 @@ namespace PlayFab
 #if defined(PLAYFAB_PLATFORM_PLAYSTATION)
         output = mktime(&timeStruct);
 #elif defined(PLAYFAB_PLATFORM_IOS) || defined(PLAYFAB_PLATFORM_ANDROID) || defined(PLAYFAB_PLATFORM_LINUX)
-        output = gmtime_r(&timeStruct);
+        output = gmtime_r(&output, &timeStruct);
 #else
         output = _mkgmtime(&timeStruct);
 #endif
