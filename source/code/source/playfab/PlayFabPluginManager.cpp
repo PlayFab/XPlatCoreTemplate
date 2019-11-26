@@ -29,46 +29,49 @@ namespace PlayFab
 
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::GetPluginInternal(const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        PluginEntry& entry = FindOrCreatePluginEntry(contract, instanceName);
-        if (entry.plugin == nullptr)
-        {
-            switch (contract)
+        { // LOCK pluginsMutex
+            std::unique_lock<std::mutex> lock(pluginsMutex);
+            PluginEntry& entry = FindOrCreatePluginEntry(contract, instanceName);
+            if (entry.plugin == nullptr)
             {
-            case PlayFabPluginContract::PlayFab_Serializer:
-                entry.plugin = CreatePlayFabSerializerPlugin();
-                break;
-            case PlayFabPluginContract::PlayFab_Transport:
-                entry.plugin = CreatePlayFabTransportPlugin();
-                break;
-            default:
-                throw PlayFabException(PlayFabExceptionCode::PluginAmbiguity, "This contract is not supported");
-                break;
+                switch (contract)
+                {
+                case PlayFabPluginContract::PlayFab_Serializer:
+                    entry.plugin = CreatePlayFabSerializerPlugin();
+                    break;
+                case PlayFabPluginContract::PlayFab_Transport:
+                    entry.plugin = CreatePlayFabTransportPlugin();
+                    break;
+                default:
+                    throw PlayFabException(PlayFabExceptionCode::PluginAmbiguity, "This contract is not supported");
+                    break;
+                }
             }
-        }
-        return entry.plugin;
+            return entry.plugin;
+        } // UNLOCK pluginsMutex
     }
 
     void PlayFabPluginManager::SetPluginInternal(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        PluginEntry& entry = FindOrCreatePluginEntry(contract, instanceName);
-        entry.plugin = plugin;
+        { // LOCK pluginsMutex
+            std::unique_lock<std::mutex> lock(pluginsMutex);
+            PluginEntry& entry = FindOrCreatePluginEntry(contract, instanceName);
+            entry.plugin = plugin;
+        } // UNLOCK pluginsMutex
     }
 
     PlayFabPluginManager::PluginEntry& PlayFabPluginManager::FindOrCreatePluginEntry(PlayFabPluginContract contract, const std::string& instanceName)
     {
-        { // LOCK pluginsMutex
-            std::unique_lock<std::mutex> lock(pluginsMutex);
-            for (PluginEntry& pluginEntry : plugins)
+        for (PluginEntry& pluginEntry : plugins)
+        {
+            if (pluginEntry.contract == contract &&
+                pluginEntry.name == instanceName)
             {
-                if (pluginEntry.contract == contract &&
-                    pluginEntry.name == instanceName)
-                {
-                    return pluginEntry;
-                }
+                return pluginEntry;
             }
-            plugins.emplace_back<PluginEntry>({contract, instanceName, nullptr});
-            return plugins.back();
-        } // UNLOCK pluginsMutex
+        }
+        plugins.emplace_back<PluginEntry>({contract, instanceName, nullptr});
+        return plugins.back();
     }
 
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::CreatePlayFabSerializerPlugin()
