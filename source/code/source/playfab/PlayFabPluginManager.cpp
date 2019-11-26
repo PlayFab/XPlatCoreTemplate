@@ -70,7 +70,7 @@ namespace PlayFab
                 return pluginEntry;
             }
         }
-        plugins.emplace_back<PluginEntry>({contract, instanceName, nullptr});
+        plugins.emplace_back(contract, instanceName, nullptr);
         return plugins.back();
     }
 
