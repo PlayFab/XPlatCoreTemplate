@@ -5,6 +5,8 @@
 
 namespace PlayFab
 {
+    const std::string PlayFabPluginManager::defaultInstanceName;
+
     PlayFabPluginManager& PlayFabPluginManager::GetInstance()
     {
         static PlayFabPluginManager instance;
@@ -27,47 +29,49 @@ namespace PlayFab
 
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::GetPluginInternal(const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        std::pair<PlayFabPluginContract, std::string> key = std::make_pair(contract, instanceName);
-        const auto pluginEntry = plugins.find(key);
-        if (pluginEntry == plugins.end())
-        {
-            // Requested plugin is not in the cache, create the default one
-            std::shared_ptr<IPlayFabPlugin> pluginPtr = nullptr;
-            switch (contract)
+        { // LOCK pluginsMutex
+            std::unique_lock<std::mutex> lock(pluginsMutex);
+            PluginEntry& entry = FindOrCreatePluginEntry(contract, instanceName);
+            if (entry.plugin == nullptr)
             {
-            case PlayFabPluginContract::PlayFab_Serializer:
-                pluginPtr = CreatePlayFabSerializerPlugin();
-                break;
-            case PlayFabPluginContract::PlayFab_Transport:
-                pluginPtr = CreatePlayFabTransportPlugin();
-                break;
-            default:
-                throw PlayFabException(PlayFabExceptionCode::PluginAmbiguity, "This contract is not supported");
-                break;
+                switch (contract)
+                {
+                case PlayFabPluginContract::PlayFab_Serializer:
+                    entry.plugin = CreatePlayFabSerializerPlugin();
+                    break;
+                case PlayFabPluginContract::PlayFab_Transport:
+                    entry.plugin = CreatePlayFabTransportPlugin();
+                    break;
+                default:
+                    throw PlayFabException(PlayFabExceptionCode::PluginAmbiguity, "This contract is not supported");
+                    break;
+                }
             }
-
-            plugins.insert({ key, pluginPtr });
-            return pluginPtr;
-        }
-        else
-        {
-            return pluginEntry->second;
-        }
+            return entry.plugin;
+        } // UNLOCK pluginsMutex
     }
 
     void PlayFabPluginManager::SetPluginInternal(const std::shared_ptr<IPlayFabPlugin>& plugin, const PlayFabPluginContract contract, const std::string& instanceName)
     {
-        std::pair<PlayFabPluginContract, std::string> key = std::make_pair(contract, instanceName);
-        const auto pluginEntry = plugins.find(key);
-        if (pluginEntry == plugins.end())
+        { // LOCK pluginsMutex
+            std::unique_lock<std::mutex> lock(pluginsMutex);
+            PluginEntry& entry = FindOrCreatePluginEntry(contract, instanceName);
+            entry.plugin = plugin;
+        } // UNLOCK pluginsMutex
+    }
+
+    PlayFabPluginManager::PluginEntry& PlayFabPluginManager::FindOrCreatePluginEntry(PlayFabPluginContract contract, const std::string& instanceName)
+    {
+        for (PluginEntry& pluginEntry : plugins)
         {
-            plugins.insert({ key, std::move(plugin) });
+            if (pluginEntry.contract == contract &&
+                pluginEntry.name == instanceName)
+            {
+                return pluginEntry;
+            }
         }
-        else
-        {
-            plugins.erase(key);
-            plugins.insert({ key, std::move(plugin) });
-        }
+        plugins.emplace_back<PluginEntry>({contract, instanceName, nullptr});
+        return plugins.back();
     }
 
     std::shared_ptr<IPlayFabPlugin> PlayFabPluginManager::CreatePlayFabSerializerPlugin()
