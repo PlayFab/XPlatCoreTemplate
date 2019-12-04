@@ -424,7 +424,7 @@ namespace PlayFab
                 return false;
             }
 
-            jstring urlJstr = jniEnv->NewStringUTF("POST");
+            auto urlJstr = jniEnv->NewStringUTF("POST");
             if (urlJstr == nullptr)
             {
                 return false;
@@ -435,7 +435,8 @@ namespace PlayFab
 
         // Call SetUrl
         {
-            const std::string requestUrl = GetUrl(requestTask);
+            CallRequestContainer* pfReqContainer = static_cast<CallRequestContainer*>(requestTask.requestContainer.get());
+            const std::string requestUrl = pfReqContainer->GetFullUrl();
 
             jmethodID methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "setUrl", "(Ljava/lang/String;)Z");
             if (methodId == nullptr)
@@ -443,7 +444,7 @@ namespace PlayFab
                 return false;
             }
 
-            jstring urlJstr = jniEnv->NewStringUTF(requestUrl.c_str());
+            auto urlJstr = jniEnv->NewStringUTF(requestUrl.c_str());
             if (urlJstr == nullptr)
             {
                 return false;
@@ -461,7 +462,7 @@ namespace PlayFab
 
         // Call SetHeader
         const std::unordered_map<std::string, std::string> headers = requestContainer.GetRequestHeaders();
-        
+
         if (!headers.empty())
         {
             for (auto const &obj : headers)
@@ -475,8 +476,6 @@ namespace PlayFab
 
         // Call SetBody
         {
-            const std::string requestUrl = GetUrl(requestTask);
-
             jmethodID methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "setBody", "([B)V");
             if (methodId == nullptr)
             {
@@ -601,12 +600,6 @@ namespace PlayFab
         ProcessResponse(*(this->requestingTask), 400); // 400 Bad Request
     }
 
-
-    std::string PlayFabAndroidHttpPlugin::GetUrl(const RequestTask& requestTask) const
-    {
-        return requestTask.GetRequestContainerUrl();
-    }
-
     void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask)
     {
         SetHeader(requestTask, "Accept", "application/json");
@@ -635,12 +628,12 @@ namespace PlayFab
             return ;
         }
 
-        jstring nameJstr = jniEnv->NewStringUTF(name);
+        auto nameJstr = jniEnv->NewStringUTF(name);
         if (nameJstr == nullptr)
         {
             return ;
         }
-        jstring valueJstr = jniEnv->NewStringUTF(value);
+        auto valueJstr = jniEnv->NewStringUTF(value);
         if (valueJstr == nullptr)
         {
             jniEnv->DeleteLocalRef(nameJstr);
@@ -702,5 +695,4 @@ namespace PlayFab
                      std::unique_ptr<CallRequestContainerBase>(static_cast<CallRequestContainerBase*>(requestTask.requestContainer.release())));
         }
     }
-
 }
