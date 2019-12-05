@@ -97,7 +97,7 @@ namespace PlayFabUnit
             std::shared_ptr<TestList*> testList;
     };
 
-    class PlayFabApiTestCase : TestCase
+    class PlayFabApiTestCase : public TestCase
     {
     protected:
         TestTitleData testTitleData;

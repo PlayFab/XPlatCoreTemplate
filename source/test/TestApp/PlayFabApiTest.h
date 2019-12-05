@@ -42,7 +42,7 @@ namespace PlayFabUnit
 {
     struct TestTitleData;
 
-    class PlayFabApiTest : public TestCase
+    class PlayFabApiTest : public PlayFabApiTestCase
     {
     private:
         // Fixed values provided from testInputs

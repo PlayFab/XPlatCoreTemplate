@@ -19,7 +19,7 @@ namespace PlayFab
 
 namespace PlayFabUnit
 {
-    class PlayFabTestMultiUserStatic : public TestCase
+    class PlayFabTestMultiUserStatic : public PlayFabApiTestCase
     {
     private:
         /// <summary>

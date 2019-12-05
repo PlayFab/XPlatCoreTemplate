@@ -6,7 +6,7 @@
 
 namespace PlayFabUnit
 {
-    class PlayFabPlatformSpecificTest : public TestCase
+    class PlayFabPlatformSpecificTest : public PlayFabApiTestCase
     {
     private:
         void TestPlatformSpecificLogin(TestContext& testContext);
