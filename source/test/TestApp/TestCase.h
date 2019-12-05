@@ -106,5 +106,5 @@ namespace PlayFabUnit
         {
             testTitleData = _testTitleData;
         }
-    }
+    };
 }
