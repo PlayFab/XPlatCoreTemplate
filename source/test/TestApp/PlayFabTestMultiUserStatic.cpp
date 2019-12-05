@@ -101,6 +101,8 @@ namespace PlayFabUnit
 
     void PlayFabTestMultiUserStatic::SetUp(TestContext& /*testContext*/)
     {
+        PlayFab::PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
+
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
 
@@ -142,6 +144,7 @@ namespace PlayFabUnit
     void PlayFabTestMultiUserStatic::TearDown(TestContext& /*testContext*/)
     {
         // Clean up PlayFab state for next TestCase.
+        PlayFab::PlayFabSettings::staticSettings->titleId.clear();
         PlayFabSettings::ForgetAllCredentials();
     }
 

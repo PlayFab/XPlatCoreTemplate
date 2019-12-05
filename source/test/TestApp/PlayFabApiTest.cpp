@@ -29,15 +29,6 @@ namespace PlayFabUnit
     const std::string PlayFabApiTest::TEST_DATA_KEY = "testCounter";
     const std::string PlayFabApiTest::TEST_STAT_NAME = "str";
 
-    void PlayFabApiTest::SetTitleInfo(TestTitleData& testInputs)
-    {
-        PlayFabSettings::staticSettings->titleId = testInputs.titleId;
-        USER_EMAIL = testInputs.userEmail;
-
-        // Verify all the inputs won't cause crashes in the tests
-        TITLE_INFO_SET = !PlayFabSettings::staticSettings->titleId.empty() && !USER_EMAIL.empty();
-    }
-
     void PlayFabApiTest::OnErrorSharedCallback(const PlayFabError& error, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
@@ -748,6 +739,12 @@ namespace PlayFabUnit
 
     void PlayFabApiTest::ClassSetUp()
     {
+        PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
+        USER_EMAIL = testTitleData.userEmail;
+
+        // Verify all the inputs won't cause crashes in the tests
+        TITLE_INFO_SET = !PlayFabSettings::staticSettings->titleId.empty() && !USER_EMAIL.empty();
+
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
 

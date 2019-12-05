@@ -16,6 +16,7 @@
 #include "PlayFabTestMultiUserStatic.h"
 #include "PlayFabTestMultiUserInstance.h"
 #include "PlayFabTestAlloc.h"
+#include "PlayFabPlatformSpecificTest.h"
 
 using namespace PlayFab;
 using namespace ClientModels;
@@ -48,8 +49,8 @@ namespace PlayFabUnit
     int TestApp::Main()
     {
         // Load the TestTitleData
-        TestTitleData testInputs;
-        bool loadSuccessful = LoadTitleData(testInputs);
+        TestTitleData testTitleData;
+        bool loadSuccessful = LoadTitleData(testTitleData);
 
         // If the title data fails to load, and you want to use custom hard-coded data, you can
         // comment out the return statement and fill out the TestTitleData fields manually.
@@ -71,8 +72,14 @@ namespace PlayFabUnit
 #ifndef DISABLE_PLAYFABCLIENT_API
         // Add PlayFab API tests.
         PlayFabApiTest pfApiTest;
-        pfApiTest.SetTitleInfo(testInputs);
+        pfApiTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfApiTest);
+
+#if defined(PLAYFAB_PLATFORM_SWITCH) // TODO: hook this up to all the platforms with a platform-specific login
+        PlayFabPlatformSpecificTest platformSpecificTest;
+        platformSpecificTest.SetTitleInfo(testTitleData);
+        testRunner.Add(platformSpecificTest);
+#endif
 
 #if !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
         // These tests don't work on all platforms atm
@@ -81,9 +88,11 @@ namespace PlayFabUnit
 #endif
 
         PlayFabTestMultiUserStatic pfMultiUserStaticTest;
+        pfMultiUserStaticTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfMultiUserStaticTest);
 
         PlayFabTestMultiUserInstance pfMultiUserInstanceTest;
+        pfMultiUserInstanceTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfMultiUserInstanceTest);
 #endif
 
@@ -95,6 +104,8 @@ namespace PlayFabUnit
 
 #ifndef DISABLE_PLAYFABCLIENT_API
         // Publish the test report via cloud script (and wait for it to finish).
+        PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
+
         LoginWithCustomIDRequest request;
         request.CustomId = PlayFabSettings::buildIdentifier;
         request.CreateAccount = true;
@@ -103,7 +114,7 @@ namespace PlayFabUnit
             std::bind(&TestApp::OnPostReportError, this, std::placeholders::_1, std::placeholders::_2),
             &testRunner.suiteTestReport);
 
-        for (int i = 0; i < CLOUDSCRIPT_TIMEOUT_MS; i+= CLOUDSCRIPT_TIMEOUT_INCREMENT)
+        for (int i = 0; i < CLOUDSCRIPT_TIMEOUT_MS; i += CLOUDSCRIPT_TIMEOUT_INCREMENT)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(CLOUDSCRIPT_TIMEOUT_INCREMENT));
             if (!cloudResponse.empty())

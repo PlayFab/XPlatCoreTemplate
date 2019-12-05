@@ -94,6 +94,8 @@ namespace PlayFabUnit
     void PlayFabTestMultiUserInstance::ClassSetUp()
     {
         settings2 = std::make_shared<PlayFab::PlayFabApiSettings>();
+        settings2->titleId = testTitleData.titleId;
+
         // Create API handles for all users.
         multiUser1ClientApi = std::make_shared<PlayFabClientInstanceAPI>();
         multiUser2ClientApi = std::make_shared<PlayFabClientInstanceAPI>(settings2); // also test explicit API settings
@@ -101,6 +103,8 @@ namespace PlayFabUnit
 
     void PlayFabTestMultiUserInstance::SetUp(TestContext& /*testContext*/)
     {
+        PlayFab::PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
+
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
 
@@ -142,6 +146,7 @@ namespace PlayFabUnit
     void PlayFabTestMultiUserInstance::TearDown(TestContext& /*testContext*/)
     {
         // Clean up PlayFab state for next TestCase.
+        PlayFab::PlayFabSettings::staticSettings->titleId.clear();
         PlayFabSettings::ForgetAllCredentials();
         multiUser1ClientApi->ForgetAllCredentials();
         multiUser2ClientApi->ForgetAllCredentials();
