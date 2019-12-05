@@ -45,7 +45,7 @@ namespace PlayFabUnit
         void AddTests() override;
 
     public:
-        void SetTitleInfo(TestTitleData& testTitleData);
+        void SetTitleInfo(const TestTitleData& testTitleData);
 
         void ClassSetUp() override;
         void SetUp(TestContext& testContext) override;

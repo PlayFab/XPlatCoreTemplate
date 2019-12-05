@@ -15,7 +15,7 @@ using namespace ClientModels;
 namespace PlayFabUnit
 {
     std::string multiUserStaticTitleId;
-    void PlayFabTestMultiUserStatic::SetTitleInfo(TestTitleData& testTitleData)
+    void PlayFabTestMultiUserStatic::SetTitleInfo(const TestTitleData& testTitleData)
     {
         multiUserStaticTitleId = testTitleData.titleId;
     }
