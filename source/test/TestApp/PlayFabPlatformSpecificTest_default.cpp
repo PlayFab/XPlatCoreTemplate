@@ -10,10 +10,6 @@
 
 namespace PlayFabUnit
 {
-    void PlayFabPlatformSpecificTest::SetTitleInfo(TestTitleData&)
-    {
-    }
-
     void PlayFabPlatformSpecificTest::TestPlatformSpecificLogin(TestContext&)
     {
     }

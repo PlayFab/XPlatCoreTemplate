@@ -16,7 +16,6 @@ namespace PlayFabUnit
     class TestCase
     {
         public:
-
             TestCase()
             {
                 testList = std::make_shared<TestList*>(new TestList());
@@ -97,4 +96,15 @@ namespace PlayFabUnit
         private:
             std::shared_ptr<TestList*> testList;
     };
+
+    class PlayFabApiTestCase : TestCase
+    {
+    protected:
+        TestTitleData testTitleData;
+    public:
+        inline void SetTitleInfo(const TestTitleData& _testTitleData)
+        {
+            testTitleData = _testTitleData;
+        }
+    }
 }

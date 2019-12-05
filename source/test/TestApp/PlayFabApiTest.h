@@ -179,8 +179,6 @@ namespace PlayFabUnit
         void AddTests() override;
 
     public:
-        void SetTitleInfo(TestTitleData& testInputs);
-
         void ClassSetUp() override;
         void SetUp(TestContext& /*testContext*/) override;
         void Tick(TestContext& testContext) override;

@@ -14,12 +14,6 @@ using namespace ClientModels;
 
 namespace PlayFabUnit
 {
-    std::string multiUserInstanceTitleId;
-    void PlayFabTestMultiUserInstance::SetTitleInfo(const TestTitleData& testTitleData)
-    {
-        multiUserInstanceTitleId = testTitleData.titleId;
-    }
-
     /// <summary>
     /// CLIENT API
     /// Try to log in two users simultaneously using instance APIs.
@@ -100,7 +94,7 @@ namespace PlayFabUnit
     void PlayFabTestMultiUserInstance::ClassSetUp()
     {
         settings2 = std::make_shared<PlayFab::PlayFabApiSettings>();
-        settings2->titleId = multiUserInstanceTitleId;
+        settings2->titleId = testTitleData.titleId;
 
         // Create API handles for all users.
         multiUser1ClientApi = std::make_shared<PlayFabClientInstanceAPI>();
@@ -109,7 +103,7 @@ namespace PlayFabUnit
 
     void PlayFabTestMultiUserInstance::SetUp(TestContext& /*testContext*/)
     {
-        PlayFab::PlayFabSettings::staticSettings->titleId = multiUserInstanceTitleId;
+        PlayFab::PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
 
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
