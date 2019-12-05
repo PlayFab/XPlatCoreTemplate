@@ -14,6 +14,12 @@ using namespace ClientModels;
 
 namespace PlayFabUnit
 {
+    std::string multiUserStaticTitleId;
+    void PlayFabTestMultiUserStatic::SetTitleInfo(TestTitleData& testTitleData)
+    {
+        multiUserStaticTitleId = testTitleData.titleId;
+    }
+
     /// <summary>
     /// CLIENT API
     /// Try to log in two users simultaneously using static APIs.
@@ -101,6 +107,8 @@ namespace PlayFabUnit
 
     void PlayFabTestMultiUserStatic::SetUp(TestContext& /*testContext*/)
     {
+        PlayFab::PlayFabSettings::staticSettings->titleId = multiUserStaticTitleId;
+
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
 
@@ -142,6 +150,7 @@ namespace PlayFabUnit
     void PlayFabTestMultiUserStatic::TearDown(TestContext& /*testContext*/)
     {
         // Clean up PlayFab state for next TestCase.
+        PlayFab::PlayFabSettings::staticSettings->titleId.clear();
         PlayFabSettings::ForgetAllCredentials();
     }
 
