@@ -4,6 +4,7 @@
 
 #include <playfab/PlayFabApiSettings.h>
 #include <playfab/PlayFabAuthenticationContext.h>
+#include <playfab/PlayFabAuthenticationInstanceAPI.h>
 #include "TestContext.h"
 #include "PlayFabTestAlloc.h"
 
@@ -67,10 +68,28 @@ namespace PlayFabUnit
         testContext.Pass();
     }
 
+    void PlayFabTestAlloc::TestApiInstanceAlloc(TestContext& testContext)
+    {
+        // If anything fails here, it'll be a straight program crash
+
+        // Context
+        PlayFab::PlayFabAuthenticationInstanceAPI* testPtrApi = new PlayFab::PlayFabAuthenticationInstanceAPI();
+        delete testPtrApi;
+
+        std::shared_ptr<PlayFab::PlayFabAuthenticationInstanceAPI> testSpApi = std::make_shared<PlayFab::PlayFabAuthenticationInstanceAPI>();
+        testSpApi.reset();
+
+        std::shared_ptr<PlayFab::PlayFabAuthenticationInstanceAPI> testNSpApi = std::shared_ptr<PlayFab::PlayFabAuthenticationInstanceAPI>(new PlayFab::PlayFabAuthenticationInstanceAPI());
+        testNSpApi.reset();
+
+        testContext.Pass();
+    }
+
     void PlayFabTestAlloc::AddTests()
     {
         AddTest("TestApiSettingsAlloc", &PlayFabTestAlloc::TestApiSettingsAlloc);
         AddTest("TestAuthContextAlloc", &PlayFabTestAlloc::TestAuthContextAlloc);
+        AddTest("TestApiInstanceAlloc", &PlayFabTestAlloc::TestApiInstanceAlloc);
     }
 
     void PlayFabTestAlloc::Tick(TestContext& /*testContext*/)

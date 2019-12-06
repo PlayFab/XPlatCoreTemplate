@@ -112,7 +112,7 @@ namespace PlayFabUnit
         {
             message = "fail";
         }
-        
+
         EndTest(TestFinishState::FAILED, message);
         // TODO: Throw "assert" exception
     }

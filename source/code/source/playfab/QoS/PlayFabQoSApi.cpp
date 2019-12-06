@@ -37,7 +37,7 @@ namespace PlayFab
                 {
                     PlayFabSettings::globalErrorHandler(container.errorWrapper, container.GetCustomData());
                 }
-                
+
                 if (container.errorCallback != nullptr)
                 {
                     container.errorCallback(container.errorWrapper, container.GetCustomData());
@@ -137,7 +137,7 @@ namespace PlayFab
         {
             Json::Value value;
             value["ErrorCode"] = Json::Value(result.errorCode);
-            
+
             Json::Value each_regionCenterResult;
             for (int i = 0; i < result.regionResults.size(); ++i)
             {
@@ -185,7 +185,7 @@ namespace PlayFab
             ListQosServersRequest request;
             PlayFabMultiplayerAPI::ListQosServers(request, ListQosServersSuccessCallBack, ListQosServersFailureCallBack, reinterpret_cast<void*>(this));
         }
-        
+
         void PlayFabQoSApi::ListQosServersSuccessCallBack(const ListQosServersResponse& result, void* customData)
         {
             // Custom data received is a pointer to our api object
@@ -247,7 +247,7 @@ namespace PlayFab
             // Setup sockets based on the number of threads
             for (unsigned int i = 0; i < numThreads; ++i)
             {
-                shared_ptr<QoSSocket> socket = shared_ptr<QoSSocket>(new QoSSocket());
+                shared_ptr<QoSSocket> socket = make_shared<QoSSocket>();
 
                 int errorCode;
                 if ((errorCode = socket->ConfigureSocket(timeoutMs)) == 0)
@@ -334,7 +334,7 @@ namespace PlayFab
             // Accumulate final results
             for (size_t i = 0; i < numThreads; ++i)
             {
-                // If the result is valid and available 
+                // If the result is valid and available
                 if (asyncPingResults[i].valid())
                 {
                     std::chrono::milliseconds pingWaitTime = std::chrono::milliseconds(timeoutMs);

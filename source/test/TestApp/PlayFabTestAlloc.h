@@ -11,6 +11,7 @@ namespace PlayFabUnit
     private:
         void TestApiSettingsAlloc(TestContext& testContext);
         void TestAuthContextAlloc(TestContext& testContext);
+        void TestApiInstanceAlloc(TestContext& testContext);
 
     protected:
         void AddTests() override;

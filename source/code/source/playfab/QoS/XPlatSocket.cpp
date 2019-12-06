@@ -33,7 +33,7 @@ namespace PlayFab
 
         int XPlatSocket::InitializeSocket()
         {
-            // If the socket is already initialized, return 0, 
+            // If the socket is already initialized, return 0,
             // else initialize it
             if (initialized)
             {
