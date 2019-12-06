@@ -21,7 +21,7 @@ namespace PlayFab
     }
 
     PlayFabEventBuffer::PlayFabEventBuffer(
-        const size_t bufferSize) 
+        const size_t bufferSize)
         :
         disabled(false),
         buffMask(AdjustBufferSize(bufferSize) - 1),
@@ -123,7 +123,7 @@ namespace PlayFab
 
         // event is available; return its values
         request = std::move(event->eventRequest);
-        
+
         // set new head (new last consumed event)
         head.store(event, std::memory_order_release);
 

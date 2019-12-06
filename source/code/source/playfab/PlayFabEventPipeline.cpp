@@ -155,7 +155,7 @@ namespace PlayFab
         using clock = std::chrono::steady_clock;
         using Result = PlayFabEventBuffer::EventConsumingResult;
         std::shared_ptr<const IPlayFabEmitEventRequest> request;
-        size_t batchCounter = 0; // used to track uniqueness of batches in the map
+        size_t batchCounter = 1; // used to track uniqueness of batches in the map
         std::chrono::steady_clock::time_point momentBatchStarted; // used to track when a currently assembled batch got its first event
 
         while (this->isWorkerThreadRunning)

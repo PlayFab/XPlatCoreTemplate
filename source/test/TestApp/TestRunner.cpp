@@ -28,8 +28,8 @@ namespace PlayFabUnit
         }
 
         // Add the tests from the given test case.
-        std::shared_ptr<TestList*> testCaseTests = testCase.GetTests();
-        suiteTests.splice(suiteTests.end(), **testCaseTests);
+        std::shared_ptr<TestList> testCaseTests = testCase.GetTests();
+        suiteTests.splice(suiteTests.end(), *testCaseTests);
     }
 
     void TestRunner::Run()
@@ -41,11 +41,8 @@ namespace PlayFabUnit
         }
 
         // Run the tests.
-        for (auto& suiteTest : suiteTests)
+        for (auto& test : suiteTests)
         {
-            // Get the next test.
-            TestContext* test = *suiteTest;
-
             // Handle transitions between TestCases.
             ManageTestCase(test->testCase, suiteTestCase);
 
@@ -112,10 +109,8 @@ namespace PlayFabUnit
         PlayFab::TimePoint testStartTime, testEndTime;
         size_t testsFinishedCount = 0, testsPassedCount = 0, testsFailedCount = 0, testsSkippedCount = 0;
 
-        for (auto testIter = suiteTests.begin(); testIter != suiteTests.end(); ++testIter)
+        for (auto& test : suiteTests)
         {
-            TestContext* test = **testIter;
-
             // Count tests
             if (TestActiveState::COMPLETE == test->activeState)
             {
@@ -144,11 +139,6 @@ namespace PlayFabUnit
             }
 
             // Line for each test report
-            if (suiteTests.begin() != testIter)
-            {
-                summaryStream << "\n";
-            }
-
             auto testDurationMs = std::chrono::duration_cast<std::chrono::milliseconds>(test->endTime - test->startTime);
             summaryStream << std::setw(10) << testDurationMs.count() << " ms";
             summaryStream << " - " << ToString(test->finishState);
@@ -157,9 +147,10 @@ namespace PlayFabUnit
             {
                 summaryStream << " - " << test->testResultMsg;
             }
+            summaryStream << "\n";
         }
 
-        summaryStream << "\n Testing complete:  ";
+        summaryStream << " - Testing complete:  ";
         summaryStream << testsFinishedCount << "/" << suiteTests.size() << " tests run, ";
         summaryStream << testsPassedCount << " tests passed, ";
         summaryStream << testsFailedCount << " tests failed, ";

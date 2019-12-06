@@ -34,9 +34,9 @@ namespace PlayFabUnit
         json["testResults"].swapPayload(init);
 
         int testResultIndex = 0;
-        for (auto it = testResults.begin(); it != testResults.end(); ++it)
+        for (auto testResult : testResults)
         {
-            (**it)->ToJson(json["testResults"][testResultIndex]);
+            testResult->ToJson(json["testResults"][testResultIndex]);
             testResultIndex += 1;
         }
     }
@@ -60,10 +60,8 @@ namespace PlayFabUnit
     void TestReport::TestComplete(std::string testName, TestFinishState testFinishState, std::chrono::milliseconds testDurationMs, std::string message)
     {
         // Add a new TestCaseReport for the completed test.
-        TestCaseReport* testReport = new TestCaseReport();
-
-        std::shared_ptr<TestCaseReport*> testReportPtr = std::make_shared<TestCaseReport*>(testReport);
-        internalReport.testResults.push_back(testReportPtr);
+        std::shared_ptr<TestCaseReport> testReport = std::make_shared<TestCaseReport>();
+        internalReport.testResults.push_back(testReport);
 
         testReport->classname = internalReport.name;
         testReport->name = testName;

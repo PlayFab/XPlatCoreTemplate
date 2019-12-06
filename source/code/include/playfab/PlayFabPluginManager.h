@@ -38,7 +38,7 @@ namespace PlayFab
 
         /// <summary>
         /// updates the process of making post requests.
-        /// This method can be used when plugin is not using a working thread and instead should execute 
+        /// This method can be used when plugin is not using a working thread and instead should execute
         /// its long-running operations via polling using this method.
         /// Returns number of currently pending post requests.
         /// </summary>

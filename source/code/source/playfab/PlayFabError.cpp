@@ -35,7 +35,7 @@ namespace PlayFab
         {
             ErrorMessage = ErrorMessage_member.asString();
         }
-        
+
         ErrorDetails = input["errorDetails"];
         Data = input["data"];
     }

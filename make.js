@@ -239,7 +239,7 @@ function getPropertySafeName(property) {
 }
 
 function getRequestActions(tabbing, apiCall, isInstanceApi) {
-    //TODO Bug 6594: add to this titleId check. 
+    //TODO Bug 6594: add to this titleId check.
     // If this titleId does not exist we should be throwing an error informing the user MUST have a titleId.
     if (apiCall.result === "LoginResult" || apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "if (request.TitleId.empty())\n"
