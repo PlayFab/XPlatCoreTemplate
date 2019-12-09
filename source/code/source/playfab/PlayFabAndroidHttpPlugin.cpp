@@ -388,6 +388,7 @@ namespace PlayFab
                     else
                     { // LOCK httpRequestMutex
                         std::unique_lock<std::mutex> lock(httpRequestMutex);
+                        this->requestingTask->impl = nullptr;
                         this->pendingResults.emplace_back(std::move(this->requestingTask));
                     } // UNLOCK httpRequestMutex
 
