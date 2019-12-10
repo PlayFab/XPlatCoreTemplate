@@ -59,7 +59,7 @@ namespace PlayFabUnit
             ApiCallback(&PlayFabEventTest::OnErrorSharedCallback),
             &testContext);
     }
-    void PlayFabEventTest::OnLogin(const PlayFab::ClientModels::LoginResult& result, void* customData)
+    void PlayFabEventTest::OnLogin(const PlayFab::ClientModels::LoginResult& /*result*/, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Pass();
@@ -322,7 +322,7 @@ namespace PlayFabUnit
         PlayFabSettings::ForgetAllCredentials();
     }
 
-    void PlayFabEventTest::SetUp(TestContext& testContext)
+    void PlayFabEventTest::SetUp(TestContext& /*testContext*/)
     {
         PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
         // Reset event test values.
