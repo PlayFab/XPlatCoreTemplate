@@ -16,8 +16,8 @@ namespace PlayFab
     enum class PlayFabEventType
     {
         Default, // Default type (e.g. the one set by global configuration)
-        Lightweight, // WriteTelemetryEvents
-        Heavyweight // WriteEvents
+        Lightweight, // Event will be sent using WriteTelemetryEvents method in EventsAPI
+        Heavyweight // Event will be sent using WriteEvents method in EventsAPI
     };
 
     /// <summary>
