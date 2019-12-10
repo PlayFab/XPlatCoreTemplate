@@ -16,8 +16,8 @@ namespace PlayFab
     enum class PlayFabEventType
     {
         Default, // Default type (e.g. the one set by global configuration)
-        Lightweight, // Event is meant to bypass processing on the PlayFab server side and be sent instead directly to One Collector (1DS).
-        Heavyweight // Event is meant to be sent to the PlayFab server.
+        Lightweight, // WriteTelemetryEvents
+        Heavyweight // WriteEvents
     };
 
     /// <summary>

@@ -43,6 +43,28 @@ namespace PlayFabUnit
     constexpr int CLOUDSCRIPT_TIMEOUT_MS = 10000;
     constexpr int CLOUDSCRIPT_TIMEOUT_INCREMENT = 100;
 
+    void PlayFabEventTest::OnErrorSharedCallback(const PlayFab::PlayFabError& error, void* customData)
+    {
+        TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+        testContext->Fail(error.GenerateErrorReport());
+    }
+    void PlayFabEventTest::BasicLogin(TestContext& testContext)
+    {
+        LoginWithCustomIDRequest request;
+        request.CustomId = PlayFabSettings::buildIdentifier;
+        request.CreateAccount = true;
+
+        PlayFabClientAPI::LoginWithCustomID(request,
+            ApiCallback(&PlayFabEventTest::OnLogin),
+            ApiCallback(&PlayFabEventTest::OnErrorSharedCallback),
+            &testContext);
+    }
+    void PlayFabEventTest::OnLogin(const PlayFab::ClientModels::LoginResult& result, void* customData)
+    {
+        TestContext* testContext = static_cast<TestContext*>(customData);
+        testContext->Pass();
+    }
+
     /// EVENTS API
     /// Test that sends heavyweight events as a whole batch.
     static EventContents CreateEventContents(const std::string& eventName, int i)
@@ -222,19 +244,19 @@ namespace PlayFabUnit
         std::atomic<uint32_t> eventsRemaining(pNumThreads * pNumEventsPerThread);
         for (uint32_t thread = 0; thread < pNumThreads; ++thread)
         {
+            std::shared_ptr<PlayFabEventAPI> api = SetupEventTest();
             testThreadPool.emplace_back(
-                [&eventsRemaining, pNumEventsPerThread, this]()
+                [api, &eventsRemaining, pNumEventsPerThread, this]()
             {
                 try
                 {
-                    std::shared_ptr<PlayFabEventAPI> api = SetupEventTest();
                     for (uint32_t i = 0; i < pNumEventsPerThread; ++i)
                     {
                         api->EmitEvent(MakeEvent(PlayFabEventType::Default),
                             [&eventsRemaining, this]
                         (std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)
                         {
-                            if (--eventsRemaining == 0)
+                            if (--eventsRemaining <= 0)
                             {
                                 eventTestContext->Pass("Threaded callback Received all events Emitted.");
                             }
@@ -262,6 +284,7 @@ namespace PlayFabUnit
 
     void PlayFabEventTest::ManyThreadsLowEventsPerTest(TestContext& testContext)
     {
+        // NOTE: Some platforms have hard limits on the maximum number of threads (This number found to be experimentally safe)
         eventTestContext = &testContext;
         uint32_t numThreads = 30;
         uint32_t numEventsPerThread = 2;
@@ -282,6 +305,7 @@ namespace PlayFabUnit
 #if !defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
         AddTest("QosResultApi", &PlayFabEventTest::QosResultApi);
 #endif
+        AddTest("BasicLogin", &PlayFabEventTest::BasicLogin);
         AddTest("EventsApi", &PlayFabEventTest::EventsApi);
         AddTest("HeavyweightEvents", &PlayFabEventTest::HeavyweightEvents);
         AddTest("LightweightEvents", &PlayFabEventTest::LightweightEvents);
@@ -296,45 +320,11 @@ namespace PlayFabUnit
     {
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
-
-        // Log in to use event functions.
-        LoginWithCustomIDRequest request;
-        request.CustomId = PlayFabSettings::buildIdentifier;
-        request.CreateAccount = true;
-
-        loggedIn = false;
-        bool loginComplete = false;
-        PlayFabClientAPI::LoginWithCustomID(request,
-            [&loginComplete](const LoginResult& /*result*/, void* customData)
-        {
-            *reinterpret_cast<bool*>(customData) = true;
-            loginComplete = true;
-        },
-            [&loginComplete](const PlayFabError /*error*/, void* customData)
-        {
-            *reinterpret_cast<bool*>(customData) = false;
-            loginComplete = true;
-        },
-            &loggedIn);
-
-        // Sleep while waiting for log in to complete.
-        for (int i = 0; i < CLOUDSCRIPT_TIMEOUT_MS; i += CLOUDSCRIPT_TIMEOUT_INCREMENT)
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(CLOUDSCRIPT_TIMEOUT_INCREMENT));
-            if (loginComplete)
-            {
-                break;
-            }
-        }
     }
 
     void PlayFabEventTest::SetUp(TestContext& testContext)
     {
-        if (!loggedIn)
-        {
-            testContext.Skip("Not logged in to PlayFab"); // Cannot run event tests if not logged in
-        }
-
+        PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
         // Reset event test values.
         eventBatchMax = 0;
         eventPassCount = 0;
@@ -388,8 +378,8 @@ namespace PlayFabUnit
         int i = eventCounter.fetch_add(1);
 
         // user can specify whether it's
-        // - lightweight (goes to 1DS),
-        // - heavyweight (goes to PlayFab's WriteEvents),
+        // - lightweight (goes to WriteTelemetryEvents),
+        // - heavyweight (goes to WriteEvents),
         // - or anything else
         event->eventType = eventType;
         std::stringstream name;
