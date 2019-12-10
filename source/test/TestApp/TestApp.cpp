@@ -59,8 +59,8 @@ namespace PlayFabUnit
             return 1;
 
             // TODO: POPULATE THIS SECTION WITH REAL INFORMATION (or set up a testTitleData file, and set your PF_TEST_TITLE_DATA_JSON to the path for that file)
-            //testInputs.titleId = ""; // The titleId for your title, found in the "Settings" section of PlayFab Game Manager
-            //testInputs.userEmail = ""; // This is the email for a valid user (test tries to log into it with an invalid password, and verifies error result)
+            //testTitleData.titleId = ""; // The titleId for your title, found in the "Settings" section of PlayFab Game Manager
+            //testTitleData.userEmail = ""; // This is the email for a valid user (test tries to log into it with an invalid password, and verifies error result)
         }
 
         // Initialize the test runner/test data.
@@ -81,9 +81,10 @@ namespace PlayFabUnit
         testRunner.Add(platformSpecificTest);
 #endif
 
-#if !defined(PLAYFAB_PLATFORM_PLAYSTATION) && !defined(PLAYFAB_PLATFORM_SWITCH)
+#if !defined(PLAYFAB_PLATFORM_PLAYSTATION)
         // These tests don't work on all platforms atm
         PlayFabEventTest pfEventTest;
+        pfEventTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfEventTest);
 #endif
 
