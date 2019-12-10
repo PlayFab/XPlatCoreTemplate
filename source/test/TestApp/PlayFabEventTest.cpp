@@ -284,7 +284,7 @@ namespace PlayFabUnit
 
     void PlayFabEventTest::ManyThreadsLowEventsPerTest(TestContext& testContext)
     {
-        // NOTE: Some platforms have hard limits on the maximum number of threads (This number found to be experimentally safe)
+        // NOTE: Some platforms have hard limits on the maximum number of threads (this number found to be experimentally safe)
         eventTestContext = &testContext;
         uint32_t numThreads = 30;
         uint32_t numEventsPerThread = 2;
