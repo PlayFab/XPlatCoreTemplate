@@ -24,11 +24,16 @@ namespace PlayFabUnit
 {
     struct TestContext;
 
-    class PlayFabEventTest : public TestCase
+    class PlayFabEventTest : public PlayFabApiTestCase
     {
     private:
         /// QoS API
         void QosResultApi(TestContext& testContext);
+
+        // Initial Login
+        void OnErrorSharedCallback(const PlayFab::PlayFabError& error, void* customData);
+        void BasicLogin(TestContext& testContext);
+        void OnLogin(const PlayFab::ClientModels::LoginResult& result, void* customData);
 
         /// EVENTS API
         /// Test that sends heavyweight events as a whole batch.
