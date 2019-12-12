@@ -583,7 +583,7 @@ namespace PlayFab
 
                             std::string body(reinterpret_cast<const char* >(bodyBuffer.data()), bodyBuffer.size());
                             requestContainer.responseString = body;
-                            ProcessResponse(*(this->requestingTask), static_cast<const int>(httpCode));
+                            ProcessResponse(*(this->requestingTask), static_cast<const int>(httpCode), "tempRequestId");
                         }
 
                         jniEnv->DeleteLocalRef(responseBody);
@@ -603,7 +603,7 @@ namespace PlayFab
     void PlayFabAndroidHttpPlugin::SetResponseAsBadRequest(RequestTask& requestTask)
     {
         CallRequestContainer& requestContainer = this->requestingTask->RequestContainer();
-        ProcessResponse(*(this->requestingTask), 400); // 400 Bad Request
+        ProcessResponse(*(this->requestingTask), 400, requestTask.requestContainer.requestId); // 400 Bad Request
     }
 
     void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask)
@@ -658,7 +658,7 @@ namespace PlayFab
         return false;
     }
 
-    void PlayFabAndroidHttpPlugin::ProcessResponse(RequestTask& requestTask, const int httpCode)
+    void PlayFabAndroidHttpPlugin::ProcessResponse(RequestTask& requestTask, const int httpCode, const std::string& requestId)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
         Json::CharReaderBuilder jsonReaderFactory;
@@ -666,7 +666,7 @@ namespace PlayFab
         JSONCPP_STRING jsonParseErrors;
         const bool parsedSuccessfully = jsonReader->parse(requestContainer.responseString.c_str(), requestContainer.responseString.c_str() + requestContainer.responseString.length(), &requestContainer.responseJson, &jsonParseErrors);
 
-        requestContainer.errorWrapper.RequestId = requestContainer.GetRequestId();
+        requestContainer.errorWrapper.RequestId = requestId;
 
         if (parsedSuccessfully)
         {
