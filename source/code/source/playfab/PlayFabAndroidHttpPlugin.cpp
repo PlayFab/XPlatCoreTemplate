@@ -251,10 +251,6 @@ namespace PlayFab
         if (container != nullptr && container->HandleInvalidSettings())
         {
             std::shared_ptr<RequestTask> requestTask = nullptr;
-            { // LOCK httpRequestMutex
-                std::unique_lock<std::mutex> lock(httpRequestMutex);
-                container->requestId = pendingRequests.size()+1;
-            } // UNLOCK httpRequestMutex
 
             try
             {
