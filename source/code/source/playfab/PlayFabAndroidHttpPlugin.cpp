@@ -567,6 +567,26 @@ namespace PlayFab
                 }
             }
 
+            std::string requestId = "initializingRequestId";
+            {
+                methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "getRequestIdFromHeader","()[B");
+                if (methodId)
+                {
+                    jbyteArray requestIdBytes = (jbyteArray)jniEnv->CallObjectMethod(httpRequestObject, methodId);
+                    if(requestIdBytes != nullptr)
+                    {
+                        int requestIdSize = jniEnv->GetArrayLength(requestIdBytes);
+                        if(requestIdSize > 0)
+                        {
+                            std::vector<uint8_t> requestIdBuffer(static_cast<size_t>(requestIdSize));
+                            jniEnv->GetByteArrayRegion(requestIdBytes, 0, requestIdSize, reinterpret_cast<jbyte*>(requestIdBuffer.data()));
+                            std::string reqId(reinterpret_cast<const char*>(requestIdBuffer.data()), requestIdBuffer.size());
+                            requestId = reqId;
+                        }
+                    }
+                }
+            }
+
             {
                 methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "getResponseHttpBody", "()[B");
                 if (methodId)
@@ -583,7 +603,7 @@ namespace PlayFab
 
                             std::string body(reinterpret_cast<const char* >(bodyBuffer.data()), bodyBuffer.size());
                             requestContainer.responseString = body;
-                            ProcessResponse(*(this->requestingTask), static_cast<const int>(httpCode), "tempRequestId");
+                            ProcessResponse(*(this->requestingTask), static_cast<const int>(httpCode), requestId);
                         }
 
                         jniEnv->DeleteLocalRef(responseBody);
@@ -603,7 +623,8 @@ namespace PlayFab
     void PlayFabAndroidHttpPlugin::SetResponseAsBadRequest(RequestTask& requestTask)
     {
         CallRequestContainer& requestContainer = this->requestingTask->RequestContainer();
-        ProcessResponse(*(this->requestingTask), 400, requestTask.requestContainer.requestId); // 400 Bad Request
+        std::string temp = "NoID-BadRequest";
+        ProcessResponse(*(this->requestingTask), 400, temp); // 400 Bad Request
     }
 
     void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask)
