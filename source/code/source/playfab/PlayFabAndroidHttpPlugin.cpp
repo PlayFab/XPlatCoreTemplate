@@ -251,7 +251,6 @@ namespace PlayFab
         if (container != nullptr && container->HandleInvalidSettings())
         {
             std::shared_ptr<RequestTask> requestTask = nullptr;
-
             try
             {
                 requestTask = std::make_shared<RequestTask>();
