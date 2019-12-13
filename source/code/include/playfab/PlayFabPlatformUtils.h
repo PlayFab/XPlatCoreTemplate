@@ -39,7 +39,7 @@ namespace PlayFab
 
     inline tm TimeTToUtcTm(time_t input)
     {
-        tm timeInfo;
+        tm timeInfo{ 0 };
 #if defined(PLAYFAB_PLATFORM_PLAYSTATION)
         gmtime_s(&input, &timeInfo);
 #elif defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
