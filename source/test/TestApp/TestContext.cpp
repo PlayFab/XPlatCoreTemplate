@@ -10,7 +10,7 @@ namespace PlayFabUnit
     {
         if (finishState == TestFinishState::PENDING) // This means that we finish successfully
         {
-            endTime = PlayFab::GetTimePointNow();
+            endTime = PlayFab::GetMilliTicks();
             testResultMsg = resultMsg;
             finishState = state;
             activeState = TestActiveState::READY;

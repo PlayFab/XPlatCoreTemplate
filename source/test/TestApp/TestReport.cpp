@@ -28,7 +28,6 @@ namespace PlayFabUnit
         json["errors"] = errors;
         json["skipped"] = skipped;
         json["time"] = time;
-        json["timestamp"] = PlayFab::LocalTimePointToUtcString(timeStamp);
         json["testResults"];
         Json::Value init(Json::arrayValue);
         json["testResults"].swapPayload(init);
@@ -44,7 +43,7 @@ namespace PlayFabUnit
     TestReport::TestReport(std::string className)
     {
         internalReport.name = className;
-        internalReport.timeStamp = PlayFab::GetTimePointNow();
+        internalReport.timeStamp = PlayFab::GetMilliTicks();
         internalReport.tests = 0;
         internalReport.failures = 0;
         internalReport.errors = 0;
@@ -57,7 +56,7 @@ namespace PlayFabUnit
         internalReport.tests += 1;
     }
 
-    void TestReport::TestComplete(std::string testName, TestFinishState testFinishState, std::chrono::milliseconds testDurationMs, std::string message)
+    void TestReport::TestComplete(std::string testName, TestFinishState testFinishState, long testDurationMs, std::string message)
     {
         // Add a new TestCaseReport for the completed test.
         std::shared_ptr<TestCaseReport> testReport = std::make_shared<TestCaseReport>();
@@ -86,7 +85,7 @@ namespace PlayFabUnit
 
         // Update overall runtime.
         // TODO: Add hooks for SuiteSetUp and SuiteTearDown, so this can be estimated more accurately
-        internalReport.time = std::chrono::duration<double>(PlayFab::GetTimePointNow() - internalReport.timeStamp).count(); // For now, update the duration on every test complete - the last one will be essentially correct
+        internalReport.time = PlayFab::GetMilliTicks() - internalReport.timeStamp; // For now, update the duration on every test complete - the last one will be essentially correct
     }
 
     bool TestReport::AllTestsPassed()

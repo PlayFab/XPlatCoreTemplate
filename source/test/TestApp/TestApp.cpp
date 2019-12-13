@@ -81,9 +81,11 @@ namespace PlayFabUnit
         testRunner.Add(platformSpecificTest);
 #endif
 
+#if !defined(PLAYFAB_PLATFORM_SWITCH)
         PlayFabEventTest pfEventTest;
         pfEventTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfEventTest);
+#endif
 
         PlayFabTestMultiUserStatic pfMultiUserStaticTest;
         pfMultiUserStaticTest.SetTitleInfo(testTitleData);
@@ -173,7 +175,7 @@ namespace PlayFabUnit
         cloudReportJson["testReport"].swapPayload(arrayInit);
 
         // Encode the test report as JSON.
-        TestReport* testReport = reinterpret_cast<TestReport*>(customData);
+        TestReport* testReport = static_cast<TestReport*>(customData);
         testReport->internalReport.ToJson(cloudReportJson["testReport"][0]);
 
         // Save the test results via cloud script.

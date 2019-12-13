@@ -44,8 +44,8 @@ namespace PlayFabUnit
         int errors; // count tests in state
         int skipped; // count tests in state
         double time; // Duration in seconds
-        PlayFab::TimePoint timeStamp;
         // Useful for debugging but not part of the serialized format
+        long timeStamp;
         int passed; // Could be calculated from the others, but sometimes knowing if they don't add up means something
         std::list<std::shared_ptr<TestCaseReport>> testResults;
 
@@ -61,7 +61,7 @@ namespace PlayFabUnit
 
         void TestStarted();
 
-        void TestComplete(std::string testName, TestFinishState testFinishState, std::chrono::milliseconds testDurationMs, std::string message);
+        void TestComplete(std::string testName, TestFinishState testFinishState, long testDurationMs, std::string message);
 
         bool AllTestsPassed();
     };

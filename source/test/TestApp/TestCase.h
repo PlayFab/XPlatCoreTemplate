@@ -86,7 +86,7 @@ namespace PlayFabUnit
 
         template <class T> void AddTest(std::string name, void(T::* testCaseFunc)(TestContext&))
         {
-            T* testCase = reinterpret_cast<T*>(this);
+            T* testCase = static_cast<T*>(this);
             const auto& testFunc = std::bind(testCaseFunc, testCase, std::placeholders::_1);
             std::shared_ptr<TestContext> testContext = std::make_shared<TestContext>(testCase, name, testFunc);
 

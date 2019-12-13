@@ -80,7 +80,7 @@ namespace PlayFab
     // Utilities for [de]serializing time_t to/from json
     inline void ToJsonUtilT(const time_t input, Json::Value& output)
     {
-        output = Json::Value(LocalTimeTToUtcString(input));
+        output = Json::Value(TimeTToIso8601String(input));
     }
     inline void FromJsonUtilT(const Json::Value& input, time_t& output)
     {
@@ -88,7 +88,7 @@ namespace PlayFab
         {
             return;
         }
-        output = UtcStringToLocalTimeT(input.asString());
+        output = Iso8601StringToTimeT(input.asString());
     }
 
     inline void ToJsonUtilT(const Boxed<time_t>& input, Json::Value& output)

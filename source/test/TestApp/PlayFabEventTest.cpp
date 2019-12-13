@@ -39,13 +39,9 @@ namespace PlayFabUnit
     }
 #endif
 
-    // Time out if waiting for login
-    constexpr int CLOUDSCRIPT_TIMEOUT_MS = 10000;
-    constexpr int CLOUDSCRIPT_TIMEOUT_INCREMENT = 100;
-
     void PlayFabEventTest::OnErrorSharedCallback(const PlayFab::PlayFabError& error, void* customData)
     {
-        TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+        TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Fail(error.GenerateErrorReport());
     }
     void PlayFabEventTest::BasicLogin(TestContext& testContext)
@@ -104,13 +100,13 @@ namespace PlayFabUnit
 
     void PlayFabEventTest::OnEventsApiSucceeded(const PlayFab::EventsModels::WriteEventsResponse&, void* customData)
     {
-        TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+        TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Pass();
     }
 
     void PlayFabEventTest::OnEventsApiFailed(const PlayFab::PlayFabError& error, void* customData)
     {
-        TestContext* testContext = reinterpret_cast<TestContext*>(customData);
+        TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Fail(error.GenerateErrorReport());
     }
 

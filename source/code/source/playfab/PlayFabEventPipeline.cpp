@@ -81,28 +81,28 @@ namespace PlayFab
             // put event into buffer
             switch (this->buffer.TryPut(request))
             {
-                case Result::Success:
-                    return;
+            case Result::Success:
+                return;
 
-                case Result::Overflow:
-                {
-                    emitResult = EmitEventResult::Overflow;
-                    LOG_PIPELINE("Buffer overflow");
-                }
-                break;
+            case Result::Overflow:
+            {
+                emitResult = EmitEventResult::Overflow;
+                LOG_PIPELINE("Buffer overflow");
+            }
+            break;
 
-                case Result::Disabled:
-                {
-                    emitResult = EmitEventResult::Disabled;
-                }
-                break;
+            case Result::Disabled:
+            {
+                emitResult = EmitEventResult::Disabled;
+            }
+            break;
 
-                default:
-                {
-                    emitResult = EmitEventResult::NotSupported;
-                    LOG_PIPELINE("TryPut returned an unknown type of result");
-                }
-                break;
+            default:
+            {
+                emitResult = EmitEventResult::NotSupported;
+                LOG_PIPELINE("TryPut returned an unknown type of result");
+            }
+            break;
             }
 
             // pipeline failed to intake the event, create a response
@@ -110,7 +110,7 @@ namespace PlayFab
             auto playFabEmitEventResponse = std::make_shared<PlayFabEmitEventResponse>();
             playFabEmitEventResponse->emitEventResult = emitResult;
 
-            std::shared_ptr<PlayFabError> emitEventError  = std::make_shared<PlayFabError>();
+            std::shared_ptr<PlayFabError> emitEventError = std::make_shared<PlayFabError>();
 
             emitEventError->ErrorName = "PlayFabEventPipeline IntakeEvent Error";
             emitEventError->ErrorMessage = "PlayFabEventPipeline did not accept the event. Please see ErrorDetails for more information.";
@@ -118,7 +118,7 @@ namespace PlayFab
             emitEventError->HttpCode = 0;
             emitEventError->HttpStatus = "None";
 
-            if(emitResult == EmitEventResult::Overflow)
+            if (emitResult == EmitEventResult::Overflow)
             {
                 emitEventError->ErrorDetails = "PlayFabEventPipeline was unable to take the event due to memory limits. Please wait for batching to complete before retrying or increase the PlayFabEventBuffer size (see its constructor)";
             }
@@ -173,30 +173,30 @@ namespace PlayFab
 
                 switch (this->buffer.TryTake(request))
                 {
-                    case Result::Success:
+                case Result::Success:
+                {
+                    // add an event to batch
+                    this->batch.push_back(std::move(request));
+
+                    // if batch is full
+                    if (this->batch.size() >= this->settings->maximalNumberOfItemsInBatch)
                     {
-                        // add an event to batch
-                        this->batch.push_back(std::move(request));
-
-                        // if batch is full
-                        if (this->batch.size() >= this->settings->maximalNumberOfItemsInBatch)
-                        {
-                            this->SendBatch(batchCounter);
-                        }
-                        else if (this->batch.size() == 1)
-                        {
-                            // if it is the first event in an incomplete batch then set the batch creation moment
-                            momentBatchStarted = clock::now();
-                        }
-
-                        continue; // immediately check if there is next event in buffer
+                        this->SendBatch(batchCounter);
                     }
-                    break;
+                    else if (this->batch.size() == 1)
+                    {
+                        // if it is the first event in an incomplete batch then set the batch creation moment
+                        momentBatchStarted = clock::now();
+                    }
 
-                    case Result::Disabled:
-                    case Result::Empty:
-                    default:
-                        break;
+                    continue; // immediately check if there is next event in buffer
+                }
+                break;
+
+                case Result::Disabled:
+                case Result::Empty:
+                default:
+                    break;
                 }
 
                 // if batch was started
@@ -229,7 +229,7 @@ namespace PlayFab
                     }
                 } // UNLOCK userCallbackMutex
             }
-            catch(...)
+            catch (...)
             {
                 LOG_PIPELINE("A non std::exception was caught in PlayFabEventPipeline::WorkerThread method");
             }

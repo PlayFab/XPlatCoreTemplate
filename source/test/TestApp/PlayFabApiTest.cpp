@@ -276,6 +276,24 @@ namespace PlayFabUnit
     // Parameter types tested: DateTime
     void PlayFabApiTest::GetServerTime(TestContext& testContext)
     {
+        TimePoint nowTP = GetTimePointNow();
+        tm timeInfoTP = TimePointToUtcTm(nowTP);
+        int actualYearTP = timeInfoTP.tm_year + 1900; // Definition of tm_year is "years since 1900"
+        if (!(2019 <= actualYearTP && actualYearTP <= 2025))
+        {
+            testContext.Fail("Suspicious year associated with \"GetTimePointNow\" in PlayFab time library: " + std::to_string(actualYearTP));
+            return;
+        }
+
+        time_t nowTT = GetTimeTNow();
+        tm timeInfoTT = TimeTToUtcTm(nowTT);
+        int actualYearTT = timeInfoTT.tm_year + 1900; // Definition of tm_year is "years since 1900"
+        if (!(2019 <= actualYearTT && actualYearTT <= 2025))
+        {
+            testContext.Fail("Suspicious year associated with \"GetTimeTNow\" in PlayFab time library: " + std::to_string(actualYearTT));
+            return;
+        }
+
         if (!PlayFabClientAPI::IsClientLoggedIn())
         {
             testContext.Skip("Earlier tests failed to log in");
@@ -290,17 +308,19 @@ namespace PlayFabUnit
     }
     void PlayFabApiTest::OnGetServerTime(const GetTimeResult& result, void* customData)
     {
-        testMessageTime = std::chrono::system_clock::from_time_t(result.Time);
+        testMessageTime = TimeTToTimePoint(result.Time);
 
         TimePoint now = GetTimePointNow();
         TimePoint minTime = now - std::chrono::minutes(5);
         TimePoint maxTime = now + std::chrono::minutes(5);
 
         TestContext* testContext = static_cast<TestContext*>(customData);
-        if (!(minTime <= testMessageTime && testMessageTime <= maxTime))
-            testContext->Fail("DateTime not parsed correctly.");
+        if (minTime > testMessageTime)
+            testContext->Fail("DateTime too early. ExpectedNowMin:" + TimePointToIso8601String(minTime) + " > actualServer:" + TimePointToIso8601String(testMessageTime) + ", From Original server: " + TimeTToIso8601String(result.Time));
+        else if (testMessageTime > maxTime)
+            testContext->Fail("DateTime too late. ExpectedNowMax:" + TimePointToIso8601String(maxTime) + " < actualServer:" + TimePointToIso8601String(testMessageTime) + ", From Original server: " + TimeTToIso8601String(result.Time));
         else
-            testContext->Pass();
+            testContext->Pass(TimeTToIso8601String(result.Time));
     }
 
     // CLIENT API
