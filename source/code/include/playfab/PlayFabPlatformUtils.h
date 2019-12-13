@@ -17,6 +17,7 @@ namespace PlayFab
     // The primary purpose of these format strings is to communicate to and from the PlayFab server with consistent accuracy across platforms supported by this SDK
     constexpr char TIMESTAMP_READ_FORMAT[] = "%Y-%m-%dT%T";
     constexpr char TIMESTAMP_WRITE_FORMAT[] = "%Y-%m-%dT%H:%M:%S.000Z";
+    constexpr int TIMESTAMP_BUFFER_SIZE = 64; // Arbitrary number sufficiently large enough to contain the timestamp strings sent by PlayFab server
 
     // Initialize may be required on some platforms
     inline void InitializeClock()
@@ -97,8 +98,8 @@ namespace PlayFab
     // Time Serialization
     inline std::string UtcTmToIso8601String(const tm& input)
     {
-        char buff[64];
-        strftime(buff, 64, TIMESTAMP_WRITE_FORMAT, &input);
+        char buff[TIMESTAMP_BUFFER_SIZE];
+        strftime(buff, TIMESTAMP_BUFFER_SIZE, TIMESTAMP_WRITE_FORMAT, &input);
         return buff;
     }
 
