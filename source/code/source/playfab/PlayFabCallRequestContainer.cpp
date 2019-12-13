@@ -72,6 +72,7 @@ namespace PlayFab
     void CallRequestContainer::SetRequestId(const std::string& newRequestId)
     {
         this->requestId = newRequestId;
+        this->errorWrapper.RequestId = newRequestId;
     }
 
     bool CallRequestContainer::HandleInvalidSettings()
