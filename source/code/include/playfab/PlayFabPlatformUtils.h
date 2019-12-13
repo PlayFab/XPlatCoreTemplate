@@ -85,13 +85,13 @@ namespace PlayFab
     }
 
     // Get a tick count that represents now in milliseconds (not useful for absolute time)
-    inline long GetMilliTicks()
+    inline Int64 GetMilliTicks()
     {
 #if defined(PLAYFAB_PLATFORM_SWITCH)
         static_assert("You must request the Nintendo specific XPlat SDK from PlayFab support.");
 #else
         auto msClock = std::chrono::time_point_cast<std::chrono::milliseconds>(Clock::now());
-        return static_cast<long>(msClock.time_since_epoch().count());
+        return static_cast<Int64>(msClock.time_since_epoch().count());
 #endif
     }
 

@@ -33,8 +33,8 @@ namespace PlayFabUnit
         std::string testResultMsg;
         TestFunc testFunc;
         TestCase* testCase;
-        long startTime;
-        long endTime;
+        Int64 startTime;
+        Int64 endTime;
 
         void EndTest(TestFinishState state, const std::string& resultMsg);
 
