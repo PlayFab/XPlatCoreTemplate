@@ -57,11 +57,11 @@ namespace PlayFabUnit
     public:
         TestSuiteReport internalReport;
 
-        TestReport(std::string testName);
+        TestReport(const std::string& testName);
 
         void TestStarted();
 
-        void TestComplete(std::string testName, TestFinishState testFinishState, long testDurationMs, std::string message);
+        void TestComplete(const std::string& testName, TestFinishState testFinishState, long testDurationMs, std::string message);
 
         bool AllTestsPassed();
     };

@@ -40,7 +40,7 @@ namespace PlayFabUnit
         }
     }
 
-    TestReport::TestReport(std::string className)
+    TestReport::TestReport(const std::string& className)
     {
         internalReport.name = className;
         internalReport.timeStamp = PlayFab::GetMilliTicks();
@@ -56,7 +56,7 @@ namespace PlayFabUnit
         internalReport.tests += 1;
     }
 
-    void TestReport::TestComplete(std::string testName, TestFinishState testFinishState, long testDurationMs, std::string message)
+    void TestReport::TestComplete(const std::string& testName, TestFinishState testFinishState, long testDurationMs, std::string message)
     {
         // Add a new TestCaseReport for the completed test.
         std::shared_ptr<TestCaseReport> testReport = std::make_shared<TestCaseReport>();

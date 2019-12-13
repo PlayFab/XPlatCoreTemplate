@@ -40,10 +40,13 @@ namespace PlayFab
     inline tm TimeTToUtcTm(time_t input)
     {
         tm timeInfo;
-#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX) || defined(PLAYFAB_PLATFORM_PLAYSTATION)
-#define gmtime_r gmtime_s
-#endif
+#if defined(PLAYFAB_PLATFORM_PLAYSTATION)
+        gmtime_s(&input, &timeInfo);
+#elif defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+        gmtime_s(&timeInfo, &input);
+#else
         gmtime_r(&input, &timeInfo);
+#endif
         return timeInfo;
     }
 
@@ -51,10 +54,9 @@ namespace PlayFab
     {
 #if defined(PLAYFAB_PLATFORM_PLAYSTATION)
         return mktime(&input);
+#elif defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+        return _mkgmtime(&input);
 #else
-#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
-#define timegm _mkgmtime
-#endif
         return timegm(&input);
 #endif
     }
@@ -64,7 +66,7 @@ namespace PlayFab
         return TimeTToUtcTm(Clock::to_time_t(input));
     }
 
-    inline TimePoint UtcTmToTimePoint(tm input)
+    inline TimePoint UtcTmToTimePoint(const tm& input)
     {
         return TimeTToTimePoint(UtcTmToTimeT(input));
     }
@@ -93,7 +95,7 @@ namespace PlayFab
     }
 
     // Time Serialization
-    inline std::string UtcTmToIso8601String(tm input)
+    inline std::string UtcTmToIso8601String(const tm& input)
     {
         char buff[64];
         strftime(buff, 64, TIMESTAMP_WRITE_FORMAT, &input);
@@ -113,7 +115,7 @@ namespace PlayFab
         return UtcTmToIso8601String(TimeTToUtcTm(input));
     }
 
-    inline time_t Iso8601StringToTimeT(std::string input)
+    inline time_t Iso8601StringToTimeT(const std::string& input)
     {
         return UtcTmToTimeT(Iso8601StringToTm(input));
     }
@@ -124,7 +126,7 @@ namespace PlayFab
         return UtcTmToIso8601String(TimePointToUtcTm(input));
     }
 
-    inline TimePoint Iso8601StringToTimePoint(std::string input)
+    inline TimePoint Iso8601StringToTimePoint(const std::string& input)
     {
         return UtcTmToTimePoint(Iso8601StringToTm(input));
     }

@@ -84,7 +84,7 @@ namespace PlayFabUnit
         /// <summary>
         virtual void AddTests() = 0;
 
-        template <class T> void AddTest(std::string name, void(T::* testCaseFunc)(TestContext&))
+        template <class T> void AddTest(const std::string& name, void(T::* testCaseFunc)(TestContext&))
         {
             T* testCase = static_cast<T*>(this);
             const auto& testFunc = std::bind(testCaseFunc, testCase, std::placeholders::_1);
