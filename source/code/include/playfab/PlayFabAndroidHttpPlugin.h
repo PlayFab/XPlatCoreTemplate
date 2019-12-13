@@ -35,7 +35,7 @@ namespace PlayFab
         virtual void SetPredefinedHeaders(const RequestTask& requestTask);
         virtual void SetHeader(const RequestTask& requestTask, const char* name, const char* value);
         virtual bool GetBinaryPayload(RequestTask& requestTask, void*& payload, size_t& payloadSize) const;
-        virtual void ProcessResponse(RequestTask& requestTask, const int httpCode, const std::string& requestId);
+        virtual void ProcessResponse(RequestTask& requestTask, const int httpCode);
         virtual void HandleResults(RequestTask& requestTask);
 
         struct RequestImpl;

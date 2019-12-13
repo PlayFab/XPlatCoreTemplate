@@ -562,7 +562,6 @@ namespace PlayFab
                 }
             }
 
-            std::string requestId = "initializingRequestId";
             {
                 methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "getRequestIdFromHeader","()[B");
                 if (methodId)
@@ -576,7 +575,7 @@ namespace PlayFab
                             std::vector<uint8_t> requestIdBuffer(static_cast<size_t>(requestIdSize));
                             jniEnv->GetByteArrayRegion(requestIdBytes, 0, requestIdSize, reinterpret_cast<jbyte*>(requestIdBuffer.data()));
                             std::string reqId(reinterpret_cast<const char*>(requestIdBuffer.data()), requestIdBuffer.size());
-                            requestId = reqId;
+                            requestContainer.SetRequestID(reqId)
                         }
                     }
                 }
@@ -618,8 +617,7 @@ namespace PlayFab
     void PlayFabAndroidHttpPlugin::SetResponseAsBadRequest(RequestTask& requestTask)
     {
         CallRequestContainer& requestContainer = this->requestingTask->RequestContainer();
-        std::string temp = "NoID-BadRequest";
-        ProcessResponse(*(this->requestingTask), 400, temp); // 400 Bad Request
+        ProcessResponse(*(this->requestingTask), 400); // 400 Bad Request
     }
 
     void PlayFabAndroidHttpPlugin::SetPredefinedHeaders(const RequestTask& requestTask)
@@ -674,15 +672,13 @@ namespace PlayFab
         return false;
     }
 
-    void PlayFabAndroidHttpPlugin::ProcessResponse(RequestTask& requestTask, const int httpCode, const std::string& requestId)
+    void PlayFabAndroidHttpPlugin::ProcessResponse(RequestTask& requestTask, const int httpCode)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
         Json::CharReaderBuilder jsonReaderFactory;
         std::unique_ptr<Json::CharReader> jsonReader(jsonReaderFactory.newCharReader());
         JSONCPP_STRING jsonParseErrors;
         const bool parsedSuccessfully = jsonReader->parse(requestContainer.responseString.c_str(), requestContainer.responseString.c_str() + requestContainer.responseString.length(), &requestContainer.responseJson, &jsonParseErrors);
-
-        requestContainer.errorWrapper.RequestId = requestId;
 
         if (parsedSuccessfully)
         {
