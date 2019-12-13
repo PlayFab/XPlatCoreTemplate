@@ -62,7 +62,6 @@ namespace PlayFabUnit
         void GenericMultiThreadedTest(uint32_t pNumThreads, uint32_t pNumEventsPerThread);
 
         // State
-        bool loggedIn;
         TestContext* eventTestContext;
         const int eventEmitCount = 6;
         size_t eventBatchMax;

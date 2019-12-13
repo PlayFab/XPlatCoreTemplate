@@ -81,12 +81,9 @@ namespace PlayFabUnit
         testRunner.Add(platformSpecificTest);
 #endif
 
-#if !defined(PLAYFAB_PLATFORM_PLAYSTATION)
-        // These tests don't work on all platforms atm
         PlayFabEventTest pfEventTest;
         pfEventTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfEventTest);
-#endif
 
         PlayFabTestMultiUserStatic pfMultiUserStaticTest;
         pfMultiUserStaticTest.SetTitleInfo(testTitleData);
