@@ -91,7 +91,7 @@ namespace PlayFab
         static_assert("You must request the Nintendo specific XPlat SDK from PlayFab support.");
 #else
         auto msClock = std::chrono::time_point_cast<std::chrono::milliseconds>(Clock::now());
-        return static_cast<Int64>(msClock.time_since_epoch().count());
+        return msClock.time_since_epoch().count();
 #endif
     }
 
