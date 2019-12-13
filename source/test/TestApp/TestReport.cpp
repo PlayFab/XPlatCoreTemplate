@@ -85,7 +85,7 @@ namespace PlayFabUnit
 
         // Update overall runtime.
         // TODO: Add hooks for SuiteSetUp and SuiteTearDown, so this can be estimated more accurately
-        internalReport.time = PlayFab::GetMilliTicks() - internalReport.timeStamp; // For now, update the duration on every test complete - the last one will be essentially correct
+        internalReport.time = (PlayFab::GetMilliTicks() - internalReport.timeStamp) / 1000.0; // For now, update the duration on every test complete - the last one will be essentially correct
     }
 
     bool TestReport::AllTestsPassed()
