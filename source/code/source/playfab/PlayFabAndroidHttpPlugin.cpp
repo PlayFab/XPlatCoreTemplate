@@ -575,7 +575,7 @@ namespace PlayFab
                             std::vector<uint8_t> requestIdBuffer(static_cast<size_t>(requestIdSize));
                             jniEnv->GetByteArrayRegion(requestIdBytes, 0, requestIdSize, reinterpret_cast<jbyte*>(requestIdBuffer.data()));
                             std::string reqId(reinterpret_cast<const char*>(requestIdBuffer.data()), requestIdBuffer.size());
-                            requestContainer.SetRequestID(reqId);
+                            requestContainer.SetRequestId(reqId);
                         }
                     }
                 }
@@ -597,7 +597,7 @@ namespace PlayFab
 
                             std::string body(reinterpret_cast<const char* >(bodyBuffer.data()), bodyBuffer.size());
                             requestContainer.responseString = body;
-                            ProcessResponse(*(this->requestingTask), static_cast<const int>(httpCode), requestId);
+                            ProcessResponse(*(this->requestingTask), static_cast<const int>(httpCode));
                         }
 
                         jniEnv->DeleteLocalRef(responseBody);
