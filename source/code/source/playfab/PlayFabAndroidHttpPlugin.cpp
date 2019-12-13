@@ -575,7 +575,7 @@ namespace PlayFab
                             std::vector<uint8_t> requestIdBuffer(static_cast<size_t>(requestIdSize));
                             jniEnv->GetByteArrayRegion(requestIdBytes, 0, requestIdSize, reinterpret_cast<jbyte*>(requestIdBuffer.data()));
                             std::string reqId(reinterpret_cast<const char*>(requestIdBuffer.data()), requestIdBuffer.size());
-                            requestContainer.SetRequestID(reqId)
+                            requestContainer.SetRequestID(reqId);
                         }
                     }
                 }
