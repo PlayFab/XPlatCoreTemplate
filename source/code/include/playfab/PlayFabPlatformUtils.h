@@ -40,7 +40,7 @@ namespace PlayFab
     inline tm TimeTToUtcTm(time_t input)
     {
         tm timeInfo;
-#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX) || defined(PLAYFAB_PLATFORM_PLAYSTATION)
 #define gmtime_r gmtime_s
 #endif
         gmtime_r(&input, &timeInfo);
@@ -49,10 +49,14 @@ namespace PlayFab
 
     inline time_t UtcTmToTimeT(tm input)
     {
+#if defined(PLAYFAB_PLATFORM_PLAYSTATION)
+        return mktime(&input);
+#else
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #define timegm _mkgmtime
 #endif
         return timegm(&input);
+#endif
     }
 
     inline tm TimePointToUtcTm(TimePoint input)
@@ -84,7 +88,7 @@ namespace PlayFab
         static_assert("You must request the Nintendo specific XPlat SDK from PlayFab support.");
 #else
         auto msClock = std::chrono::time_point_cast<std::chrono::milliseconds>(Clock::now());
-        return msClock.time_since_epoch().count();
+        return static_cast<long>(msClock.time_since_epoch().count());
 #endif
     }
 
