@@ -563,6 +563,25 @@ namespace PlayFab
             }
 
             {
+                methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "getRequestIdFromHeader","()[B");
+                if (methodId)
+                {
+                    jbyteArray requestIdBytes = (jbyteArray)jniEnv->CallObjectMethod(httpRequestObject, methodId);
+                    if(requestIdBytes != nullptr)
+                    {
+                        int requestIdSize = jniEnv->GetArrayLength(requestIdBytes);
+                        if(requestIdSize > 0)
+                        {
+                            std::vector<uint8_t> requestIdBuffer(static_cast<size_t>(requestIdSize));
+                            jniEnv->GetByteArrayRegion(requestIdBytes, 0, requestIdSize, reinterpret_cast<jbyte*>(requestIdBuffer.data()));
+                            std::string reqId(reinterpret_cast<const char*>(requestIdBuffer.data()), requestIdBuffer.size());
+                            requestContainer.SetRequestId(reqId);
+                        }
+                    }
+                }
+            }
+
+            {
                 methodId = jniEnv->GetMethodID(GetHelper().GetHttpRequestClass(), "getResponseHttpBody", "()[B");
                 if (methodId)
                 {
@@ -660,8 +679,6 @@ namespace PlayFab
         std::unique_ptr<Json::CharReader> jsonReader(jsonReaderFactory.newCharReader());
         JSONCPP_STRING jsonParseErrors;
         const bool parsedSuccessfully = jsonReader->parse(requestContainer.responseString.c_str(), requestContainer.responseString.c_str() + requestContainer.responseString.length(), &requestContainer.responseJson, &jsonParseErrors);
-
-        requestContainer.errorWrapper.RequestId = requestContainer.GetRequestId();
 
         if (parsedSuccessfully)
         {
