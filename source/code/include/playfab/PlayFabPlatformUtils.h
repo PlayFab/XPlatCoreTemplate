@@ -104,7 +104,7 @@ namespace PlayFab
 
     inline tm Iso8601StringToTm(const std::string& utcString)
     {
-        tm timeInfo;
+        tm timeInfo{ 0 };
         std::istringstream iss(utcString);
         iss >> std::get_time(&timeInfo, TIMESTAMP_READ_FORMAT);
         return timeInfo;
