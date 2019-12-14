@@ -6,11 +6,11 @@
 
 namespace PlayFabUnit
 {
-    void TestContext::EndTest(TestFinishState state, std::string resultMsg)
+    void TestContext::EndTest(TestFinishState state, const std::string& resultMsg)
     {
         if (finishState == TestFinishState::PENDING) // This means that we finish successfully
         {
-            endTime = PlayFab::GetTimePointNow();
+            endTime = PlayFab::GetMilliTicks();
             testResultMsg = resultMsg;
             finishState = state;
             activeState = TestActiveState::READY;
@@ -101,7 +101,7 @@ namespace PlayFabUnit
         }
     }
 
-    void TestContext::Pass(std::string message)
+    void TestContext::Pass(const std::string& message)
     {
         EndTest(TestFinishState::PASSED, message);
     }
@@ -117,7 +117,7 @@ namespace PlayFabUnit
         // TODO: Throw "assert" exception
     }
 
-    void TestContext::Skip(std::string message)
+    void TestContext::Skip(const std::string& message)
     {
         EndTest(TestFinishState::SKIPPED, message);
         // TODO: Throw "test skipped" exception

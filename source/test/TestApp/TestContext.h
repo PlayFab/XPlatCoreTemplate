@@ -17,7 +17,7 @@ namespace PlayFabUnit
 
     struct TestContext
     {
-        TestContext(TestCase* testCase, std::string name, TestFunc func) :
+        TestContext(TestCase* testCase, const std::string& name, TestFunc func) :
             testName(name),
             activeState(TestActiveState::PENDING),
             finishState(TestFinishState::PENDING),
@@ -33,13 +33,13 @@ namespace PlayFabUnit
         std::string testResultMsg;
         TestFunc testFunc;
         TestCase* testCase;
-        PlayFab::TimePoint startTime;
-        PlayFab::TimePoint endTime;
+        Int64 startTime;
+        Int64 endTime;
 
-        void EndTest(TestFinishState state, std::string resultMsg);
+        void EndTest(TestFinishState state, const std::string& resultMsg);
 
-        void Pass(std::string message = "");
+        void Pass(const std::string& message = "");
         void Fail(std::string message = "");
-        void Skip(std::string message = "");
+        void Skip(const std::string& message = "");
     };
 }

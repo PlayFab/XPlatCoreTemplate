@@ -256,7 +256,7 @@ namespace PlayFab
                 requestTask = std::make_shared<RequestTask>();
                 requestTask->Initialize(requestContainer);
             }
-            catch (const std::exception & ex)
+            catch (const std::exception& ex)
             {
                 PlayFabPluginManager::GetInstance().HandleException(ex);
             }
