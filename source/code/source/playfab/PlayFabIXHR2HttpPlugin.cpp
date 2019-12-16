@@ -129,7 +129,7 @@ namespace PlayFab
         reportErrorAsSuccessHeader.wstrHeaderValue = L"true";
         headers.push_back(std::move(reportErrorAsSuccessHeader));
 
-        const std::unordered_map<std::string, std::string> reqHeaders = reqContainer.GetHeaders();
+        const std::unordered_map<std::string, std::string> reqHeaders = reqContainer.GetRequestHeaders();
 
         if (reqHeaders.size() > 0)
         {
@@ -188,7 +188,7 @@ namespace PlayFab
             reqContainer.errorWrapper.HttpCode = 401;
             reqContainer.errorWrapper.HttpStatus = "Access denied";
 
-            reqContainer.errorWrapper.ErrorCode = PlayFabErrorConnectionRefused;
+            reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorConnectionRefused;
             reqContainer.errorWrapper.ErrorName = "Access denied";
             reqContainer.errorWrapper.ErrorMessage = "Failed to contact server, error: " + std::to_string(res);
             HandleCallback(std::move(requestContainer));
