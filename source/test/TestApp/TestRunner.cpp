@@ -85,6 +85,7 @@ namespace PlayFabUnit
             test->endTime = PlayFab::GetMilliTicks();
             test->testCase->TearDown(*test);
             test->activeState = TestActiveState::COMPLETE;
+            // printf("\n%s\n", suiteTestSummary.c_str()); // If we're debugging EventTests, it's nice to see each test as it happens...
 
             // Update the report.
             Int64 testDurationMs = test->endTime - test->startTime;
@@ -139,7 +140,7 @@ namespace PlayFabUnit
             }
 
             // Line for each test report
-            Int64 testDurationMs = test->endTime - test->startTime;
+            Int64 testDurationMs = testEndTime - testStartTime;
             summaryStream << std::setw(10) << testDurationMs << " ms";
             summaryStream << " - " << ToString(test->finishState);
             summaryStream << " - " << test->testName;

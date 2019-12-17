@@ -2,8 +2,11 @@
 
 #pragma once
 
-#include <string>
+#include <condition_variable>
 #include <memory>
+#include <mutex>
+#include <string>
+
 #include "TestDataTypes.h"
 
 namespace PlayFab
@@ -30,6 +33,9 @@ namespace PlayFabUnit
         // Cloud Report
         std::string cloudResponse = "";
         std::string cloudPlayFabId = "";
+        std::mutex cloudResponseMutex;
+        std::condition_variable cloudResponseConditionVar;
+
         void OnPostReportLogin(const PlayFab::ClientModels::LoginResult& result, void* customData);
         void OnPostReportComplete(const PlayFab::ClientModels::ExecuteCloudScriptResult& result, void* /*customData*/);
         void OnPostReportError(const PlayFab::PlayFabError& error, void* /*customData*/);

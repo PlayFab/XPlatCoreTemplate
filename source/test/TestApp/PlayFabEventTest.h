@@ -24,6 +24,13 @@ namespace PlayFabUnit
 {
     struct TestContext;
 
+    // A wrapper around TestEvents, so we can track it back to the test that launched the event
+    class TestEvent : public PlayFab::PlayFabEvent
+    {
+    public:
+        TestContext* testContext;
+    };
+
     class PlayFabEventTest : public PlayFabApiTestCase
     {
     private:
@@ -59,10 +66,9 @@ namespace PlayFabUnit
         void ManyThreadsLowEventsPerTest(TestContext& testContext);
         void FewThreadsHighEventsPerTest(TestContext& testContext);
 
-        void GenericMultiThreadedTest(uint32_t pNumThreads, uint32_t pNumEventsPerThread);
+        void GenericMultiThreadedTest(TestContext& testContext, uint32_t pNumThreads, uint32_t pNumEventsPerThread);
 
         // State
-        TestContext* eventTestContext;
         const int eventEmitCount = 6;
         size_t eventBatchMax;
         int eventPassCount;
@@ -73,7 +79,7 @@ namespace PlayFabUnit
         std::atomic<uint32_t> eventCounter;
 
         // Utility
-        void EmitEvents(PlayFab::PlayFabEventType eventType, int maxBatchWaitTime = 2, int maxItemsInBatch = 3, int maxBatchesInFlight = 10);
+        void EmitEvents(TestContext& testContext, PlayFab::PlayFabEventType eventType, int maxBatchWaitTime = 2, int maxItemsInBatch = 3, int maxBatchesInFlight = 10);
         void EmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
         void NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
 
@@ -87,7 +93,7 @@ namespace PlayFabUnit
         }
 
         std::shared_ptr<PlayFab::PlayFabEventAPI> SetupEventTest(int maxBatchWaitTime = 2, int maxItemSinBatch = 3, int maxBatchesInFlight = 10);
-        std::unique_ptr<PlayFab::PlayFabEvent> MakeEvent(PlayFab::PlayFabEventType eventType);
+        std::unique_ptr<PlayFab::PlayFabEvent> MakeEvent(TestContext& testContext, PlayFab::PlayFabEventType eventType);
 
     protected:
         void AddTests() override;
