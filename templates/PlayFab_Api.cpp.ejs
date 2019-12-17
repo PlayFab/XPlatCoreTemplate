@@ -62,7 +62,7 @@ namespace PlayFab
         http.MakePostRequest(std::unique_ptr<CallRequestContainerBase>(static_cast<CallRequestContainerBase*>(reqContainer.release())));
     }
 
-    void PlayFab<%- api.name %>API::On<%- apiCall.name %>Result(int httpCode, const std::string& result, const std::shared_ptr<CallRequestContainerBase>& reqContainer)
+    void PlayFab<%- api.name %>API::On<%- apiCall.name %>Result(int /*httpCode*/, const std::string& /*result*/, const std::shared_ptr<CallRequestContainerBase>& reqContainer)
     {
         CallRequestContainer& container = static_cast<CallRequestContainer&>(*reqContainer);
         std::shared_ptr<PlayFabAuthenticationContext> context = container.GetContext();
