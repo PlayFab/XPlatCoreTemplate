@@ -18,7 +18,7 @@ namespace PlayFabUnit
     {
         PENDING, // Not started
         ACTIVE, // Currently testing
-        READY, // An answer is sent by the http thread, but the main thread hasn't finalized the test yet
+        READY, // An answer is sent by the (potentially) alternate thread, but the main thread hasn't finalized the test yet
         COMPLETE, // Test is finalized and recorded
         ABORTED // todo
     };
@@ -31,4 +31,5 @@ namespace PlayFabUnit
         SKIPPED,
         TIMEDOUT
     };
+    static const char* TestFinishStateToString[] = { "PENDING", "PASSED", "FAILED", "SKIPPED", "TIMEDOUT" };
 }

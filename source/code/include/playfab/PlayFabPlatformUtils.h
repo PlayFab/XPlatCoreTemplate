@@ -28,7 +28,7 @@ namespace PlayFab
     }
 
     // Time type conversions
-    inline time_t TimePointToTimeT(TimePoint input)
+    inline time_t TimePointToTimeT(const TimePoint& input)
     {
         return Clock::to_time_t(input);
     }
@@ -62,7 +62,7 @@ namespace PlayFab
 #endif
     }
 
-    inline tm TimePointToUtcTm(TimePoint input)
+    inline tm TimePointToUtcTm(const TimePoint& input)
     {
         return TimeTToUtcTm(Clock::to_time_t(input));
     }
@@ -122,7 +122,7 @@ namespace PlayFab
     }
 
     // TODO: Invert this conversion at some point, and serialize the milliseconds as well
-    inline std::string TimePointToIso8601String(TimePoint input)
+    inline std::string TimePointToIso8601String(const TimePoint& input)
     {
         return UtcTmToIso8601String(TimePointToUtcTm(input));
     }
