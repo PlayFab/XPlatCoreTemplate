@@ -1,12 +1,15 @@
 #pragma once
 
-<%- getApiDefine(api) %>
+<%- getApiDefine(api) %><%- remStaticDefine %>
 
-#include <playfab/PlayFabCallRequestContainer.h>
 #include <playfab/PlayFab<%- api.name %>DataModels.h>
+#include <playfab/PlayFabError.h>
 
 namespace PlayFab
 {
+    class CallRequestContainerBase;
+    class CallRequestContainer;
+
     /// <summary>
     /// Main interface for PlayFab Sdk, specifically all <%- api.name %> APIs
     /// </summary>

@@ -7,9 +7,10 @@ if (typeof templatizeTree === "undefined") templatizeTree = function () { };
 exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     console.log("Generating Combined api from: " + sourceDir + " to: " + apiOutputDir);
 
-    var libDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;";
-    var clientDefines = "";
-    var serverDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;DISABLE_PLAYFABCLIENT_API;";
+    var removeStatic = ""; // "DISABLE_PLAYFAB_STATIC_API;";
+    var libDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;" + removeStatic;
+    var clientDefines = "" + removeStatic;
+    var serverDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;DISABLE_PLAYFABCLIENT_API;" + removeStatic;
 
     var locals = {
         apis: apis,
@@ -31,6 +32,8 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
 };
 
 function makeApiFiles(api, sourceDir, apiOutputDir) {
+    var remStaticDefine = ""; // " && !defined(DISABLE_PLAYFAB_STATIC_API)";
+
     var locals = {
         api: api,
         enumtypes: getEnumTypes(api.datatypes),
@@ -46,6 +49,7 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
         hasClientOptions: getAuthMechanisms([api]).includes("SessionTicket"),
         hasAuthParams: hasAuthParams,
         ifHasProps: ifHasProps,
+        remStaticDefine: remStaticDefine,
         sdkVersion: sdkGlobals.sdkVersion,
         sortedClasses: getSortedClasses(api.datatypes)
     };
@@ -103,14 +107,14 @@ function getSortedClasses(datatypes) {
 // *************************** ejs-exposed methods ***************************
 function getApiDefine(api) {
     if (api.name === "Client")
-        return "#ifndef DISABLE_PLAYFABCLIENT_API";
+        return "#if !defined(DISABLE_PLAYFABCLIENT_API)";
     if (api.name === "Matchmaker")
-        return "#ifdef ENABLE_PLAYFABSERVER_API"; // Matchmaker is bound to server, which is just a legacy design decision at this point
+        return "#if defined(ENABLE_PLAYFABSERVER_API)"; // Matchmaker is bound to server, which is just a legacy design decision at this point
     if (api.name === "Admin" || api.name === "Server")
-        return "#ifdef ENABLE_PLAYFAB" + api.name.toUpperCase() + "_API";
+        return "#if defined(ENABLE_PLAYFAB" + api.name.toUpperCase() + "_API)";
 
     // For now, everything else is considered ENTITY
-    return "#ifndef DISABLE_PLAYFABENTITY_API";
+    return "#if !defined(DISABLE_PLAYFABENTITY_API)";
 }
 
 function hasAuthParams(apiCall) {

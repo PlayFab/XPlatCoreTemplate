@@ -15,7 +15,7 @@ namespace PlayFab
     const std::shared_ptr<PlayFabApiSettings> PlayFabSettings::staticSettings = std::make_shared<PlayFabApiSettings>();
     const std::shared_ptr<PlayFabAuthenticationContext> PlayFabSettings::staticPlayer = std::make_shared<PlayFabAuthenticationContext>();
 
-#ifndef DISABLE_PLAYFABCLIENT_API
+#if !defined(DISABLE_PLAYFABCLIENT_API)
     const std::string PlayFabSettings::AD_TYPE_IDFA = "Idfa";
     const std::string PlayFabSettings::AD_TYPE_ANDROID_ID = "Adid";
 #endif
