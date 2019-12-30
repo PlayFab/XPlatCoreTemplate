@@ -220,7 +220,7 @@ namespace PlayFab
                 // give some time back to CPU, don't starve it without a good reason
                 std::this_thread::sleep_for(std::chrono::milliseconds(this->settings->readBufferWaitTime));
             }
-            catch (const std::exception & ex)
+            catch (const std::exception& ex)
             {
                 LOG_PIPELINE("An exception was caught in PlayFabEventPipeline::WorkerThread method");
                 this->isWorkerThreadRunning = false;
