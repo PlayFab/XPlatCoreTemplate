@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdafx.h>
 #include <playfab/PlayFabCallRequestContainer.h>
 #include <playfab/PlayFabPluginManager.h>
 #include <playfab/PlayFabError.h>
