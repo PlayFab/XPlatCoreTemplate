@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <stdafx.h>
 #include <objbase.h>
 #include <windows.h>
 #include <string>
