@@ -1,5 +1,6 @@
 #pragma once
 
+#if defined (ENABLE_QOS)
 
 #include <playfab/QoS/QoS.h>
 #include <playfab/QoS/QoSResult.h>
@@ -60,3 +61,4 @@ namespace PlayFab
         };
     }
 }
+#endif // defined (ENABLE_QOS)

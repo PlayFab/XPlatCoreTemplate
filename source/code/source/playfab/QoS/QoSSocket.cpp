@@ -1,5 +1,7 @@
 #include <stdafx.h>
 
+#if defined (ENABLE_QOS)
+
 #include <chrono>
 #include <thread>
 #include <iostream>
@@ -88,3 +90,4 @@ namespace PlayFab
         }
     }
 }
+#endif defined (ENABLE_QOS)

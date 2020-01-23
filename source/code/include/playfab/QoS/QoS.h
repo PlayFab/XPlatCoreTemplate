@@ -3,6 +3,8 @@
 /// </summary>
 
 #pragma once
+
+#if defined (ENABLE_QOS)
 #include <iostream>
 
 // define body for logging or debug output
@@ -35,3 +37,4 @@ namespace PlayFab
         };
     }
 }
+#endif // defined (ENABLE_QOS)
