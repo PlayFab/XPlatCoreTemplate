@@ -1,3 +1,4 @@
+#if defined(PLAYFAB_PLATFORM_XBOX)
 #pragma once
 
 #include <playfab/PlayFabCallRequestContainer.h>
@@ -45,3 +46,4 @@ namespace PlayFab
         std::deque<std::unique_ptr<CallRequestContainerBase>> pendingResults;
     };
 }
+#endif // defined(PLAYFAB_PLATFORM_XBOX)

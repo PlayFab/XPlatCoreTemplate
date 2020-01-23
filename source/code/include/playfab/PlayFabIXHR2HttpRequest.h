@@ -1,3 +1,4 @@
+#if defined(PLAYFAB_PLATFORM_XBOX)
 //------------------------------------------------------------------------------
 // HttpRequest.h
 //
@@ -165,3 +166,4 @@ namespace PlayFab
     };
 
 }  // namespace PlayFab
+#endif // defined(PLAYFAB_PLATFORM_XBOX)
