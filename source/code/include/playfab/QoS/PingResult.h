@@ -1,5 +1,6 @@
 #pragma once
 
+#if defined (ENABLE_QOS)
 #include <cstdint>
 
 namespace PlayFab
@@ -26,3 +27,4 @@ namespace PlayFab
         };
     }
 }
+#endif // defined (ENABLE_QOS)

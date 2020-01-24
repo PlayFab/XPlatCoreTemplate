@@ -1,5 +1,6 @@
 #pragma once
 
+#if defined (ENABLE_QOS)
 #include <vector>
 
 #include <playfab/QoS/RegionResult.h>
@@ -28,3 +29,4 @@ namespace PlayFab
         };
     }
 }
+#endif // defined (ENABLE_QOS)

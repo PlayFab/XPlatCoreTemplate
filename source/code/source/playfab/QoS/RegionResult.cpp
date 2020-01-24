@@ -1,5 +1,6 @@
 #include <stdafx.h>
 
+#if defined (ENABLE_QOS)
 #include <playfab/QoS/RegionResult.h>
 
 namespace PlayFab
@@ -12,3 +13,4 @@ namespace PlayFab
         }
     }
 }
+#endif // defined (ENABLE_QOS)
