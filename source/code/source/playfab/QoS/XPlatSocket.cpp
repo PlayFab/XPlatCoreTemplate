@@ -1,5 +1,6 @@
 #include <stdafx.h>
 
+#if defined (ENABLE_QOS)
 #include <playfab/QoS/XPlatSocket.h>
 #include <playfab/QoS/QoS.h>
 
@@ -218,3 +219,4 @@ namespace PlayFab
 
     }
 }
+#endif // defined (ENABLE_QOS)

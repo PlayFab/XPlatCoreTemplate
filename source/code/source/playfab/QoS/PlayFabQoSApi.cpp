@@ -1,5 +1,6 @@
 #include <stdafx.h>
 
+#if defined (ENABLE_QOS)
 #include <cstdint>
 
 #include <playfab/QoS/QoS.h>
@@ -392,3 +393,4 @@ namespace PlayFab
         }
     }
 }
+#endif // defined (ENABLE_QOS)
