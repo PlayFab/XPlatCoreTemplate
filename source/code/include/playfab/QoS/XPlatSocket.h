@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined (ENABLE_QOS)
+#if defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #include <winsock2.h>
 #include <Windows.h>
@@ -82,4 +82,4 @@ namespace PlayFab
         };
     }
 }
-#endif // defined (ENABLE_QOS)
+#endif // defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)
