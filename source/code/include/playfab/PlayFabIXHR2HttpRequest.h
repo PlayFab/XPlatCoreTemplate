@@ -1,3 +1,4 @@
+#pragma once
 #if defined(PLAYFAB_PLATFORM_XBOX)
 //------------------------------------------------------------------------------
 // HttpRequest.h
@@ -9,7 +10,6 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 //------------------------------------------------------------------------------
 
-#pragma once
 
 #include <objbase.h>
 #include <windows.h>

@@ -1,5 +1,5 @@
-#if defined(PLAYFAB_PLATFORM_XBOX)
 #pragma once
+#if defined(PLAYFAB_PLATFORM_XBOX)
 
 #include <playfab/PlayFabCallRequestContainer.h>
 #include <playfab/PlayFabPluginManager.h>
