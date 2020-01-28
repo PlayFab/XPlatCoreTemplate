@@ -1,6 +1,6 @@
 #include <stdafx.h>
 
-#if defined (ENABLE_QOS)
+#if defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)
 
 #include <chrono>
 #include <thread>
@@ -90,4 +90,4 @@ namespace PlayFab
         }
     }
 }
-#endif defined (ENABLE_QOS)
+#endif // defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)

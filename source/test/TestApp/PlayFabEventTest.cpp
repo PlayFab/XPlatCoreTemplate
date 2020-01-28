@@ -11,7 +11,9 @@
 #include <playfab/PlayFabEventsDataModels.h>
 #include <playfab/PlayFabEventsInstanceApi.h>
 #include <playfab/PlayFabSettings.h>
+#if QOS_ENABLED
 #include <playfab/QoS/PlayFabQoSApi.h>
+#endif // QOS_ENABLED
 #include "PlayFabEventTest.h"
 #include "TestContext.h"
 #include "TestDataTypes.h"
@@ -22,6 +24,7 @@ using namespace EventsModels;
 
 namespace PlayFabUnit
 {
+#if QOS_ENABLED
 #if (!UNITY_IOS && !UNITY_ANDROID) && (!defined(PLAYFAB_PLATFORM_IOS) && !defined(PLAYFAB_PLATFORM_ANDROID) && !defined(PLAYFAB_PLATFORM_SWITCH))
     /// QoS API
     void PlayFabEventTest::QosResultApi(TestContext& testContext)
@@ -39,8 +42,8 @@ namespace PlayFabUnit
             testContext.Fail("Error Code:" + std::to_string(result.errorCode));
         }
     }
-#endif
-
+#endif // Platform test limits
+#endif // QOS_ENABLED
     void PlayFabEventTest::OnErrorSharedCallback(const PlayFab::PlayFabError& error, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);

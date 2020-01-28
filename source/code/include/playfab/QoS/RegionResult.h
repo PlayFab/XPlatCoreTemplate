@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined (ENABLE_QOS)
+#if defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)
 #include <string>
 #include <playfab/PlayFabMultiplayerDataModels.h>
 
@@ -28,4 +28,4 @@ namespace PlayFab
         };
     }
 }
-#endif // defined (ENABLE_QOS)
+#endif // defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)
