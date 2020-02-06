@@ -737,7 +737,10 @@ namespace PlayFabUnit
         AddTest("LoginWithAdvertisingId", &PlayFabApiTest::LoginWithAdvertisingId);
         AddTest("UserDataApi", &PlayFabApiTest::UserDataApi);
         AddTest("PlayerStatisticsApi", &PlayFabApiTest::PlayerStatisticsApi);
-        AddTest("GetServerTime", &PlayFabApiTest::GetServerTime);
+        // BUG 41168 - GetServerTime relies on the client device configurations,
+        // leading to a lot of build failures especially when moving to other platforms
+        // when we have the time, we can revisit this test and replace it with something more reliable.
+        //AddTest("GetServerTime", &PlayFabApiTest::GetServerTime);
         AddTest("UserCharacter", &PlayFabApiTest::UserCharacter);
         AddTest("LeaderBoard", &PlayFabApiTest::LeaderBoard);
         AddTest("AccountInfo", &PlayFabApiTest::AccountInfo);
