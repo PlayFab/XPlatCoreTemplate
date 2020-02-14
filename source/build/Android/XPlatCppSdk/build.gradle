@@ -29,14 +29,6 @@ android {
             path "CMakeLists.txt"
         }
     }
-
-    splits {
-        abi {
-            reset()
-
-            include "ARMEABI_V7A", "ARM64_V8A"
-        }
-    }
 }
 
 dependencies {
