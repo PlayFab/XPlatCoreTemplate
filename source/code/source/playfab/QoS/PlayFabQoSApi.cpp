@@ -22,7 +22,7 @@ namespace PlayFab
 {
     namespace QoS
     {
-        static const size_t MaxWaitForFuturesLoopCounts = 1000;
+        static const size_t MaxWaitForFuturesLoopCounts = 300;
         PlayFabQoSApi::PlayFabQoSApi()
         {
             eventsApi = std::make_shared<PlayFabEventsInstanceAPI>(PlayFabSettings::staticPlayer);
