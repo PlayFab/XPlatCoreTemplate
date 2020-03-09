@@ -20,7 +20,7 @@ namespace PlayFab
         XPlatSocket::XPlatSocket()
         {
             initialized = false;
-            timeOutVal = (struct timeval){ 0 };
+            timeOutVal = { 0 };
         }
 
         XPlatSocket::~XPlatSocket()
