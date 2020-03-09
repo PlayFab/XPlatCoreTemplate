@@ -287,7 +287,7 @@ namespace PlayFab
                 // Iterate over all the threads and servers that need to be pinged
                 for (size_t i = 0; i < numThreads && pingItr < numPings; ++i)
                 {
-                    if (asyncPingResults[i].valid()) // the very first ping result might be a fake future
+                    while (asyncPingResults[i].valid()) // the very first ping result might be a fake future
                     {
                         future_status status = asyncPingResults[i].wait_for(threadWaitTimespan);
                         if (status == future_status::ready)
