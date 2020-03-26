@@ -294,27 +294,16 @@ namespace PlayFab
         }
     }
 
+
+
     void PlayFabEventPipeline::WriteEventsApiCallback(const EventsModels::WriteEventsResponse& result, void* customData)
     {
         try
         {
-            bool batchMissingFromFlight = false;
-            std::unordered_map<void*, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>::iterator foundBatchIterator;
-
-            { // LOCK batchesInFlight mutex
-                std::unique_lock<std::mutex> lock(inFlightMutex);
-                // batch was successfully sent out, find it in the batch tracking map using customData pointer as a key
-                foundBatchIterator = this->batchesInFlight.find(customData);
-                batchMissingFromFlight = foundBatchIterator == this->batchesInFlight.end();
-            } // UNLOCK batchesInFlight
-            
-            if (batchMissingFromFlight)
+            std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batchWritten;
+            if(TryGetBatchOutOfFlight(customData, &batchWritten))
             {
-                LOG_PIPELINE("Untracked batch was returned to EventsAPI.WriteEvents callback"); // normally this never happens
-            }
-            else
-            {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(foundBatchIterator->second)));
+                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(batchWritten));
 
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
@@ -333,13 +322,12 @@ namespace PlayFab
                     // call an emit event callback
                     CallbackRequest(playFabEmitRequest, std::move(playFabEmitEventResponse));
                 }
-
-                { // LOCK batchesInFlight mutex
-                    std::unique_lock<std::mutex> lock2(inFlightMutex);
-                    // remove the batch from tracking map
-                    this->batchesInFlight.erase(foundBatchIterator->first);
-                } // UNLOCK batchesInFlight
             }
+            else
+            {
+                LOG_PIPELINE("After a balid PlayFabEventPipeline write call, the requeted return Batch did not appear in our known flighted batches, there is no trustworthy data we can return to the user");
+            }
+            
         }
         catch (...)
         {
@@ -351,23 +339,10 @@ namespace PlayFab
     {
         try
         {
-            bool batchMissingFromFlight = false;
-            std::unordered_map<void*, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>::iterator foundBatchIterator;
-
-            { // LOCK batchesInFlight mutex
-                std::unique_lock<std::mutex> lock(inFlightMutex);
-                // batch wasn't sent out due to an error, find it in the batch tracking map using customData pointer as a key
-                foundBatchIterator = this->batchesInFlight.find(customData);
-                batchMissingFromFlight = foundBatchIterator == this->batchesInFlight.end();
-            }
-            
-            if (batchMissingFromFlight)
+            std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batchWritten;
+            if(TryGetBatchOutOfFlight(customData, &batchWritten))
             {
-                LOG_PIPELINE("Untracked batch was returned to EventsAPI.WriteEvents callback"); // normally this never happens
-            }
-            else
-            {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(foundBatchIterator->second)));
+                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(batchWritten));
 
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
@@ -382,11 +357,10 @@ namespace PlayFab
                     // call an emit event callback
                     CallbackRequest(playFabEmitRequest, std::move(playFabEmitEventResponse));
                 }
-                { // LOCK batchesInFlight mutex
-                    std::unique_lock<std::mutex> lock2(inFlightMutex);
-                    // remove the batch from tracking map
-                    this->batchesInFlight.erase(foundBatchIterator->first);
-                } // UNLOCK batchesInFlight mutex
+            }
+            else
+            {
+                LOG_PIPELINE("After an invalid PlayFabEventPipeline write call error was being raised to the user, the requeted return Batch did not appear in our known flighted batches, there is no trustworthy data we can return to the user");
             }
         }
         catch (...)
@@ -408,6 +382,24 @@ namespace PlayFab
         {
             playFabEmitRequest->stdCallback(playFabEmitRequest->event, response);
         }
+    }
+
+    bool PlayFabEventPipeline::TryGetBatchOutOfFlight(void* customData, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>* batchReturn)
+    {
+        // LOCK batchesInFlight mutex
+        std::unique_lock<std::mutex> lock(inFlightMutex);
+        auto iter = this->batchesInFlight.find(customData);
+        if (iter == this->batchesInFlight.end())
+        {
+            // not finding the batch in the queue is a bug
+            LOG_PIPELINE("Untracked batch was returned to EventsAPI.WriteEvents callback"); // normally this never happens
+            return false;
+        }
+
+        *batchReturn = std::move(iter->second);
+        this->batchesInFlight.erase(iter);
+        return true;
+        // UNLOCK batchesInFlight
     }
 }
 

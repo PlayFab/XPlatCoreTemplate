@@ -100,6 +100,8 @@ namespace PlayFab
         std::atomic<bool> isWorkerThreadRunning;
         std::mutex userExceptionCallbackMutex;
         ExceptionCallback userExceptionCallback;
+
+        bool TryGetBatchOutOfFlight(void* customData, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>* batchReturn);
     };
 }
 
