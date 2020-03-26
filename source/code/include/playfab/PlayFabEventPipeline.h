@@ -73,7 +73,7 @@ namespace PlayFab
         void SetExceptionCallback(ExceptionCallback callback);
 
     protected:
-        virtual void SendBatch(size_t& batchCounter);
+        virtual void SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch, size_t& batchCounter);
 
     private:
         void WorkerThread();
@@ -89,7 +89,7 @@ namespace PlayFab
         // that would allow to quickly map a pointer (like void* customData) to a batch (like a std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>).
         std::mutex inFlightMutex;
         std::unordered_map<void*, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>> batchesInFlight;
-        std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batch;
+        //std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batch;
 
     private:
         std::shared_ptr<PlayFabEventsInstanceAPI> eventsApi;
