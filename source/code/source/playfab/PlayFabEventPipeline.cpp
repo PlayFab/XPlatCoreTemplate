@@ -184,30 +184,30 @@ namespace PlayFab
 
                 switch (this->buffer.TryTake(request))
                 {
-                    case Result::Success:
+                case Result::Success:
+                {
+                    // add an event to batch
+                    this->batch.push_back(std::move(request));
+
+                    // if batch is full
+                    if (this->batch.size() >= this->settings->maximalNumberOfItemsInBatch)
                     {
-                        // add an event to batch
-                        this->batch.push_back(std::move(request));
-
-                        // if batch is full
-                        if (this->batch.size() >= this->settings->maximalNumberOfItemsInBatch)
-                        {
-                            this->SendBatch(batchCounter);
-                        }
-                        else if (this->batch.size() == 1)
-                        {
-                            // if it is the first event in an incomplete batch then set the batch creation moment
-                            momentBatchStarted = clock::now();
-                        }
-
-                        continue; // immediately check if there is next event in buffer
+                        this->SendBatch(batchCounter);
                     }
-                    break;
+                    else if (this->batch.size() == 1)
+                    {
+                        // if it is the first event in an incomplete batch then set the batch creation moment
+                        momentBatchStarted = clock::now();
+                    }
 
-                    case Result::Disabled:
-                    case Result::Empty:
-                    default:
-                        break;
+                    continue; // immediately check if there is next event in buffer
+                }
+                break;
+
+                case Result::Disabled:
+                case Result::Empty:
+                default:
+                    break;
                 }
 
                 // if batch was started
