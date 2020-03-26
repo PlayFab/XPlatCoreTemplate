@@ -159,7 +159,7 @@ namespace PlayFab
         using clock = std::chrono::steady_clock;
         using Result = PlayFabEventBuffer::EventConsumingResult;
         std::shared_ptr<const IPlayFabEmitEventRequest> request;
-        size_t batchCounter = 1; // used to track uniqueness of batches in the map
+        uintptr_t batchCounter = 1; // used to track uniqueness of batches in the map
         std::chrono::steady_clock::time_point momentBatchStarted; // used to track when a currently assembled batch got its first event
         
         std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batch;
@@ -251,7 +251,7 @@ namespace PlayFab
         }
     }
 
-    void PlayFabEventPipeline::SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch, size_t& batchCounter)
+    void PlayFabEventPipeline::SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch, uintptr_t& batchCounter)
     {
         // create a WriteEvents API request to send the batch
         EventsModels::WriteEventsRequest batchReq;

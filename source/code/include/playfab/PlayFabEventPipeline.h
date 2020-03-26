@@ -73,7 +73,7 @@ namespace PlayFab
         void SetExceptionCallback(ExceptionCallback callback);
 
     protected:
-        virtual void SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch, size_t& batchCounter);
+        virtual void SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch, uintptr_t& batchCounter);
 
     private:
         void WorkerThread();
