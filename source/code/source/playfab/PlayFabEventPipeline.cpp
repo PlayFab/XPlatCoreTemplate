@@ -45,7 +45,6 @@ namespace PlayFab
         eventsApi = std::make_shared<PlayFabEventsInstanceAPI>(PlayFabSettings::staticPlayer);
 
         this->settings = settings;
-        //this->batch.reserve(this->settings->maximalNumberOfItemsInBatch);
         this->batchesInFlight.reserve(this->settings->maximalNumberOfBatchesInFlight);
         this->Start();
     }
@@ -174,7 +173,7 @@ namespace PlayFab
 
                 { // LOCK batchesInFlight mutex
                     std::unique_lock<std::mutex> lock(inFlightMutex);
-                    sizeOfBatchesInFlight = batchesInFlight.size();
+                    sizeOfBatchesInFlight = this->batchesInFlight.size();
                 } // UNLOCK batchesInFlight
 
                 // Process events in the loop
