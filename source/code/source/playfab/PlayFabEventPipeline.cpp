@@ -304,8 +304,7 @@ namespace PlayFab
             std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batchWritten;
             if(TryGetBatchOutOfFlight(customData, &batchWritten))
             {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(batchWritten)));
-
+                auto requestBatchPtr = std::make_shared<std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(std::move(batchWritten));
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
                 {
@@ -343,8 +342,7 @@ namespace PlayFab
             std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batchWritten;
             if(TryGetBatchOutOfFlight(customData, &batchWritten))
             {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(batchWritten)));
-
+                auto requestBatchPtr = std::make_shared<std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(std::move(batchWritten));
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
                 {
