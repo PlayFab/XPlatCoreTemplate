@@ -351,7 +351,7 @@ namespace PlayFab
                     playFabEmitEventResponse->emitEventResult = EmitEventResult::Success;
                     playFabEmitEventResponse->playFabError = std::shared_ptr<PlayFabError>(new PlayFabError(error));
                     playFabEmitEventResponse->batch = requestBatchPtr;
-                    playFabEmitEventResponse->batchNumber = reinterpret_cast<size_t>(customData);
+                    playFabEmitEventResponse->batchNumber = static_cast<size_t>(reinterpret_cast<uintptr_t>(customData));
 
                     // call an emit event callback
                     CallbackRequest(playFabEmitRequest, std::move(playFabEmitEventResponse));
