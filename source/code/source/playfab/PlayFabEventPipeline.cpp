@@ -318,7 +318,7 @@ namespace PlayFab
                     playFabEmitEventResponse->playFabError = playFabError;
                     playFabEmitEventResponse->writeEventsResponse = std::shared_ptr<EventsModels::WriteEventsResponse>(new EventsModels::WriteEventsResponse(result));
                     playFabEmitEventResponse->batch = requestBatchPtr;
-                    playFabEmitEventResponse->batchNumber = reinterpret_cast<size_t>(customData);
+                    playFabEmitEventResponse->batchNumber = static_cast<size_t>(reinterpret_cast<uintptr_t>(customData));
 
                     // call an emit event callback
                     CallbackRequest(playFabEmitRequest, std::move(playFabEmitEventResponse));
