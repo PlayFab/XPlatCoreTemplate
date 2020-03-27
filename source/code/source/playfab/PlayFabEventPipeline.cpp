@@ -163,11 +163,11 @@ namespace PlayFab
         
         std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batch;
 
-        batch.reserve(this->settings->maximalNumberOfItemsInBatch);
-
-        while (this->isWorkerThreadRunning)
+        try
         {
-            try
+            batch.reserve(this->settings->maximalNumberOfItemsInBatch);
+        
+            while (this->isWorkerThreadRunning)
             {
                 size_t sizeOfBatchesInFlight = 0;
 
@@ -230,23 +230,23 @@ namespace PlayFab
                 // give some time back to CPU, don't starve it without a good reason
                 std::this_thread::sleep_for(std::chrono::milliseconds(this->settings->readBufferWaitTime));
             }
-            catch (const std::exception& ex)
-            {
-                LOG_PIPELINE("An exception was caught in PlayFabEventPipeline::WorkerThread method");
-                this->isWorkerThreadRunning = false;
+        }
+        catch (const std::exception& ex)
+        {
+            LOG_PIPELINE("An exception was caught in PlayFabEventPipeline::WorkerThread method");
+            this->isWorkerThreadRunning = false;
 
-                { // LOCK userCallbackMutex
-                    std::unique_lock<std::mutex> lock(userExceptionCallbackMutex);
-                    if (userExceptionCallback)
-                    {
-                        userExceptionCallback(ex);
-                    }
-                } // UNLOCK userCallbackMutex
-            }
-            catch (...)
-            {
-                LOG_PIPELINE("A non std::exception was caught in PlayFabEventPipeline::WorkerThread method");
-            }
+            { // LOCK userCallbackMutex
+                std::unique_lock<std::mutex> lock(userExceptionCallbackMutex);
+                if (userExceptionCallback)
+                {
+                    userExceptionCallback(ex);
+                }
+            } // UNLOCK userCallbackMutex
+        }
+        catch (...)
+        {
+            LOG_PIPELINE("A non std::exception was caught in PlayFabEventPipeline::WorkerThread method");
         }
     }
 
@@ -393,6 +393,7 @@ namespace PlayFab
             // not finding the batch in the queue is a bug
             LOG_PIPELINE("Untracked batch was returned to EventsAPI.WriteEvents callback");
             return false;
+            // UNLOCK batchesInFlight
         }
 
         *batchReturn = std::move(iter->second);
