@@ -304,7 +304,7 @@ namespace PlayFab
             std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batchWritten;
             if(TryGetBatchOutOfFlight(customData, &batchWritten))
             {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(batchWritten));
+                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(batchWritten)));
 
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
@@ -326,7 +326,7 @@ namespace PlayFab
             }
             else
             {
-                LOG_PIPELINE("After a balid PlayFabEventPipeline write call, the requeted return Batch did not appear in our known flighted batches, there is no trustworthy data we can return to the user");
+                LOG_PIPELINE("After a valid PlayFabEventPipeline write call, the requested return Batch did not appear in our known flighted batches, there is no trustworthy data we can return to the user");
             }
             
         }
@@ -343,7 +343,7 @@ namespace PlayFab
             std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batchWritten;
             if(TryGetBatchOutOfFlight(customData, &batchWritten))
             {
-                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(batchWritten));
+                auto requestBatchPtr = std::shared_ptr<const std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>>(new std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>(std::move(batchWritten)));
 
                 // call individual emit event callbacks
                 for (const auto& eventEmitRequest : *requestBatchPtr)
@@ -393,7 +393,7 @@ namespace PlayFab
         if (iter == this->batchesInFlight.end())
         {
             // not finding the batch in the queue is a bug
-            LOG_PIPELINE("Untracked batch was returned to EventsAPI.WriteEvents callback"); // normally this never happens
+            LOG_PIPELINE("Untracked batch was returned to EventsAPI.WriteEvents callback");
             return false;
         }
 
