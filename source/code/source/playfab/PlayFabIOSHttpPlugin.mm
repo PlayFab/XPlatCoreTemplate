@@ -270,11 +270,11 @@ namespace PlayFab
                                                                        CallRequestContainer& requestContainer = request->RequestContainer();
                                                                        if(body != nil)
                                                                        {
-                                                                        requestContainer.responseString = [body UTF8String];
+                                                                           requestContainer.responseString = [body UTF8String];
                                                                        }
                                                                        else
                                                                        {
-                                                                           requestContainer.responseString = "PlayFabIOSHttpPlugin Failed to parse body as it is nil";
+                                                                           requestContainer.responseString = "PlayFabIOSHttpPlugin failed to parse body as it is nil";
                                                                        }
                                                                        ProcessResponse(*request, static_cast<const int>(httpResponse.statusCode));
                                                                        { // LOCK httpRequestMutex
