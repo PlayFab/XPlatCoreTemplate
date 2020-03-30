@@ -274,7 +274,7 @@ namespace PlayFab
                                                                        }
                                                                        else
                                                                        {
-                                                                           requestContainer.responseString = "PlayFabIOSHttpPlugin Failed to parse body";
+                                                                           requestContainer.responseString = "PlayFabIOSHttpPlugin Failed to parse body as it is nil";
                                                                        }
                                                                        ProcessResponse(*request, static_cast<const int>(httpResponse.statusCode));
                                                                        { // LOCK httpRequestMutex
