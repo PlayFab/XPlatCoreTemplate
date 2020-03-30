@@ -272,6 +272,10 @@ namespace PlayFab
                                                                        {
                                                                         requestContainer.responseString = [body UTF8String];
                                                                        }
+                                                                       else
+                                                                       {
+                                                                           requestContainer.responseString = "PlayFabIOSHttpPlugin Failed to parse body";
+                                                                       }
                                                                        ProcessResponse(*request, static_cast<const int>(httpResponse.statusCode));
                                                                        { // LOCK httpRequestMutex
                                                                            lock->lock();
