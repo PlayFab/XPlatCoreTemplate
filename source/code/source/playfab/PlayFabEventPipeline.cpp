@@ -69,6 +69,9 @@ namespace PlayFab
         }
     }
 
+    /// NOTE: settings are expected to be set prior to calling ::Start()
+    /// changing them after ::Start is called may cause threading issues
+    /// users should not expect changing settings to take effect unless a started pipeline is destroyed and re-created
     std::shared_ptr<PlayFabEventPipelineSettings> PlayFabEventPipeline::GetSettings() const
     {
         return this->settings;
