@@ -200,7 +200,11 @@ namespace PlayFab
                                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                                 {
                                     std::string header = obj.first + ": " + obj.second;
-                                    WinHttpAddRequestHeaders(hRequest, std::wstring(header.begin(), header.end()).c_str(), -1, 0);
+                                    HRESULT hHeaderAdd = WinHttpAddRequestHeaders(hRequest, std::wstring(header.begin(), header.end()).c_str(), -1, 0);
+                                    if(!hHeaderAdd)
+                                    {
+                                        SetErrorInfo(reqContainer, "Error in WinHttpAddRequestHeaders");
+                                    }
                                 }
                             }
                         }
