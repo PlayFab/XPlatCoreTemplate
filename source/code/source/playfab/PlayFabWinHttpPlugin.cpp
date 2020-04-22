@@ -196,7 +196,7 @@ namespace PlayFab
                         if(!headerNoErrors)
                         {
                             SetErrorInfo(reqContainer, "Error in attempting to add Default Headers with HRESULT: " + std::to_string(GetLastError()));
-                            CloseOutConnections(std::move(requestContainer), hRequest, hConnect, hSession);
+                            CompleteRequest(std::move(requestContainer), hRequest, hConnect, hSession);
                             headerNoErrors = true;
                             return;
                         }
@@ -209,10 +209,10 @@ namespace PlayFab
                                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                                 {
                                     std::string header = obj.first + ": " + obj.second;
-                                    if(TryAddHeader(hRequest, std::wstring(header.begin(), header.end()).c_str(), -1, 0))
+                                    if(!TryAddHeader(hRequest, std::wstring(header.begin(), header.end()).c_str()))
                                     {
-                                        SetErrorInfo(reqContainer, "Error in WinHttpAddRequestHeaders attempting to add parameters" + std::to_string(GetLastError()));
-                                        CloseOutConnections(std::move(requestContainer), hRequest, hConnect, hSession);
+                                        SetErrorInfo(reqContainer, "Error in WinHttpAddRequestHeaders attempting to add parameters with HRESULT: " + std::to_string(GetLastError()));
+                                        CompleteRequest(std::move(requestContainer), hRequest, hConnect, hSession);
                                         return;
                                     }
                                 }
@@ -359,7 +359,7 @@ namespace PlayFab
             } // WinHttpOpen
         } // WinHttpCrackUrl
 
-        CloseOutConnections(std::move(requestContainer), hRequest, hConnect, hSession);
+        CompleteRequest(std::move(requestContainer), hRequest, hConnect, hSession);
     }
 
     std::string PlayFabWinHttpPlugin::GetUrl(const CallRequestContainer& reqContainer) const
@@ -370,15 +370,15 @@ namespace PlayFab
     void PlayFabWinHttpPlugin::SetPredefinedHeaders(const CallRequestContainer& requestContainer, HINTERNET hRequest)
     {
         UNREFERENCED_PARAMETER(requestContainer);
-        headerNoErrors = !TryAddHeader(hRequest, L"Accept: application/json", -1, 0) &&
-            !TryAddHeader(hRequest, L"Content-Type: application/json; charset=utf-8", -1, 0) &&
-            !TryAddHeader(hRequest, (L"X-PlayFabSDK: " + std::wstring(PlayFabSettings::versionString.begin(), PlayFabSettings::versionString.end())).c_str(), -1, 0) &&
-            !TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true", -1, 0);
+        headerNoErrors = TryAddHeader(hRequest, L"Accept: application/json") &&
+            TryAddHeader(hRequest, L"Content-Type: application/json; charset=utf-8") &&
+            TryAddHeader(hRequest, (L"X-PlayFabSDK: " + std::wstring(PlayFabSettings::versionString.begin(), PlayFabSettings::versionString.end())).c_str()) &&
+            TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true");
     }
 
-    bool PlayFabWinHttpPlugin::TryAddHeader(HINTERNET hRequest, LPCWSTR lpszHeaders, DWORD dwHeadersLength, DWORD dwModifiers)
+    bool PlayFabWinHttpPlugin::TryAddHeader(HINTERNET hRequest, LPCWSTR lpszHeaders)
     {
-        return WinHttpAddRequestHeaders(hRequest, lpszHeaders, dwHeadersLength, dwModifiers) == S_OK;
+        return static_cast<bool>(WinHttpAddRequestHeaders(hRequest, lpszHeaders, -1, 0));
     }
 
     bool PlayFabWinHttpPlugin::GetBinaryPayload(CallRequestContainer& reqContainer, LPVOID& payload, DWORD& payloadSize) const
@@ -470,7 +470,7 @@ namespace PlayFab
         }
     }
 
-    void PlayFabWinHttpPlugin::CloseOutConnections(std::unique_ptr<CallRequestContainer> requestContainer, HINTERNET hRequest, HINTERNET hConnect, HINTERNET hSession)
+    void PlayFabWinHttpPlugin::CompleteRequest(std::unique_ptr<CallRequestContainer> requestContainer, HINTERNET hRequest, HINTERNET hConnect, HINTERNET hSession)
     {
         HandleCallback(std::move(requestContainer));
 
