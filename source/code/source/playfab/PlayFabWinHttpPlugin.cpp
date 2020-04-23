@@ -16,7 +16,7 @@ namespace PlayFab
     {
         activeRequestCount = 0;
         threadRunning = true;
-        setPredefinedHeadersFailed = false;
+        setPredefinedHeadersFailed = FALSE;
         workerThread = std::thread(&PlayFabWinHttpPlugin::WorkerThread, this);
     };
 
@@ -376,9 +376,9 @@ namespace PlayFab
             TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true");
     }
 
-    bool PlayFabWinHttpPlugin::TryAddHeader(HINTERNET hRequest, LPCWSTR lpszHeaders)
+    BOOL PlayFabWinHttpPlugin::TryAddHeader(HINTERNET hRequest, LPCWSTR lpszHeaders)
     {
-        return static_cast<bool>(WinHttpAddRequestHeaders(hRequest, lpszHeaders, -1, 0));
+        return WinHttpAddRequestHeaders(hRequest, lpszHeaders, -1, 0);
     }
 
     bool PlayFabWinHttpPlugin::GetBinaryPayload(CallRequestContainer& reqContainer, LPVOID& payload, DWORD& payloadSize) const
