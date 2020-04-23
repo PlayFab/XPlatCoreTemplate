@@ -16,7 +16,7 @@ namespace PlayFab
     {
         activeRequestCount = 0;
         threadRunning = true;
-        headerNoErrors = true;
+        setPredefinedHeadersFailed = false;
         workerThread = std::thread(&PlayFabWinHttpPlugin::WorkerThread, this);
     };
 
@@ -193,11 +193,11 @@ namespace PlayFab
                     {
                         // Add HTTP headers
                         SetPredefinedHeaders(reqContainer, hRequest);
-                        if(!headerNoErrors)
+                        if(!setPredefinedHeadersFailed)
                         {
                             SetErrorInfo(reqContainer, "Error in attempting to add Default Headers with HRESULT: " + std::to_string(GetLastError()));
                             CompleteRequest(std::move(requestContainer), hRequest, hConnect, hSession);
-                            headerNoErrors = true;
+                            setPredefinedHeadersFailed = true;
                             return;
                         }
 
@@ -370,7 +370,7 @@ namespace PlayFab
     void PlayFabWinHttpPlugin::SetPredefinedHeaders(const CallRequestContainer& requestContainer, HINTERNET hRequest)
     {
         UNREFERENCED_PARAMETER(requestContainer);
-        headerNoErrors = TryAddHeader(hRequest, L"Accept: application/json") &&
+        setPredefinedHeadersFailed = TryAddHeader(hRequest, L"Accept: application/json") &&
             TryAddHeader(hRequest, L"Content-Type: application/json; charset=utf-8") &&
             TryAddHeader(hRequest, (L"X-PlayFabSDK: " + std::wstring(PlayFabSettings::versionString.begin(), PlayFabSettings::versionString.end())).c_str()) &&
             TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true");
