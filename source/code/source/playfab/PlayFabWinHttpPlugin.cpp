@@ -193,9 +193,10 @@ namespace PlayFab
                     {
                         // Add HTTP headers
                         SetPredefinedHeaders(reqContainer, hRequest);
-                        if(setPredefinedHeadersResult != S_OK)
+                        HRESULT hr = setPredefinedHeadersResult.exchange(S_OK);
+                        if(FAILED(hr))
                         {
-                            SetErrorInfo(reqContainer, "Error in attempting to add Default Headers with HRESULT: " + std::to_string(setPredefinedHeadersResult));
+                            SetErrorInfo(reqContainer, "Error in attempting to add Default Headers with HRESULT: " + std::to_string(hr));
                             CompleteRequest(std::move(requestContainer), hRequest, hConnect, hSession);
                             setPredefinedHeadersResult = S_OK;
                             return;
@@ -209,9 +210,10 @@ namespace PlayFab
                                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                                 {
                                     std::string header = obj.first + ": " + obj.second;
-                                    if(!TryAddHeader(hRequest, std::wstring(header.begin(), header.end()).c_str()))
+                                    hr = TryAddHeader(hRequest, std::wstring(header.begin(), header.end()).c_str());
+                                    if(FAILED(hr))
                                     {
-                                        SetErrorInfo(reqContainer, "Error in WinHttpAddRequestHeaders attempting to add parameters with HRESULT: " + std::to_string(GetLastError()));
+                                        SetErrorInfo(reqContainer, "Error in WinHttpAddRequestHeaders attempting to add parameters with HRESULT: " + std::to_string(hr));
                                         CompleteRequest(std::move(requestContainer), hRequest, hConnect, hSession);
                                         return;
                                     }
@@ -370,18 +372,36 @@ namespace PlayFab
     void PlayFabWinHttpPlugin::SetPredefinedHeaders(const CallRequestContainer& requestContainer, HINTERNET hRequest)
     {
         UNREFERENCED_PARAMETER(requestContainer);
-        if(!TryAddHeader(hRequest, L"Accept: application/json") ||
-            !TryAddHeader(hRequest, L"Content-Type: application/json; charset=utf-8") ||
-            !TryAddHeader(hRequest, (L"X-PlayFabSDK: " + std::wstring(PlayFabSettings::versionString.begin(), PlayFabSettings::versionString.end())).c_str()) ||
-            !TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true"))
+
+        HRESULT hr = S_OK;
+
+        hr = TryAddHeader(hRequest, L"Accept: application/json");
+        if (SUCCEEDED(hr))
         {
-            setPredefinedHeadersResult = GetLastError();
+            hr = TryAddHeader(hRequest, L"Content-Type: application/json; charset=utf-8");
+            if (SUCCEEDED(hr))
+            {
+                std::string versionHeader = "X-PlayFabSDK: " + PlayFabSettings::versionString;
+                std::wstring versionWideHeader(versionHeader.begin(), versionHeader.end());
+                hr = TryAddHeader(hRequest, versionWideHeader.c_str());
+                if (SUCCEEDED(hr))
+                {
+                    hr = TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true");
+                }
+            }
         }
+
+        setPredefinedHeadersResult = hr;
     }
 
-    BOOL PlayFabWinHttpPlugin::TryAddHeader(HINTERNET hRequest, LPCWSTR lpszHeaders)
+    HRESULT PlayFabWinHttpPlugin::TryAddHeader(HINTERNET hRequest, LPCWSTR lpszHeaders)
     {
-        return WinHttpAddRequestHeaders(hRequest, lpszHeaders, -1, 0);
+        bool succeeded = WinHttpAddRequestHeaders(hRequest, lpszHeaders, -1, 0);
+        if (!succeeded)
+        {
+            return HRESULT_FROM_WIN32(GetLastError());
+        }
+        return S_OK;
     }
 
     bool PlayFabWinHttpPlugin::GetBinaryPayload(CallRequestContainer& reqContainer, LPVOID& payload, DWORD& payloadSize) const
