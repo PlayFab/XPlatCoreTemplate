@@ -42,7 +42,7 @@ namespace PlayFab
         std::thread workerThread;
         std::mutex httpRequestMutex;
         std::atomic<bool> threadRunning;
-        std::atomic<BOOL> setPredefinedHeadersFailed;
+        std::atomic<HRESULT> setPredefinedHeadersResult;
         int activeRequestCount;
         std::deque<std::unique_ptr<CallRequestContainerBase>> pendingRequests;
         std::deque<std::unique_ptr<CallRequestContainerBase>> pendingResults;

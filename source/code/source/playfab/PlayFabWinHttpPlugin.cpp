@@ -16,7 +16,7 @@ namespace PlayFab
     {
         activeRequestCount = 0;
         threadRunning = true;
-        setPredefinedHeadersFailed = FALSE;
+        setPredefinedHeadersResult = S_OK;
         workerThread = std::thread(&PlayFabWinHttpPlugin::WorkerThread, this);
     };
 
@@ -193,11 +193,11 @@ namespace PlayFab
                     {
                         // Add HTTP headers
                         SetPredefinedHeaders(reqContainer, hRequest);
-                        if(!setPredefinedHeadersFailed)
+                        if(setPredefinedHeadersResult != S_OK)
                         {
-                            SetErrorInfo(reqContainer, "Error in attempting to add Default Headers with HRESULT: " + std::to_string(GetLastError()));
+                            SetErrorInfo(reqContainer, "Error in attempting to add Default Headers with HRESULT: " + std::to_string(setPredefinedHeadersResult));
                             CompleteRequest(std::move(requestContainer), hRequest, hConnect, hSession);
-                            setPredefinedHeadersFailed = true;
+                            setPredefinedHeadersResult = S_OK;
                             return;
                         }
 
@@ -370,10 +370,13 @@ namespace PlayFab
     void PlayFabWinHttpPlugin::SetPredefinedHeaders(const CallRequestContainer& requestContainer, HINTERNET hRequest)
     {
         UNREFERENCED_PARAMETER(requestContainer);
-        setPredefinedHeadersFailed = TryAddHeader(hRequest, L"Accept: application/json") &&
-            TryAddHeader(hRequest, L"Content-Type: application/json; charset=utf-8") &&
-            TryAddHeader(hRequest, (L"X-PlayFabSDK: " + std::wstring(PlayFabSettings::versionString.begin(), PlayFabSettings::versionString.end())).c_str()) &&
-            TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true");
+        if(!TryAddHeader(hRequest, L"Accept: application/json") ||
+            !TryAddHeader(hRequest, L"Content-Type: application/json; charset=utf-8") ||
+            !TryAddHeader(hRequest, (L"X-PlayFabSDK: " + std::wstring(PlayFabSettings::versionString.begin(), PlayFabSettings::versionString.end())).c_str()) ||
+            !TryAddHeader(hRequest, L"X-ReportErrorAsSuccess: true"))
+        {
+            setPredefinedHeadersResult = GetLastError();
+        }
     }
 
     BOOL PlayFabWinHttpPlugin::TryAddHeader(HINTERNET hRequest, LPCWSTR lpszHeaders)
