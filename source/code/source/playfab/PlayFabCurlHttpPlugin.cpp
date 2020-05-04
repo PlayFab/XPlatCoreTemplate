@@ -179,6 +179,15 @@ namespace PlayFab
                 {
                     std::string header = obj.first + ": " + obj.second;
                     curlHttpHeaders = curl_slist_append(curlHttpHeaders, header.c_str());
+                    if(curlHttpHeaders == NULL)
+                    {
+                        reqContainer.errorWrapper.HttpStatus = "Failed to create Headers list";
+                        reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::UnknownError;
+                        reqContainer.errorWrapper.ErrorName = "Header Creation failed";
+                        reqContainer.errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
+                        HandleCallback(std::move(requestContainer));
+                        return;
+                    }
                 }
             }
         }
