@@ -325,7 +325,7 @@ namespace PlayFab
         HandleCallback(std::move(requestContainer));
     }
 
-    bool PlayFabCurlHttpPlugin::TryCurlAddHeader(std::unique_ptr<CallRequestContainer> requestContainer, curl_slist* list, char* headerToAppend)
+    bool PlayFabCurlHttpPlugin::TryCurlAddHeader(std::unique_ptr<CallRequestContainer> requestContainer, curl_slist* list, const char* headerToAppend)
     {
         list = curl_slist_append(list, headerToAppend);
         if(list == NULL)

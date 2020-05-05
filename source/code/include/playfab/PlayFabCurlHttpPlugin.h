@@ -46,6 +46,6 @@ namespace PlayFab
 
     private:
         void CurlHeaderFailed(std::unique_ptr<CallRequestContainer> requestContainer);
-        bool TryCurlAddHeader(std::unique_ptr<CallRequestContainer> requestContainer, curl_slist* list, char* headerToAppend);
+        bool TryCurlAddHeader(std::unique_ptr<CallRequestContainer> requestContainer, curl_slist* list, const char* headerToAppend);
     };
 }
