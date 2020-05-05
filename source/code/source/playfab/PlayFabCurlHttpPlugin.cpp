@@ -164,10 +164,32 @@ namespace PlayFab
 
         // Set up headers
         curl_slist* curlHttpHeaders = nullptr;
-        curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Accept: application/json");
-        curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
-        curlHttpHeaders = curl_slist_append(curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
-        curlHttpHeaders = curl_slist_append(curlHttpHeaders, "X-ReportErrorAsSuccess: true");
+
+        if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, "Accept: application/json"))
+        {
+            return;
+        }
+
+        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Accept: application/json");
+
+        if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, "Content-Type: application/json; charset=utf-8"))
+        {
+            return;
+        }
+
+        if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str()))
+        {
+            return;
+        }
+
+        if(!TryCurlAddHeader(curlHttpHeaders, "X-ReportErrorAsSuccess: true"))
+        {
+            return;
+        }
+
+        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
+        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
+        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, "X-ReportErrorAsSuccess: true");
 
         const std::unordered_map<std::string, std::string> headers = reqContainer.GetRequestHeaders();
 
@@ -178,14 +200,8 @@ namespace PlayFab
                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                 {
                     std::string header = obj.first + ": " + obj.second;
-                    curlHttpHeaders = curl_slist_append(curlHttpHeaders, header.c_str());
-                    if(curlHttpHeaders == NULL)
+                    if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, header.c_str()))
                     {
-                        reqContainer.errorWrapper.HttpStatus = "Failed to create Headers list";
-                        reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::UnknownError;
-                        reqContainer.errorWrapper.ErrorName = "Header Creation failed";
-                        reqContainer.errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
-                        HandleCallback(std::move(requestContainer));
                         return;
                     }
                 }
@@ -299,5 +315,25 @@ namespace PlayFab
             std::unique_lock<std::mutex> lock(httpRequestMutex);
             return activeRequestCount;
         }
+    }
+
+    void PlayFabCurlHttpPlugin::CurlHeaderFailed(std::unique_ptr<CallRequestContainer> requestContainer)
+    {
+        reqContainer.errorWrapper.HttpStatus = "Failed to create Headers list";
+        reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::UnknownError;
+        reqContainer.errorWrapper.ErrorName = "Header Creation failed";
+        reqContainer.errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
+        HandleCallback(std::move(requestContainer));
+    }
+
+    bool PlayFabCurlHttpPlugin::TryCurlAddHeader(std::unique_ptr<CallRequestContainer> requestContainer, curl_slist* list, char* headerToAppend)
+    {
+        list = curl_slist_append(list, headerToAppend);
+        if(list == NULL)
+        {
+            CurlHeaderFailed(std::move(requestContainer));
+            return false;
+        }
+        return true;
     }
 }
