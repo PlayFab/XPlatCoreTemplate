@@ -164,24 +164,24 @@ namespace PlayFab
         // Set up headers
         curl_slist* curlHttpHeaders = nullptr;
 
-        if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, "Accept: application/json"))
+        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Accept: application/json"))
         {
             return;
         }
 
         //curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Accept: application/json");
 
-        if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, "Content-Type: application/json; charset=utf-8"))
+        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Content-Type: application/json; charset=utf-8"))
         {
             return;
         }
 
-        if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str()))
+        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str()))
         {
             return;
         }
 
-        if(!TryCurlAddHeader(curlHttpHeaders, "X-ReportErrorAsSuccess: true"))
+        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "X-ReportErrorAsSuccess: true"))
         {
             return;
         }
@@ -199,7 +199,7 @@ namespace PlayFab
                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                 {
                     std::string header = obj.first + ": " + obj.second;
-                    if(!TryCurlAddHeader(requestContainer, curlHttpHeaders, header.c_str()))
+                    if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, header.c_str()))
                     {
                         return;
                     }
