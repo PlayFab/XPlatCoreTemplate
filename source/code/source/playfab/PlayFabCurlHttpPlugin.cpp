@@ -199,10 +199,12 @@ namespace PlayFab
                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                 {
                     std::string header = obj.first + ": " + obj.second;
-                    if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, header.c_str()))
-                    {
-                        return;
-                    }
+                    curlHttpHeaders = curl_slist_append(curlHttpHeaders, header.c_str());
+
+                    // if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, header.c_str()))
+                    // {
+                    //     return;
+                    // }
                 }
             }
         }
