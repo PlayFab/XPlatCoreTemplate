@@ -320,7 +320,7 @@ namespace PlayFab
     void PlayFabCurlHttpPlugin::CurlHeaderFailed(std::unique_ptr<CallRequestContainer> requestContainer)
     {
         reqContainer.errorWrapper.HttpStatus = "Failed to create Headers list";
-        reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::UnknownError;
+        reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorUnkownError;
         reqContainer.errorWrapper.ErrorName = "Header Creation failed";
         reqContainer.errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
         HandleCallback(std::move(requestContainer));
