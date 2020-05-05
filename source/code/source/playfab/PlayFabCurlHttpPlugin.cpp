@@ -164,31 +164,31 @@ namespace PlayFab
         // Set up headers
         curl_slist* curlHttpHeaders = nullptr;
 
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Accept: application/json"))
-        {
-            return;
-        }
+        // if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Accept: application/json"))
+        // {
+        //     return;
+        // }
 
-        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Accept: application/json");
 
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Content-Type: application/json; charset=utf-8"))
-        {
-            return;
-        }
+        // if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Content-Type: application/json; charset=utf-8"))
+        // {
+        //     return;
+        // }
 
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str()))
-        {
-            return;
-        }
+        // if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str()))
+        // {
+        //     return;
+        // }
 
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "X-ReportErrorAsSuccess: true"))
-        {
-            return;
-        }
+        // if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "X-ReportErrorAsSuccess: true"))
+        // {
+        //     return;
+        // }
 
-        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
-        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
-        //curlHttpHeaders = curl_slist_append(curlHttpHeaders, "X-ReportErrorAsSuccess: true");
+        curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Accept: application/json");
+        curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
+        curlHttpHeaders = curl_slist_append(curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
+        curlHttpHeaders = curl_slist_append(curlHttpHeaders, "X-ReportErrorAsSuccess: true");
 
         const std::unordered_map<std::string, std::string> headers = reqContainer.GetRequestHeaders();
 
@@ -238,7 +238,7 @@ namespace PlayFab
             reqContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorConnectionTimeout;
             reqContainer.errorWrapper.ErrorName = "Failed to contact server";
             reqContainer.errorWrapper.ErrorMessage = "Failed to contact server, curl error: " + std::to_string(res);
-            HandleCallback(std::move(requestContainer));
+            //HandleCallback(std::move(requestContainer));
         }
         else
         {
@@ -266,8 +266,10 @@ namespace PlayFab
                 reqContainer.errorWrapper.ErrorMessage = jsonParseErrors;
             }
 
-            HandleCallback(std::move(requestContainer));
+            //HandleCallback(std::move(requestContainer));
         }
+
+        HandleCallback(std::move(requestContainer));
 
         curl_slist_free_all(curlHttpHeaders);
         curlHttpHeaders = nullptr;
