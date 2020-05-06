@@ -18,6 +18,10 @@ namespace PlayFab
     public:
         /// <summary>
         /// Runs the IHttpPlugin's Update function to check for responses to HTTP requests (can be platform specific HttpPlugin impl or user defiend)
+        /// This has global consequences since all api's share the same httpPlugin (technically, call order of Update per Api may matter to developers)
+        /// You should call it in this manner: 
+        ///    <%- api.name %>.Update();
+        /// whenever your own game ticks.
         /// </summary>
         static size_t Update();
         static void ForgetAllCredentials();
