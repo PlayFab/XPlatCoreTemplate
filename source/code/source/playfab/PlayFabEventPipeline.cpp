@@ -248,10 +248,8 @@ namespace PlayFab
                         // if it is the first event in an incomplete batch then set the batch creation moment
                         momentBatchStarted = clock::now();
                     }
-
-                    continue; // immediately check if there is next event in buffer
+                    return true;
                 }
-                break;
 
                 case Result::Disabled:
                 case Result::Empty:
@@ -320,8 +318,6 @@ namespace PlayFab
             std::unique_lock<std::mutex> lock(inFlightMutex);
             this->batchesInFlight[customData] = std::move(batch);
         } // UNLOCK batchesInFlight
-        
-        batchCounter++;
 
         batch.clear(); // batch vector will be reused
         batch.reserve(this->settings->maximalNumberOfItemsInBatch);
