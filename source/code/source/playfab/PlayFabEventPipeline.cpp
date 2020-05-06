@@ -225,7 +225,7 @@ namespace PlayFab
 
                 // Don't try taking a request until we get an entity token. We'd rather not lose events
                 // that were generated before an entity token was created (i.e. before a user was created).
-                if (PlayFabSettings::entityToken.empty() &&
+                if (PlayFabSettings::staticPlayer->entityToken.empty() &&
                     (settings->authenticationContext == nullptr || settings->authenticationContext->entityToken.empty()))
                 {
                     return false;
@@ -241,7 +241,7 @@ namespace PlayFab
                     // if batch is full
                     if (batch.size() >= this->settings->maximalNumberOfItemsInBatch)
                     {
-                        this->SendBatch();
+                        this->SendBatch(batch);
                     }
                     else if (batch.size() == 1)
                     {
@@ -265,7 +265,7 @@ namespace PlayFab
                     if (batchAge.count() >= (int32_t)this->settings->maximalBatchWaitTime)
                     {
                         // batch wait time expired, send incomplete batch
-                        this->SendBatch();
+                        this->SendBatch(batch);
                         return true;
                     }
                 }
@@ -296,7 +296,7 @@ namespace PlayFab
         }
     }
 
-    void PlayFabEventPipeline::SendBatch()
+    void PlayFabEventPipeline::SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch)
     {
         // create a WriteEvents API request to send the batch
         EventsModels::WriteEventsRequest batchReq;
