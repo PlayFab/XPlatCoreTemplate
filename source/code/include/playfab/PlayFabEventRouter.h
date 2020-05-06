@@ -41,7 +41,7 @@ namespace PlayFab
         PlayFabEventRouter(bool threadedEventPipeline);
         virtual void RouteEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) const;
 
-        void Update() override;
+        virtual void Update() override;
     private:
     };
 }

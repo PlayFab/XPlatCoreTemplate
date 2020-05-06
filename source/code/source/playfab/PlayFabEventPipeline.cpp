@@ -270,10 +270,7 @@ namespace PlayFab
                     }
                 }
                 return false;
-                // event buffer is disabled or empty, and batch is not ready to be sent yet
-                // give some time back to CPU, don't starve it without a good reason
-                //std::this_thread::sleep_for(std::chrono::milliseconds(this->settings->readBufferWaitTime));
-            }
+                }
         }
         catch (const std::exception& ex)
         {
@@ -287,13 +284,12 @@ namespace PlayFab
                     userExceptionCallback(ex);
                 }
             } // UNLOCK userCallbackMutex
-            return false;
         }
         catch (...)
         {
             LOG_PIPELINE("A non std::exception was caught in PlayFabEventPipeline::WorkerThread method");
-            return false;
         }
+        return false;
     }
 
     void PlayFabEventPipeline::SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch)
