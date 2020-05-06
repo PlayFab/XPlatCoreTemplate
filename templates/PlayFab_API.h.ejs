@@ -16,6 +16,9 @@ namespace PlayFab
     class PlayFab<%- api.name %>API
     {
     public:
+        /// <summary>
+        /// Runs the IHttpPlugin's Update function to check for responses to HTTP requests (can be platform specific HttpPlugin impl or user defiend)
+        /// </summary>
         static size_t Update();
         static void ForgetAllCredentials();
 
