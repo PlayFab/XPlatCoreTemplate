@@ -32,6 +32,7 @@ namespace PlayFab
     public:
         PlayFabEventPipelineSettings();
         PlayFabEventPipelineSettings(PlayFabEventPipelineType emitType);
+        PlayFabEventPipelineSettings(PlayFabEventPipelineType emitType, bool useBackgroundThread);
         virtual ~PlayFabEventPipelineSettings() {};
 
         size_t bufferSize; // The minimal size of buffer, in bytes. The actually allocated size will be a power of 2 that is equal or greater than this value.
@@ -42,6 +43,7 @@ namespace PlayFab
         int64_t readBufferWaitTime; // The wait time between attempts to read events from buffer when it is empty, in milliseconds.
         std::shared_ptr<PlayFabAuthenticationContext> authenticationContext; // The optional PlayFab authentication context that can be used with static PlayFab events API
         PlayFabEventPipelineType emitType; // whether we call WriteEvent or WriteTelemetryEvent through PlayFab
+        bool useBackgroundThread;
     };
 
     /// <summary>
@@ -52,6 +54,8 @@ namespace PlayFab
     public:
         virtual ~IPlayFabEventPipeline() {}
         virtual void Start() {} // Start pipeline's worker thread
+        virtual void Stop() = 0;
+        virtual void Update() = 0;
         virtual void IntakeEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) = 0; // Intake an event. This method must be thread-safe.
     };
 
@@ -79,10 +83,11 @@ namespace PlayFab
         void SetExceptionCallback(ExceptionCallback callback);
 
     protected:
-        virtual void SendBatch(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch, uintptr_t& batchCounter);
+        virtual void SendBatch();
 
     private:
         void WorkerThread();
+        bool DoWork();
         void WriteEventsApiCallback(const EventsModels::WriteEventsResponse& result, void* customData);
         void WriteEventsApiErrorCallback(const PlayFabError& error, void* customData);
         void CallbackRequest(std::shared_ptr<const IPlayFabEmitEventRequest> request, std::shared_ptr<const IPlayFabEmitEventResponse> response);
@@ -97,6 +102,8 @@ namespace PlayFab
         std::unordered_map<void*, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>> batchesInFlight;
 
     private:
+        std::atomic_uintptr_t batchCounter;
+        std::chrono::steady_clock::time_point momentBatchStarted;
         std::shared_ptr<PlayFabEventsInstanceAPI> eventsApi;
 
         std::shared_ptr<PlayFabEventPipelineSettings> settings;

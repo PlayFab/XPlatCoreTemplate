@@ -15,6 +15,9 @@ namespace PlayFab
     {
     public:
         PlayFabEventAPI(); // Default constructor
+
+        PlayFabEventAPI(bool threadedEventPipeline);
+
         std::shared_ptr<IPlayFabEventRouter> GetEventRouter() const;
 
         /// <summary>
@@ -25,6 +28,8 @@ namespace PlayFab
         void EmitEvent(std::unique_ptr<const IPlayFabEvent> event, const PlayFabEmitEventCallback callback) const;
 
         void EmitEvent(std::unique_ptr<const IPlayFabEvent> event, std::function<void(std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)> callback) const;
+
+        void Update();
 
     private:
         std::shared_ptr<IPlayFabEventRouter> eventRouter;
