@@ -45,14 +45,12 @@ namespace PlayFab
         std::shared_ptr<PlayFabApiSettings> GetSettings() const;
         std::shared_ptr<PlayFabAuthenticationContext> GetAuthenticationContext() const;
         /// <summary>
-        /// Runs the IHttpPlugin's Update function to check for responses to HTTP requests (can be platform specific HttpPluginImpl or user defiend)
-        /// This has global consequences since all api's share the same httpPlugin 
-        /// Therefore, only 1 api needs to call Update() 
-        /// It Doesn't matter which API, all will do the exact same thing.
-        /// Please note any later Update call in the same tick will probably be a wasted call
-        /// You may call it in this manner: 
-        ///    <%- api.name %>.Update();
-        /// whenever your own game ticks.
+        /// Calls the Update function on your implementation of the IHttpPlugin to check for responses to HTTP requests.
+        /// All api's (Client, Server, Admin etc.) share the same IHttpPlugin. 
+        /// This means that you only need to call Update() on one API to retrieve the responses for all APIs.
+        /// Additional calls to Update (on any API) during the same tick is unlikely retrieve addtional responses.
+        /// Call Update when your game ticks as follows:
+        ///     <%- api.name %>.Update();
         /// </summary>
         size_t Update();
         void ForgetAllCredentials();
