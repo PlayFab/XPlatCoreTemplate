@@ -104,10 +104,6 @@ namespace PlayFab
     private:
         std::atomic_uintptr_t batchCounter;
         std::chrono::steady_clock::time_point momentBatchStarted;
-        std::shared_ptr<PlayFabEventsInstanceAPI> eventsApi;
-
-        std::atomic_uintptr_t batchCounter;
-        std::chrono::steady_clock::time_point momentBatchStarted;
         std::shared_ptr<PlayFabEventPipelineSettings> settings;
         PlayFabEventBuffer buffer;
         std::thread workerThread;
