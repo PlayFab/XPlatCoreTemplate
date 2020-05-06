@@ -102,6 +102,8 @@ namespace PlayFab
         std::unordered_map<void*, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>> batchesInFlight;
 
     private:
+        std::shared_ptr<PlayFabEventsInstanceAPI> eventsApi;
+
         std::atomic_uintptr_t batchCounter;
         std::chrono::steady_clock::time_point momentBatchStarted;
         std::shared_ptr<PlayFabEventPipelineSettings> settings;
