@@ -223,7 +223,6 @@ namespace PlayFab
         using clock = std::chrono::steady_clock;
         using Result = PlayFabEventBuffer::EventConsumingResult;
         std::shared_ptr<const IPlayFabEmitEventRequest> request;
-
         std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batch;
 
         try
