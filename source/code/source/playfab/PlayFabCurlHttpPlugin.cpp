@@ -165,7 +165,7 @@ namespace PlayFab
         curl_slist* curlHttpHeaders = nullptr;
 
         curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "Accept: application/json");
-        if(curlHttpHeaders == nullptr)
+        if (curlHttpHeaders == NULL)
         {
             HandleCallback(std::move(requestContainer));
             return;
@@ -178,7 +178,7 @@ namespace PlayFab
             return;
         }
 
-        curlHttpHeaders = TryCurlAddHeader(reqContainer, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
         if (curlHttpHeaders == NULL)
         {
             HandleCallback(std::move(requestContainer));
@@ -334,7 +334,6 @@ namespace PlayFab
         if(list == NULL)
         {
             CurlHeaderFailed(std::move(requestContainer));
-            return nullptr;
         }
         return list;
     }
