@@ -333,7 +333,7 @@ namespace PlayFab
         list = curl_slist_append(list, headerToAppend);
         if(list == NULL)
         {
-            CurlHeaderFailed(std::move(requestContainer));
+            CurlHeaderFailed(requestContainer);
         }
         return list;
     }
