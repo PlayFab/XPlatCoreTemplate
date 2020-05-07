@@ -29,6 +29,10 @@ namespace PlayFab
 
         void EmitEvent(std::unique_ptr<const IPlayFabEvent> event, std::function<void(std::shared_ptr<const IPlayFabEvent>, std::shared_ptr<const IPlayFabEmitEventResponse>)> callback) const;
 
+        /// <summary>
+        /// Updates the underlying event router which in turn will update the eventpipeline.
+        /// This function must be called every game tick if threadedEventPipeline is set to false
+        /// </summary>
         void Update();
 
     private:

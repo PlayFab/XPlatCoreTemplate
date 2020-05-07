@@ -74,8 +74,9 @@ namespace PlayFab
         PlayFabEventPipeline& operator=(PlayFabEventPipeline&& other) = delete; // disable move assignment
 
         // NOTE: settings are expected to be set prior to calling PlayFabEventPipeline::Start()
-        // changing them after PlayFabEventPipeline::Start() may cause threading issues
-        // users should not expect changes made to settings to take effect after ::Start is called unless the pipeline is destroyed and re-created
+        // changing them after PlayFabEventPipeline::Start() may cause threading issues unless you have set useBackgroundThread flag to true
+        // If this flag is not set, users should not expect changes made to settings to take effect after ::Start is called
+        //   unless the pipeline is A.) destroyed and re-created or B.) restart it by running Stop() and then Start() again 
         std::shared_ptr<PlayFabEventPipelineSettings> GetSettings() const;
         virtual void Start() override;
         virtual void Stop() override;
@@ -102,7 +103,6 @@ namespace PlayFab
         // that would allow to quickly map a pointer (like void* customData) to a batch (like a std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>).
         std::mutex inFlightMutex;
         std::unordered_map<void*, std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>> batchesInFlight;
-        //std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batch;
 
     private:
         std::shared_ptr<PlayFabEventsInstanceAPI> eventsApi;

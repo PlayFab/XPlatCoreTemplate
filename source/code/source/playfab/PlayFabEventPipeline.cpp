@@ -62,6 +62,18 @@ namespace PlayFab
 
     void PlayFabEventPipeline::Start()
     {
+        if (!this->settings->useBackgroundThread)
+        {
+            LOG_PIPELINE("PlayFabEventPipeline is set to NOT use background threads. Start() is not needed to be called then, but Update() is required to be manually called every tick in this case.");
+            return;
+        }
+
+        if(isWorkerThreadRunning)
+        {
+            LOG_PIPELINE("PlayFabEventPipeline has already been started, and should not be started again until Stop() is called.");
+            return;
+        }
+
         // start worker thread
         this->isWorkerThreadRunning = true;
         if (!this->workerThread.joinable())
@@ -72,6 +84,12 @@ namespace PlayFab
 
     void PlayFabEventPipeline::Stop()
     {
+        if(!isWorkerThreadRunning)
+        {
+            LOG_PIPELINE("PlayFabEventPipeline has already been stopped, and should not be stopped again until Start() is called.");
+            return;
+        }
+
         // stop worker thread
         this->isWorkerThreadRunning = false;
         if (this->workerThread.joinable())

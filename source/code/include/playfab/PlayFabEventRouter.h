@@ -41,6 +41,10 @@ namespace PlayFab
         PlayFabEventRouter(bool threadedEventPipeline);
         virtual void RouteEvent(std::shared_ptr<const IPlayFabEmitEventRequest> request) const;
 
+        /// <summary>
+        /// Updates underlying PlayFabEventPipeline
+        /// This function must be called every game tick if threadedEventPipeline is set to false
+        /// </summary>
         virtual void Update() override;
     private:
     };
