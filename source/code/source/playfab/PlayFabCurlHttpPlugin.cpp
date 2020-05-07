@@ -164,31 +164,33 @@ namespace PlayFab
         // Set up headers
         curl_slist* curlHttpHeaders = nullptr;
 
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Accept: application/json"))
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "Accept: application/json");
+        if(curlHttpHeaders == nullptr)
         {
+            HandleCallback(std::move(requestContainer));
             return;
         }
 
-
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "Content-Type: application/json; charset=utf-8"))
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
+        if (curlHttpHeaders == NULL)
         {
+            HandleCallback(std::move(requestContainer));
             return;
         }
 
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str()))
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
+        if (curlHttpHeaders == NULL)
         {
+            HandleCallback(std::move(requestContainer));
             return;
         }
 
-        if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, "X-ReportErrorAsSuccess: true"))
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "X-ReportErrorAsSuccess: true");
+        if (curlHttpHeaders == NULL)
         {
+            HandleCallback(std::move(requestContainer));
             return;
         }
-
-        // curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Accept: application/json");
-        // curlHttpHeaders = curl_slist_append(curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
-        // curlHttpHeaders = curl_slist_append(curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
-        // curlHttpHeaders = curl_slist_append(curlHttpHeaders, "X-ReportErrorAsSuccess: true");
 
         const std::unordered_map<std::string, std::string> headers = reqContainer.GetRequestHeaders();
 
@@ -199,10 +201,11 @@ namespace PlayFab
                 if (obj.first.length() != 0 && obj.second.length() != 0) // no empty keys or values in headers
                 {
                     std::string header = obj.first + ": " + obj.second;
-                    //curlHttpHeaders = curl_slist_append(curlHttpHeaders, header.c_str());
 
-                    if(!TryCurlAddHeader(std::move(requestContainer), curlHttpHeaders, header.c_str()))
+                    curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, header.c_str());
+                    if (curlHttpHeaders == NULL)
                     {
+                        HandleCallback(std::move(requestContainer));
                         return;
                     }
                 }
@@ -317,23 +320,22 @@ namespace PlayFab
         }
     }
 
-    void PlayFabCurlHttpPlugin::CurlHeaderFailed(std::unique_ptr<CallRequestContainer> requestContainer)
+    void PlayFabCurlHttpPlugin::CurlHeaderFailed(CallRequestContainer& requestContainer)
     {
         requestContainer->errorWrapper.HttpStatus = "Failed to create Headers list";
         requestContainer->errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorUnkownError;
         requestContainer->errorWrapper.ErrorName = "Header Creation failed";
         requestContainer->errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
-        HandleCallback(std::move(requestContainer));
     }
 
-    bool PlayFabCurlHttpPlugin::TryCurlAddHeader(std::unique_ptr<CallRequestContainer> requestContainer, curl_slist* list, const char* headerToAppend)
+    curl_slist* PlayFabCurlHttpPlugin::TryCurlAddHeader(CallRequestContainer& requestContainer, curl_slist* list, const char* headerToAppend)
     {
         list = curl_slist_append(list, headerToAppend);
         if(list == NULL)
         {
             CurlHeaderFailed(std::move(requestContainer));
-            return false;
+            return nullptr;
         }
-        return true;
+        return list;
     }
 }
