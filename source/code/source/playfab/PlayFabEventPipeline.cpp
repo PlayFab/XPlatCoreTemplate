@@ -105,7 +105,7 @@ namespace PlayFab
             throw std::runtime_error("You should not call Update() when PlayFabEventPipelineSettings::useBackgroundThread == true");
         }
 
-        bool hasMoreWorkToProcess;
+        bool hasMoreWorkToProcess = false;
         do
         {
             hasMoreWorkToProcess = DoWork();
