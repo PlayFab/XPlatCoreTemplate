@@ -6,15 +6,9 @@
 
 namespace PlayFab
 {
-    PlayFabEventAPI::PlayFabEventAPI() :
-        PlayFabEventAPI(true)
-    {
-    }
-
     PlayFabEventAPI::PlayFabEventAPI(bool threadedEventPipeline) : 
         eventRouter(std::make_shared<PlayFabEventRouter>(threadedEventPipeline))
     {
-        
     }
 
     std::shared_ptr<IPlayFabEventRouter> PlayFabEventAPI::GetEventRouter() const

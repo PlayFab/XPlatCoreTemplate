@@ -84,6 +84,12 @@ namespace PlayFab
 
     void PlayFabEventPipeline::Stop()
     {
+        if (!this->settings->useBackgroundThread)
+        {
+            LOG_PIPELINE("PlayFabEventPipeline is set to NOT use background threads. Stop() is not needed to be called then, but Update() is required to be manually called every tick in this case.");
+            return;
+        }
+
         if(!isWorkerThreadRunning)
         {
             LOG_PIPELINE("PlayFabEventPipeline has already been stopped, and should not be stopped again until Start() is called.");

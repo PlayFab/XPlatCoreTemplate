@@ -14,9 +14,7 @@ namespace PlayFab
     class PlayFabEventAPI
     {
     public:
-        PlayFabEventAPI(); // Default constructor
-
-        PlayFabEventAPI(bool threadedEventPipeline);
+        PlayFabEventAPI(bool threadedEventPipeline=true);
 
         std::shared_ptr<IPlayFabEventRouter> GetEventRouter() const;
 
