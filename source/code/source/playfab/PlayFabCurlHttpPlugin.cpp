@@ -322,10 +322,10 @@ namespace PlayFab
 
     void PlayFabCurlHttpPlugin::CurlHeaderFailed(CallRequestContainer& requestContainer)
     {
-        requestContainer->errorWrapper.HttpStatus = "Failed to create Headers list";
-        requestContainer->errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorUnkownError;
-        requestContainer->errorWrapper.ErrorName = "Header Creation failed";
-        requestContainer->errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
+        requestContainer.errorWrapper.HttpStatus = "Failed to create Headers list";
+        requestContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorUnkownError;
+        requestContainer.errorWrapper.ErrorName = "Header Creation failed";
+        requestContainer.errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
     }
 
     curl_slist* PlayFabCurlHttpPlugin::TryCurlAddHeader(CallRequestContainer& requestContainer, curl_slist* list, const char* headerToAppend)
