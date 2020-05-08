@@ -298,7 +298,7 @@ namespace PlayFab
         }
     }
 
-    curl_slist* PlayFabCurlHttpPlugin::SetPredefinedHeaders()
+    curl_slist* PlayFabCurlHttpPlugin::SetPredefinedHeaders(CallRequestContainer& reqContainer)
     {
         curl_slist* curlHttpHeaders = nullptr;
 
