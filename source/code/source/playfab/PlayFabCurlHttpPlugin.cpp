@@ -315,7 +315,7 @@ namespace PlayFab
         requestContainer.errorWrapper.HttpStatus = "Failed to create Headers list";
         requestContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorUnkownError;
         requestContainer.errorWrapper.ErrorName = "Header Creation Failed";
-        requestContainer.errorWrapper.ErrorMessage = "Request failed initializing the header before sending the request. Failing out early. The Problematic Header: " + failedHeader;
+        requestContainer.errorWrapper.ErrorMessage = ("Request failed initializing the header before sending the request. Failing out early. The Problematic Header: " + failedHeader).c_str());
     }
 
     curl_slist* PlayFabCurlHttpPlugin::TryCurlAddHeader(CallRequestContainer& requestContainer, curl_slist* list, const char* headerToAppend)
