@@ -45,7 +45,8 @@ namespace PlayFab
         std::deque<std::unique_ptr<CallRequestContainerBase>> pendingResults;
 
     private:
-        void CurlHeaderFailed(CallRequestContainer& requestContainer);
+        void CurlHeaderFailed(CallRequestContainer& requestContainer, const char* failedHeader);
+        curl_slist* SetPredefinedHeaders(CallRequestContainer& requestContainer);
         curl_slist* TryCurlAddHeader(CallRequestContainer& requestContainer, curl_slist* list, const char* headerToAppend);
     };
 }

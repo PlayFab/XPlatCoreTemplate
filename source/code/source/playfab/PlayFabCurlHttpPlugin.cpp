@@ -162,31 +162,9 @@ namespace PlayFab
         curl_easy_setopt(curlHandle, CURLOPT_URL, urlString.c_str());
 
         // Set up headers
-        curl_slist* curlHttpHeaders = nullptr;
+        curl_slist* curlHttpHeaders = SetPredefinedHeaders(reqContainer);
 
-        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "Accept: application/json");
-        if (curlHttpHeaders == NULL)
-        {
-            HandleCallback(std::move(requestContainer));
-            return;
-        }
-
-        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
-        if (curlHttpHeaders == NULL)
-        {
-            HandleCallback(std::move(requestContainer));
-            return;
-        }
-
-        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
-        if (curlHttpHeaders == NULL)
-        {
-            HandleCallback(std::move(requestContainer));
-            return;
-        }
-
-        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "X-ReportErrorAsSuccess: true");
-        if (curlHttpHeaders == NULL)
+        if(curlHttpHeaders == NULL)
         {
             HandleCallback(std::move(requestContainer));
             return;
@@ -320,12 +298,24 @@ namespace PlayFab
         }
     }
 
-    void PlayFabCurlHttpPlugin::CurlHeaderFailed(CallRequestContainer& requestContainer)
+    curl_slist* PlayFabCurlHttpPlugin::SetPredefinedHeaders()
+    {
+        curl_slist* curlHttpHeaders = nullptr;
+
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "Accept: application/json");
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "Content-Type: application/json; charset=utf-8");
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, ("X-PlayFabSDK: " + PlayFabSettings::versionString).c_str());
+        curlHttpHeaders = TryCurlAddHeader(reqContainer, curlHttpHeaders, "X-ReportErrorAsSuccess: true");
+
+        return curlHttpHeaders;
+    }
+
+    void PlayFabCurlHttpPlugin::CurlHeaderFailed(CallRequestContainer& requestContainer, const char* failedHeader)
     {
         requestContainer.errorWrapper.HttpStatus = "Failed to create Headers list";
         requestContainer.errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorUnkownError;
-        requestContainer.errorWrapper.ErrorName = "Header Creation failed";
-        requestContainer.errorWrapper.ErrorMessage = "Request failed initializing before sending. Failing out early.";
+        requestContainer.errorWrapper.ErrorName = "Header Creation Failed";
+        requestContainer.errorWrapper.ErrorMessage = "Request failed initializing the header before sending the request. Failing out early. The Problematic Header: " + failedHeader;
     }
 
     curl_slist* PlayFabCurlHttpPlugin::TryCurlAddHeader(CallRequestContainer& requestContainer, curl_slist* list, const char* headerToAppend)
@@ -333,7 +323,7 @@ namespace PlayFab
         list = curl_slist_append(list, headerToAppend);
         if(list == NULL)
         {
-            CurlHeaderFailed(requestContainer);
+            CurlHeaderFailed(requestContainer, headerToAppend);
         }
         return list;
     }
