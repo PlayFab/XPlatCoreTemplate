@@ -80,7 +80,7 @@ namespace PlayFabUnit
         std::vector<std::thread> testThreadPool;
         std::vector<std::shared_ptr<PlayFab::PlayFabEventAPI>> eventApiPool;
         std::atomic<uint32_t> eventCounter;
-        std::atomic<uint32_t> queueTestCount = 0;
+        std::atomic<uint32_t> queueTestCount;
         const uint32_t c_numQueueTestEvents = 4;
 
         // Utility
