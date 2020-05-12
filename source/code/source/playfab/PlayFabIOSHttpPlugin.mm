@@ -96,7 +96,8 @@ namespace PlayFab
     void PlayFabIOSHttpPlugin::MakePostRequest(std::unique_ptr<CallRequestContainerBase> requestContainer)
     {
         CallRequestContainer* container = dynamic_cast<CallRequestContainer*>(requestContainer.get());
-        if (container != nullptr && container->HandleInvalidSettings())
+        // Option C step 1
+        if (container != nullptr)// && container->HandleInvalidSettings())
         {
             std::shared_ptr<RequestTask> requestTask = nullptr;
             try
@@ -221,6 +222,12 @@ namespace PlayFab
     void PlayFabIOSHttpPlugin::ExecuteRequest(RequestTask& requestTask)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
+        // Option C step 2
+        if(requestContainer.HandleInvalidSettings())
+        {
+            return;
+        }
+
         const auto& requestUrl = GetUrl(requestTask);
 
         NSURL* url = [NSURL URLWithString:[NSString stringWithUTF8String:requestUrl.c_str()]];
