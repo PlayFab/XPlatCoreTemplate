@@ -223,7 +223,7 @@ namespace PlayFab
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
         // Option C step 2
-        if(requestContainer.HandleInvalidSettings())
+        if(!requestContainer.HandleInvalidSettings())
         {
             return;
         }
