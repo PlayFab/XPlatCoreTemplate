@@ -77,32 +77,10 @@ namespace PlayFab
 
     bool CallRequestContainer::HandleInvalidSettings()
     {
-        bool isValid = true;
         if (m_settings->titleId.empty())
         {
-            // Option B
-            //throw new PlayFabException(PlayFabExceptionCode::TitleNotSet, "PlayFabSettings::staticSettings->titleId has not been set properly. It must not be empty.");
-
-            errorWrapper.HttpCode = 0;
-            errorWrapper.HttpStatus = "Client-side validation failure";
-            errorWrapper.ErrorCode = PlayFabErrorCode::PlayFabErrorInvalidParams;
-            errorWrapper.ErrorName = errorWrapper.HttpStatus;
-            errorWrapper.ErrorMessage = "PlayFabSettings::staticSettings->titleId has not been set properly. It must not be empty.";
-            isValid = false;
+            throw new PlayFabException(PlayFabExceptionCode::TitleNotSet, "PlayFabSettings::staticSettings->titleId has not been set properly. It must not be empty.");
         }
-
-        if (!isValid)
-        {
-            if (PlayFabSettings::globalErrorHandler != nullptr)
-            {
-                PlayFabSettings::globalErrorHandler(errorWrapper, GetCustomData());
-            }
-            if (errorCallback != nullptr)
-            {
-                errorCallback(errorWrapper, GetCustomData());
-            }
-        }
-
-        return isValid;
+        return true;
     }
 }

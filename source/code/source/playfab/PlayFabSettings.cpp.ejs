@@ -5,8 +5,7 @@
 namespace PlayFab
 {
     // Control whether all callbacks are threaded or whether the user manually controls callback timing from their main-thread
-    // OPTION A-1 - If the title id is not set, the error callback will be synchronosly called within your failing api call.
-    //        B     ANY api call may synchronously throw an exception if the title id is not set
+    // Note ANY api call may synchronously throw an exception if the title id is not set, regardless of this flag
     bool PlayFabSettings::threadedCallbacks = false;
     const std::string PlayFabSettings::sdkVersion = "<%- sdkVersion %>";
     const std::string PlayFabSettings::buildIdentifier = "<%- buildIdentifier %>";
