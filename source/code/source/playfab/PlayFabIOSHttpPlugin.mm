@@ -221,7 +221,6 @@ namespace PlayFab
     void PlayFabIOSHttpPlugin::ExecuteRequest(RequestTask& requestTask)
     {
         CallRequestContainer& requestContainer = requestTask.RequestContainer();
-
         const auto& requestUrl = GetUrl(requestTask);
 
         NSURL* url = [NSURL URLWithString:[NSString stringWithUTF8String:requestUrl.c_str()]];
