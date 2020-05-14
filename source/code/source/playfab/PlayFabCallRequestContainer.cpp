@@ -75,12 +75,11 @@ namespace PlayFab
         this->errorWrapper.RequestId = newRequestId;
     }
 
-    bool CallRequestContainer::HandleInvalidSettings()
+    void CallRequestContainer::ThrowIfSettingsInvalid()
     {
         if (m_settings->titleId.empty())
         {
             throw new PlayFabException(PlayFabExceptionCode::TitleNotSet, "PlayFabSettings::staticSettings->titleId has not been set properly. It must not be empty.");
         }
-        return true;
     }
 }
