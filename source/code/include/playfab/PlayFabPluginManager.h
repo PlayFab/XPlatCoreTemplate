@@ -43,6 +43,8 @@ namespace PlayFab
         /// Returns number of currently pending post requests.
         /// </summary>
         virtual size_t Update() = 0;
+
+        const std::string c_requestIdHeaderKey = "X-RequestId:";
     };
 
     /// <summary>

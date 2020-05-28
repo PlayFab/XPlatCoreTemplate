@@ -120,8 +120,7 @@ namespace PlayFab
         } // UNLOCK httpRequestMutex
     }
 
-    constexpr char requestIdHeaderKey[] = "X-RequestId:";
-    constexpr size_t requestIdheaderKeyLen = _countof(requestIdHeaderKey) - 1;
+    constexpr size_t requestIdheaderKeyLen = _countof(c_requestIdHeaderKey) - 1;
     constexpr char whitespace[] = "\t\n\v\f\r ";
 
     size_t HeaderCallback(char* buffer, size_t size, size_t nitems, void* userdata)
