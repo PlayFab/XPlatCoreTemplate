@@ -324,7 +324,6 @@ namespace PlayFab
             requestContainer.errorWrapper.ErrorCode = static_cast<PlayFabErrorCode>(requestContainer.responseJson.get("errorCode", Json::Value::null).asInt());
             requestContainer.errorWrapper.ErrorMessage = requestContainer.responseJson.get("errorMessage", Json::Value::null).asString();
             requestContainer.errorWrapper.ErrorDetails = requestContainer.responseJson.get("errorDetails", Json::Value::null);
-            requestContainer.SetRequestId(requestContainer.responseJson.get(c_requestIdHeaderKey, Json::Value::null).asString());
         }
         else
         {
