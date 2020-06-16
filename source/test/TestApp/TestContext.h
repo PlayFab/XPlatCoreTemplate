@@ -36,6 +36,7 @@ namespace PlayFabUnit
         TestCase* testCase;
         Int64 startTime;
         Int64 endTime;
+        int retryCount;
 
         // End this test with the given state and message
         void EndTest(TestFinishState state, const std::string& resultMsg);
@@ -49,5 +50,7 @@ namespace PlayFabUnit
 
         // Set a temporary message, which will display if the test times out
         void SetInterrimMessage(const std::string& message);
+
+        void AttemptRetry();
     };
 }

@@ -54,4 +54,12 @@ namespace PlayFabUnit
         interrimMsg = message;
         // printf("Interrim: %s\n", message.c_str());
     }
+
+    void TestContext::AttemptRetry()
+    {
+        activeState = TestActiveState::PENDING;
+        finishState = TestFinishState::PENDING;
+        testResultMsg = "";
+        retryCount++;
+    }
 }

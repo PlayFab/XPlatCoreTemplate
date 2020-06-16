@@ -70,6 +70,20 @@ namespace PlayFabUnit
                     // Allow worker threads a chance to run (important for platforms with conservative thread management).
                     std::this_thread::yield();
 
+                    if (test->finishState == TestFinishState::FAILED && test->retryCount < test->testCase->maxRetry)
+                    {
+                        // Reset the test and try again
+                        test->AttemptRetry();
+                    }
+                    else
+                    {
+                        // Retrys are expired, move to the next test
+                        //_activeIndex++;
+                        //nextTest = (_activeIndex >= _testContexts.Count) ? null : _testContexts[_activeIndex];
+                        test->EndTest(TestFinishState::TIMEDOUT, "Test duration exceeded maximum");
+                        break;
+                    }
+
                     continue;
                 }
                 else if ((TestActiveState::ACTIVE == test->activeState) && timeExpired)

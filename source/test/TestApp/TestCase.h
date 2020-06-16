@@ -16,6 +16,7 @@ namespace PlayFabUnit
     class TestCase
     {
     public:
+        int maxRetry = 0;
         TestCase()
         {
             testList = std::make_shared<TestList>();
