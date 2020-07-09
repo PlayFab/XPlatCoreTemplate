@@ -53,6 +53,8 @@ namespace PlayFabUnit
 
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
+
+        PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
     }
 
     void PlatformLoginTest::Tick(TestContext& /*testContext*/)
