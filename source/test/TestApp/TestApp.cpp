@@ -80,6 +80,7 @@ namespace PlayFabUnit
 #if !defined(PLAYFAB_PLATFORM_IOS) // IOS isn't implemented yet
         // Add PlayFab API tests.
         PlatformLoginTest loginTest;
+        loginTest.SetTitleInfo(testTitleData);
         testRunner.Add(loginTest);
 #endif
 
