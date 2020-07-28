@@ -24,7 +24,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         vsVer: "v141", // As C++ versions change, we may need to update this
         vsYear: "2017", // As VS versions change, we may need to update this
         getVerticalNameDefault: getVerticalNameDefault,
-        winSdkVersion: "10.0.16299.0" // Which version of the Windows SDK (A VS installation option) to use
+        winSdkVersion: "10.0.18362.0" // Which version of the Windows SDK (A VS installation option) to use
     };
 
     templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir);
