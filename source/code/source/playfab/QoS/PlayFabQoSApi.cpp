@@ -136,6 +136,22 @@ namespace PlayFab
             }
 
             std::sort(result.regionResults.begin(), result.regionResults.end(), [](const RegionResult& first, const RegionResult& second) -> bool {return first.latencyMs < second.latencyMs; });
+
+            bool allTimedOut = false;
+            for(auto& regionRes: result.regionResults)
+            {
+                if(regionRes.latencyMs != timeoutMs)
+                {
+                    allTimedOut = false;
+                    break;
+                }
+                allTimedOut = true;
+            }
+
+            if(allTimedOut)
+            {
+                result.errorCode = static_cast<int>(QoSErrorCode::Timeout);;
+            }
             return result;
         }
 
@@ -372,6 +388,7 @@ namespace PlayFab
             }
 
             // if a ping took longer than TIMEOUT value it will be ignored (by design)
+            // THIS IS WRONG, IF ALL REGIONS ARE TIMEOUT WE SHOULD ENSURE WE ARE HANDING BACK AN ERROR
         }
 
         // Ping one data center and return the address.
