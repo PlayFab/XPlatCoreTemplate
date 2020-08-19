@@ -5,6 +5,8 @@
 
 #include "TestAppPch.h"
 
+#if !defined(DISABLE_PLAYFABCLIENT_API)
+
 #include "TestContext.h"
 #include <playfab/PlayFabApiSettings.h>
 #include <playfab/PlayFabSettings.h>
@@ -74,3 +76,5 @@ namespace PlayFabUnit
         PlayFabSettings::ForgetAllCredentials();
     }
 }
+
+#endif

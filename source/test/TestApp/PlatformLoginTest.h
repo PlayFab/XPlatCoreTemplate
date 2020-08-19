@@ -2,6 +2,8 @@
 
 #pragma once
 
+#if !defined(DISABLE_PLAYFABCLIENT_API)
+
 #include "TestCase.h"
 
 #include <memory>
@@ -28,3 +30,5 @@ namespace PlayFabUnit
         void ClassTearDown() override;
     };
 }
+
+#endif
