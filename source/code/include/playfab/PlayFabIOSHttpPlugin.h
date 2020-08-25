@@ -50,7 +50,7 @@ namespace PlayFab
                 Requesting,
                 Finished
             };
-            
+
             CallRequestContainer& RequestContainer()
             {
                 return *dynamic_cast<CallRequestContainer*>(requestContainer.get());
@@ -66,7 +66,7 @@ namespace PlayFab
                 return requestContainer->GetUrl();
             }
 
-            std::string GetRequetsContainerFullUrl() const
+            std::string GetRequestContainerFullUrl() const
             {
                 return ConstRequestContainer().GetFullUrl();
             }
