@@ -91,6 +91,8 @@ namespace PlayFabUnit
     void PlayFabApiTest::LoginFailedCallback(const PlayFabError& error, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
+
+        // TODO: Bug 45560 - remove this platform specific check when fixed.
 #if !defined(PLAYFAB_PLATFORM_IOS)
         if (error.RequestId.empty())
         {
