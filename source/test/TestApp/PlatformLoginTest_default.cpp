@@ -1,13 +1,15 @@
 // Copyright (C) Microsoft Corporation. All rights reserved.
 
+// This file is meant to be compiled into projects that do not have a useful/valid platform specific login.
+// When present, add instead the platform specific file, and do NOT add this one
+
 #include "TestAppPch.h"
 
 #if !defined(DISABLE_PLAYFABCLIENT_API)
 
+#include "TestContext.h"
 #include <playfab/PlayFabApiSettings.h>
 #include <playfab/PlayFabSettings.h>
-
-#include <playfab/PlayFabClientInstanceApi.h>
 
 #include "PlatformLoginTest.h"
 
@@ -16,50 +18,56 @@ using namespace ClientModels;
 
 namespace PlayFabUnit
 {
-    void PlatformLoginTest::OnErrorSharedCallback(const PlayFabError& error, void* customData)
+    void OnErrorSharedCallback(const PlayFabError& error, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Fail("Unexpected error: " + error.GenerateErrorReport());
     }
 
+    void OnPlatformLogin(const LoginResult& result, void* customData)
+    {
+        TestContext* testContext = static_cast<TestContext*>(customData);
+        testContext->Pass("Custom: " + result.PlayFabId);
+    }
+
     // CLIENT API
     // Attempt a successful login
-    void PlatformLoginTest::PlatformLogin(TestContext& testContext)
+    void PlatformLoginTest::TestPlatformSpecificLogin(TestContext& testContext)
     {
         LoginWithCustomIDRequest request;
         request.CustomId = PlayFabSettings::buildIdentifier;
         request.CreateAccount = true;
 
         clientApi->LoginWithCustomID(request,
-            Callback(&PlatformLoginTest::OnPlatformLogin),
-            Callback(&PlatformLoginTest::OnErrorSharedCallback),
+            OnPlatformLogin,
+            OnErrorSharedCallback,
             &testContext);
-    }
-    void PlatformLoginTest::OnPlatformLogin(const LoginResult& /*result*/, void* customData)
-    {
-        TestContext* testContext = static_cast<TestContext*>(customData);
-        testContext->Pass();
+
     }
 
-    // Add test calls to this method, after implementation
     void PlatformLoginTest::AddTests()
     {
-        AddTest("PlatformLogin", &PlatformLoginTest::PlatformLogin);
+        AddTest("TestPlatformSpecificLogin", &PlatformLoginTest::TestPlatformSpecificLogin);
+        // Make sure PlayFab state is clean.
+        PlayFabSettings::ForgetAllCredentials();
+        PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
     }
 
     void PlatformLoginTest::ClassSetUp()
     {
         clientApi = std::make_shared<PlayFabClientInstanceAPI>(PlayFabSettings::staticPlayer);
-
-        // Make sure PlayFab state is clean.
-        PlayFabSettings::ForgetAllCredentials();
-
-        PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
     }
 
-    void PlatformLoginTest::Tick(TestContext& /*testContext*/)
+    void PlatformLoginTest::SetUp(TestContext&)
     {
-        // No work needed, async tests will end themselves
+    }
+
+    void PlatformLoginTest::Tick(TestContext&)
+    {
+    }
+
+    void PlatformLoginTest::TearDown(TestContext&)
+    {
     }
 
     void PlatformLoginTest::ClassTearDown()
