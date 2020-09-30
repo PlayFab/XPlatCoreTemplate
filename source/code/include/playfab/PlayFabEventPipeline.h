@@ -90,7 +90,7 @@ namespace PlayFab
 
     private:
         void WorkerThread();
-        bool DoWork(std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>>& batch, std::chrono::steady_clock::time_point& momentBatchStarted);
+        bool DoWork();
         void WriteEventsApiCallback(const EventsModels::WriteEventsResponse& result, void* customData);
         void WriteEventsApiErrorCallback(const PlayFabError& error, void* customData);
         void CallbackRequest(std::shared_ptr<const IPlayFabEmitEventRequest> request, std::shared_ptr<const IPlayFabEmitEventResponse> response);
@@ -108,6 +108,8 @@ namespace PlayFab
         std::shared_ptr<PlayFabEventsInstanceAPI> eventsApi;
 
         std::atomic_uintptr_t batchCounter;
+        std::vector<std::shared_ptr<const IPlayFabEmitEventRequest>> batch;
+        std::chrono::steady_clock::time_point momentBatchStarted;
         std::shared_ptr<PlayFabEventPipelineSettings> settings;
         PlayFabEventBuffer buffer;
         std::thread workerThread;
