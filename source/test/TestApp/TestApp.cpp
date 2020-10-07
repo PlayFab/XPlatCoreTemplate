@@ -20,6 +20,9 @@
 #include "PlayFabTestMultiUserInstance.h"
 #endif
 
+// possible disable qos thing
+#include "PlayFabQoSTest.h"
+
 #include <playfab/PlayFabJsonHeaders.h>
 
 #include "PlayFabTestAlloc.h"
@@ -103,6 +106,10 @@ namespace PlayFabUnit
         pfMultiUserInstanceTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfMultiUserInstanceTest);
 #endif
+
+        PlayFabQoSTest pfQosTest;
+        pfQosTest.SetTitleInfo(testTitleData);
+        testRunner.Add(pfQosTest);
 
         // Run the tests (blocks until all tests have finished).
         testRunner.Run();
