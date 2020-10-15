@@ -730,6 +730,38 @@ namespace PlayFabUnit
         }
     }
 
+    // GROUP API
+    void PlayFabApiTest::GroupEmptyTest(TestContext& testContext)
+    {
+        // TODO need to add Group API (does it need to be imported first?)
+        // Login (need to define entity ID and title_player_account) and group too?
+        //   call CreateGroup 
+        //   Ensure CustomTags is in the header and that it is empty 
+        auto settings = std::make_shared<PlayFabApiSettings>();
+        PlayFab::PlayFabClientInstanceAPI clientApi = PlayFab::PlayFabClientInstanceAPI(settings);
+
+        auto req = PlayFab::ClientModels::LoginWithCustomIDRequest();
+
+        clientApi.LoginWithCustomID(req, Callback(&PlayFabApiTest::LoginCallback), nullptr);
+
+    }
+
+    void PlayFabApiTest::GroupEmptyTestLoginCallback(const LoginResult& result, void* customData)
+    {
+
+        PlayFab::PlayFabGroupsInstanceAPI groupApi = PlayFab::PlayFabGroupsInstanceAPI(result.authenticationContext);
+        auto req = PlayFab::GroupsModels::CreateGroupRequest();
+        groupApi.CreateGroup(req, nullptr, nullptr);
+        //TestContext* testContext = static_cast<TestContext*>(customData);
+        //testContext->Fail("Expected login to fail");
+    }
+
+    void PlayFabApiTest::GroupEmptyTestLoginFailedCallback(const PlayFabError& error, void* customData)
+    {
+        TestContext* testContext = static_cast<TestContext*>(customData);
+        testContext->Fail("Expected Group Login to succeed.");
+    }
+
     //
     //
     // Add test calls to this method, after implementation
