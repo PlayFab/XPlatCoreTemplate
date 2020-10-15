@@ -16,10 +16,47 @@
 #include "PlayFabApiTest.h"
 #include "TestContext.h"
 
+#include <random>
+#include <sstream>
+
 using namespace PlayFab;
 using namespace ClientModels;
 using namespace AuthenticationModels;
 using namespace DataModels;
+
+namespace uuid {
+    static std::random_device              rd;
+    static std::mt19937                    gen(rd());
+    static std::uniform_int_distribution<> dis(0, 15);
+    static std::uniform_int_distribution<> dis2(8, 11);
+
+    std::string generate_uuid_v4() {
+        std::stringstream ss;
+        int i;
+        ss << std::hex;
+        for (i = 0; i < 8; i++) {
+            ss << dis(gen);
+        }
+        ss << "-";
+        for (i = 0; i < 4; i++) {
+            ss << dis(gen);
+        }
+        ss << "-4";
+        for (i = 0; i < 3; i++) {
+            ss << dis(gen);
+        }
+        ss << "-";
+        ss << dis2(gen);
+        for (i = 0; i < 3; i++) {
+            ss << dis(gen);
+        }
+        ss << "-";
+        for (i = 0; i < 12; i++) {
+            ss << dis(gen);
+        };
+        return ss.str();
+    }
+}
 
 namespace PlayFabUnit
 {
@@ -730,36 +767,41 @@ namespace PlayFabUnit
         }
     }
 
-    // GROUP API
-    void PlayFabApiTest::GroupEmptyTest(TestContext& testContext)
+     // GROUPS API
+    void PlayFabApiTest::GroupsApiTest(TestContext& testContext)
     {
-        // TODO need to add Group API (does it need to be imported first?)
-        // Login (need to define entity ID and title_player_account) and group too?
-        //   call CreateGroup 
-        //   Ensure CustomTags is in the header and that it is empty 
         auto settings = std::make_shared<PlayFabApiSettings>();
-        PlayFab::PlayFabClientInstanceAPI clientApi = PlayFab::PlayFabClientInstanceAPI(settings);
+        //clientApi = std::make_shared<PlayFab::PlayFabClientInstanceAPI>(settings);
 
         auto req = PlayFab::ClientModels::LoginWithCustomIDRequest();
+        req.CustomId = PlayFabSettings::buildIdentifier;
 
-        clientApi.LoginWithCustomID(req, Callback(&PlayFabApiTest::LoginCallback), nullptr);
-
+        clientApi->LoginWithCustomID(req, Callback(&PlayFabApiTest::GroupsTestLoginCallback), Callback(&PlayFabApiTest::GroupsTestLoginFailedCallback), &testContext);
     }
 
-    void PlayFabApiTest::GroupEmptyTestLoginCallback(const LoginResult& result, void* customData)
+    void PlayFabApiTest::GroupsTestLoginCallback(const LoginResult& result, void* customData)
     {
-
-        PlayFab::PlayFabGroupsInstanceAPI groupApi = PlayFab::PlayFabGroupsInstanceAPI(result.authenticationContext);
+        auto groupApi = std::make_shared<PlayFab::PlayFabGroupsInstanceAPI>(result.authenticationContext);
         auto req = PlayFab::GroupsModels::CreateGroupRequest();
-        groupApi.CreateGroup(req, nullptr, nullptr);
-        //TestContext* testContext = static_cast<TestContext*>(customData);
-        //testContext->Fail("Expected login to fail");
+        req.CustomTags = std::map<std::string, std::string>();
+
+        // TODO Bug 29786037: this map is required to be filled to not get a 500 error with the CreateGroup api call
+        req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
+
+        req.GroupName = uuid::generate_uuid_v4();
+        groupApi->CreateGroup(req, Callback(&PlayFabApiTest::GroupsTestGroupCallback), Callback(&PlayFabApiTest::GroupsTestLoginFailedCallback), customData);
     }
 
-    void PlayFabApiTest::GroupEmptyTestLoginFailedCallback(const PlayFabError& error, void* customData)
+    void PlayFabApiTest::GroupsTestGroupCallback(const PlayFab::GroupsModels::CreateGroupResponse& response, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
-        testContext->Fail("Expected Group Login to succeed.");
+        testContext->Pass("CreateGroups succeeded and made the new group: " + response.GroupName);
+    }
+
+    void PlayFabApiTest::GroupsTestLoginFailedCallback(const PlayFabError& error, void* customData)
+    {
+        TestContext* testContext = static_cast<TestContext*>(customData);
+        testContext->Fail("Expected Group Login to succeed. Got error " + error.ErrorMessage);
     }
 
     //
@@ -787,6 +829,7 @@ namespace PlayFabUnit
         AddTest("WriteEvent", &PlayFabApiTest::WriteEvent);
         AddTest("GetEntityToken", &PlayFabApiTest::GetEntityToken);
         AddTest("ObjectApi", &PlayFabApiTest::ObjectApi);
+        AddTest("CreateGroupApi", &PlayFabApiTest::GroupsApiTest);
     }
 
     void PlayFabApiTest::ClassSetUp()
