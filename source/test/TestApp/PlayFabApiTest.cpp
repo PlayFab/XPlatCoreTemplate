@@ -15,48 +15,14 @@
 
 #include "PlayFabApiTest.h"
 #include "TestContext.h"
-
-#include <random>
-#include <sstream>
+#include "TestUtils.h"
 
 using namespace PlayFab;
 using namespace ClientModels;
 using namespace AuthenticationModels;
 using namespace DataModels;
 
-namespace uuid {
-    static std::random_device              rd;
-    static std::mt19937                    gen(rd());
-    static std::uniform_int_distribution<> dis(0, 15);
-    static std::uniform_int_distribution<> dis2(8, 11);
 
-    std::string generate_uuid_v4() {
-        std::stringstream ss;
-        int i;
-        ss << std::hex;
-        for (i = 0; i < 8; i++) {
-            ss << dis(gen);
-        }
-        ss << "-";
-        for (i = 0; i < 4; i++) {
-            ss << dis(gen);
-        }
-        ss << "-4";
-        for (i = 0; i < 3; i++) {
-            ss << dis(gen);
-        }
-        ss << "-";
-        ss << dis2(gen);
-        for (i = 0; i < 3; i++) {
-            ss << dis(gen);
-        }
-        ss << "-";
-        for (i = 0; i < 12; i++) {
-            ss << dis(gen);
-        };
-        return ss.str();
-    }
-}
 
 namespace PlayFabUnit
 {
@@ -771,7 +737,6 @@ namespace PlayFabUnit
     void PlayFabApiTest::GroupsApiTest(TestContext& testContext)
     {
         auto settings = std::make_shared<PlayFabApiSettings>();
-        //clientApi = std::make_shared<PlayFab::PlayFabClientInstanceAPI>(settings);
 
         auto req = PlayFab::ClientModels::LoginWithCustomIDRequest();
         req.CustomId = PlayFabSettings::buildIdentifier;
@@ -788,7 +753,7 @@ namespace PlayFabUnit
         // TODO Bug 29786037: this map is required to be filled to not get a 500 error with the CreateGroup api call
         req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
 
-        req.GroupName = uuid::generate_uuid_v4();
+        req.GroupName = PlayFabUnit::GenerateUuidV4();
         groupApi->CreateGroup(req, Callback(&PlayFabApiTest::GroupsTestGroupCallback), Callback(&PlayFabApiTest::GroupsTestLoginFailedCallback), customData);
     }
 

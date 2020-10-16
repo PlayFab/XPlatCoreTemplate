@@ -8,4 +8,5 @@ namespace PlayFabUnit
 {
     const char* ToString(TestActiveState state);
     const char* ToString(TestFinishState state);
+    std::string GenerateUuidV4();
 }
