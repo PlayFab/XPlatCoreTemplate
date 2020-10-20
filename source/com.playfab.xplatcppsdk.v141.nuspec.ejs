@@ -23,7 +23,8 @@
         <license type="expression">Apache-2.0</license>
 
         <!-- The icon is used in Visual Studio's package manager UI -->
-        <iconUrl>https://playfab.com/assets/img/logo/azure-playfab-logo.png</iconUrl>
+        <!-- <iconUrl>https://playfab.com/assets/img/logo/azure-playfab-logo.png</iconUrl> -->
+
 
         <!-- 
             If true, this value prompts the user to accept the license when
@@ -54,6 +55,9 @@
 
     <!-- A readme.txt to display when the package is installed -->
     <files>
-        <file src="readme.txt" target="" />
+        <file src=".\build\Windows\x64\Debug\*.pdb" target="lib" />
+        <file src=".\build\Windows\x64\Debug\*.lib" target="lib" />
+        <file src=".\build\Windows\x64\Debug\XPlatCppWindows\*.pdb" target="lib" />
+        <file src=".\build\Windows\x64\Debug\XPlatCppWindows\*.lib" target="lib" />
     </files>
 </package>
