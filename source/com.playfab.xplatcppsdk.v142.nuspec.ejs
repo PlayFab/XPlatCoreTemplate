@@ -1,67 +1,28 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
     <metadata>
-        <!-- The identifier that must be unique within the hosting gallery -->
         <id>com.playfab.xplatcppsdk.<%- vsVer %></id>
-
-        <!-- The package version number that is used when resolving dependencies -->
         <version><%- sdkVersion %></version>
-
-        <!-- Authors contain text that appears directly on the gallery -->
-        <authors>PlayFab</authors>
-
-        <!-- 
-            Owners are typically nuget.org identities that allow gallery
-            users to easily find other packages by the same owners.  
-        -->
+        <authors>Microsoft</authors>
         <owners>pgilmore, toddbellMSFT</owners>
-        
-         <!-- Project URL provides a link for the gallery -->
         <projectUrl>http://github.com/PlayFab/XPlatCppSdk</projectUrl>
-
-         <!-- License information is displayed on the gallery -->
         <license type="expression">Apache-2.0</license>
-
-        <!-- The icon is used in Visual Studio's package manager UI -->
-        <!-- <iconUrl>https://playfab.com/assets/img/logo/azure-playfab-logo.png</iconUrl> -->
-
-
-        <!-- 
-            If true, this value prompts the user to accept the license when
-            installing the package. 
-        -->
+        <iconUrl>https://playfab.com/assets/img/logo/azure-playfab-logo.png</iconUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-
-        <!-- Any details about this particular release -->
         <releaseNotes>https://api.playfab.com/releaseNotes/#201014</releaseNotes>
-
-        <!-- 
-            The description can be used in package manager UI. Note that the
-            nuget.org gallery uses information you add in the portal. 
-        -->
-        <description>PlayFab XPlatCppSdk</description>
-
-        <!-- Copyright information -->
+        <description>Microsoft Azure PlayFab XPlatCppSdk</description>
         <copyright>Copyright ©2020 Microsoft Corp</copyright>
-
-        <!-- Tags appear in the gallery and can be used for tag searches -->
-        <tags>PlayFab Baas Paas JSON REST HTTP SSL API cloud liveops game gamedev native nativepackage</tags>
-
+        <tags>Microsoft Azure PlayFab Baas Paas JSON REST HTTP SSL API cloud liveops game gamedev native nativepackage</tags>
     </metadata>
-
-    <!-- A readme.txt to display when the package is installed -->
     <files>
         <file src=".\com.playfab.xplatcppsdk.<%- vsVer %>.targets" target="build\native\com.playfab.xplatcppsdk.<%- vsVer %>.targets" />
-
-            <file src=".\build\Windows\x64\Debug\lib_json.lib" target="build\native\lib\x64\Debug\lib_json.lib" />
-            <file src=".\build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.pdb" target="build\native\lib\x64\Debug\XPlatCppWindows.pdb" />
-            <file src=".\build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.lib" target="build\native\lib\x64\Debug\XPlatCppWindows.lib" />
-    
-            <file src=".\build\Windows\x64\Release\lib_json.lib" target="build\native\lib\x64\Release\lib_json.lib" />
-            <file src=".\build\Windows\x64\Release\XPlatCppWindows\XPlatCppWindows.pdb" target="build\native\lib\x64\Release\XPlatCppWindows.pdb" />
-            <file src=".\build\Windows\x64\Release\XPlatCppWindows\XPlatCppWindows.lib" target="build\native\lib\x64\Release\XPlatCppWindows.lib" />
-    
-            <file src=".\code\include\playfab\**\*.h" target="build\native\include\playfab" />
-            <file src=".\external\jsoncpp\include\json\**\*.h" target="build\native\include\json" />
+        <file src=".\build\Windows\x64\Debug\lib_json.lib" target="build\native\lib\x64\Debug\lib_json.lib" />
+        <file src=".\build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.pdb" target="build\native\lib\x64\Debug\XPlatCppWindows.pdb" />
+        <file src=".\build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.lib" target="build\native\lib\x64\Debug\XPlatCppWindows.lib" />
+        <file src=".\build\Windows\x64\Release\lib_json.lib" target="build\native\lib\x64\Release\lib_json.lib" />
+        <file src=".\build\Windows\x64\Release\XPlatCppWindows\XPlatCppWindows.pdb" target="build\native\lib\x64\Release\XPlatCppWindows.pdb" />
+        <file src=".\build\Windows\x64\Release\XPlatCppWindows\XPlatCppWindows.lib" target="build\native\lib\x64\Release\XPlatCppWindows.lib" />
+        <file src=".\code\include\playfab\**\*.h" target="build\native\include\playfab" />
+        <file src=".\external\jsoncpp\include\json\**\*.h" target="build\native\include\json" />
     </files>
 </package>
