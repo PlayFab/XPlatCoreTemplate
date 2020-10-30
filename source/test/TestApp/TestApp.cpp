@@ -107,9 +107,11 @@ namespace PlayFabUnit
         testRunner.Add(pfMultiUserInstanceTest);
 #endif
 
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
         PlayFabQoSTest pfQosTest;
         pfQosTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfQosTest);
+#endif
 
         // Run the tests (blocks until all tests have finished).
         testRunner.Run();
