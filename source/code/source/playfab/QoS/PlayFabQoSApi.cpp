@@ -305,7 +305,7 @@ namespace PlayFab
                 for (size_t i = 0; i < numThreads && pingItr < numPings; ++i)
                 {
                     // NOTE: the very first ping result might be a fake future
-                    for (size_t futuresCount = 0; futuresCount < MaxWaitForFuturesLoopCounts || asyncPingResults[i].valid(); ++futuresCount)
+                    for (size_t futuresCount = 0; futuresCount < MaxWaitForFuturesLoopCounts && asyncPingResults[i].valid(); ++futuresCount)
                     {
                         future_status status = asyncPingResults[i].wait_for(threadWaitTimespan);
                         if (status == future_status::ready)
