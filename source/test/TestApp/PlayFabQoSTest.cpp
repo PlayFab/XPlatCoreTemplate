@@ -2,7 +2,7 @@
 
 #include "TestAppPch.h"
 
-//#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 
 #include <thread>
 #include <chrono>
@@ -43,7 +43,10 @@ namespace PlayFabUnit
             },
                 &testContext);
 
-        while (!isLoggedIn) {}
+        while (!isLoggedIn) 
+        {
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        }
 
         QoS::PlayFabQoSApi api;
 
@@ -62,6 +65,9 @@ namespace PlayFabUnit
 
     void PlayFabQoSTest::AddTests()
     {
+        // It is not appropriate for this test to block infinitely until the QoS result is returned
+        // Not the least of which is because it frequently blocks forever if called within a callback.
+        // TODO: This test cannot switch to an async mechanism until QoS is re-architected to allow such a calling scheme.
         AddTest("QosResultApi", &PlayFabQoSTest::QoSResultApi);
     }
 
@@ -92,4 +98,4 @@ namespace PlayFabUnit
         PlayFabSettings::ForgetAllCredentials();
     }
 }
-//#endif //defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+#endif //defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)

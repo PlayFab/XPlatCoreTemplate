@@ -135,9 +135,7 @@ namespace PlayFab
                 result.regionResults.push_back(RegionResult(it->first, latency, it->second.errorCode));
             }
 
-            std::sort(result.regionResults.begin(), result.regionResults.end(), [](const RegionResult& first, const RegionResult& second) -> bool {return first.latencyMs < second.latencyMs; });
-
-            bool allTimedOut = false;
+            bool allTimedOut = true;
             for(auto& regionRes: result.regionResults)
             {
                 if(regionRes.latencyMs != timeoutMs)
@@ -145,13 +143,15 @@ namespace PlayFab
                     allTimedOut = false;
                     break;
                 }
-                allTimedOut = true;
             }
 
             if(allTimedOut)
             {
                 result.errorCode = static_cast<int>(QoSErrorCode::Timeout);;
             }
+
+            std::sort(result.regionResults.begin(), result.regionResults.end(), [](const RegionResult& first, const RegionResult& second) -> bool {return first.latencyMs < second.latencyMs; });
+
             return result;
         }
 
@@ -305,8 +305,12 @@ namespace PlayFab
                 for (size_t i = 0; i < numThreads && pingItr < numPings; ++i)
                 {
                     // NOTE: the very first ping result might be a fake future
-                    for (size_t futuresCount = 0; futuresCount < MaxWaitForFuturesLoopCounts && asyncPingResults[i].valid(); ++futuresCount)
+                    for (size_t futuresCount = 0; futuresCount < MaxWaitForFuturesLoopCounts; ++futuresCount)
                     {
+                        if(!asyncPingResults[i].valid())
+                        {
+                            continue;
+                        }
                         future_status status = asyncPingResults[i].wait_for(threadWaitTimespan);
                         if (status == future_status::ready)
                         {
@@ -386,9 +390,6 @@ namespace PlayFab
                 accumulatedPingResults[region].latencyMs += result.latencyMs;
                 ++accumulatedPingResults[region].pingCount;
             }
-
-            // if a ping took longer than TIMEOUT value it will be ignored (by design)
-            // THIS IS WRONG, IF ALL REGIONS ARE TIMEOUT WE SHOULD ENSURE WE ARE HANDING BACK AN ERROR
         }
 
         // Ping one data center and return the address.
