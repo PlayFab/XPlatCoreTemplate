@@ -10,7 +10,6 @@
 #include <playfab/PlayFabAuthenticationInstanceApi.h>
 #include <playfab/PlayFabClientInstanceApi.h>
 #include <playfab/PlayFabDataInstanceApi.h>
-#include <playfab/PlayFabGroupsInstanceApi.h>
 
 #include "TestCase.h"
 
