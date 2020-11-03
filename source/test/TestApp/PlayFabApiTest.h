@@ -177,13 +177,6 @@ namespace PlayFabUnit
         void OnSetObjects(const PlayFab::DataModels::SetObjectsResponse&, void* customData);
         void OnGetObjects2(const PlayFab::DataModels::GetObjectsResponse& result, void* customData);
 
-        // GROUPS API
-        // Test adding a group with empty custom tags and ensure it doesn't crash anything
-        void GroupsApiTest(TestContext& testContext);
-        void GroupsTestLoginCallback(const PlayFab::ClientModels::LoginResult&, void* customData);
-        void GroupsTestLoginFailedCallback(const PlayFab::PlayFabError& error, void* customData);
-        void GroupsTestGroupCallback(const PlayFab::GroupsModels::CreateGroupResponse& response, void* customData);
-
         // Utility
         template<typename T> std::function<void(const T&, void*)> Callback(void(PlayFabApiTest::* func)(const T&, void*))
         {

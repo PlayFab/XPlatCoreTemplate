@@ -37,7 +37,7 @@ namespace PlayFabUnit
     void PlayFabGroupsTest::GroupsTestGroupCallback(const GroupsModels::CreateGroupResponse& response, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
-        testContext->Pass("CreateGroups succeeded and made the new group: " + response.GroupName);
+        testContext->Pass();
     }
 
     void PlayFabGroupsTest::GroupsTestLoginFailedCallback(const PlayFabError& error, void* customData)
@@ -46,11 +46,6 @@ namespace PlayFabUnit
         testContext->Fail("Expected Group Login to succeed. Got error " + error.ErrorMessage);
     }
 
-    //
-    //
-    // Add test calls to this method, after implementation
-    //
-    //
     void PlayFabGroupsTest::AddTests()
     {
         AddTest("CreateGroupApi", &PlayFabGroupsTest::GroupsApiTest);
