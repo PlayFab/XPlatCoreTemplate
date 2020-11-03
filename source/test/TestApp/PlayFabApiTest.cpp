@@ -15,7 +15,6 @@
 
 #include "PlayFabApiTest.h"
 #include "TestContext.h"
-#include "TestUtils.h"
 
 using namespace PlayFab;
 using namespace ClientModels;
