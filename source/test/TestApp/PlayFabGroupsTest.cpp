@@ -1,6 +1,11 @@
 
 #include "TestAppPch.h"
 
+#include "PlayFabGroupsTest.h"
+#include "playfab/PlayFabApiSettings.h"
+#include "playfab/PlayFabSettings.h"
+
+using namespace PlayFab;
 
 namespace PlayFabUnit
 {
@@ -10,26 +15,26 @@ namespace PlayFabUnit
     {
         auto settings = std::make_shared<PlayFabApiSettings>();
 
-        auto req = PlayFab::ClientModels::LoginWithCustomIDRequest();
+        auto req = ClientModels::LoginWithCustomIDRequest();
         req.CustomId = PlayFabSettings::buildIdentifier;
 
-        clientApi->LoginWithCustomID(req, Callback(&PlayFabApiTest::GroupsTestLoginCallback), Callback(&PlayFabApiTest::GroupsTestLoginFailedCallback), &testContext);
+        clientApi->LoginWithCustomID(req, Callback(&PlayFabGroupsTest::GroupsTestLoginCallback), Callback(&PlayFabGroupsTest::GroupsTestLoginFailedCallback), &testContext);
     }
 
-    void PlayFabGroupsTest::GroupsTestLoginCallback(const LoginResult& result, void* customData)
+    void PlayFabGroupsTest::GroupsTestLoginCallback(const ClientModels::LoginResult& result, void* customData)
     {
-        auto groupApi = std::make_shared<PlayFab::PlayFabGroupsInstanceAPI>(result.authenticationContext);
-        auto req = PlayFab::GroupsModels::CreateGroupRequest();
+        auto groupApi = std::make_shared<PlayFabGroupsInstanceAPI>(result.authenticationContext);
+        auto req = GroupsModels::CreateGroupRequest();
         req.CustomTags = std::map<std::string, std::string>();
 
         // TODO Bug 29786037: this map is required to be filled to not get a 500 error with the CreateGroup api call
         req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
 
-        req.GroupName = PlayFabUnit::GenerateUuidV4();
-        groupApi->CreateGroup(req, Callback(&PlayFabApiTest::GroupsTestGroupCallback), Callback(&PlayFabApiTest::GroupsTestLoginFailedCallback), customData);
+        req.GroupName = GenerateUuidV4();
+        groupApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsTestGroupCallback), Callback(&PlayFabGroupsTest::GroupsTestLoginFailedCallback), customData);
     }
 
-    void PlayFabGroupsTest::GroupsTestGroupCallback(const PlayFab::GroupsModels::CreateGroupResponse& response, void* customData)
+    void PlayFabGroupsTest::GroupsTestGroupCallback(const GroupsModels::CreateGroupResponse& response, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Pass("CreateGroups succeeded and made the new group: " + response.GroupName);
@@ -48,8 +53,7 @@ namespace PlayFabUnit
     //
     void PlayFabGroupsTest::AddTests()
     {
-        // AddTest("InvalidSettings", &PlayFabApiTest::InvalidSettings);
-        AddTest("CreateGroupApi", &PlayFabApiTest::GroupsApiTest);
+        AddTest("CreateGroupApi", &PlayFabGroupsTest::GroupsApiTest);
     }
 
     void PlayFabGroupsTest::ClassSetUp()

@@ -5,12 +5,30 @@
 #include "TestCase.h"
 #include <playfab/PlayFabClientInstanceApi.h>
 
+#include "playfab/PlayFabClientDataModels.h"
+#include "playfab/PlayFabGroupsInstanceApi.h"
+#include "playfab/PlayFabGroupsDataModels.h"
+
 namespace PlayFabUnit
 {
     class PlayFabGroupsTest : public PlayFabApiTestCase
     {
     private:
+        // Fixed values provided from testInputs
+        bool TITLE_INFO_SET;
+        std::string USER_EMAIL;
+
         void GroupsApiTest(TestContext& testContext);
+
+        // Utility
+        template<typename T> std::function<void(const T&, void*)> Callback(void(PlayFabGroupsTest::* func)(const T&, void*))
+        {
+            return std::bind(func, this, std::placeholders::_1, std::placeholders::_2);
+        }
+
+        void GroupsTestLoginCallback(const PlayFab::ClientModels::LoginResult& result, void* customData);
+        void GroupsTestGroupCallback(const PlayFab::GroupsModels::CreateGroupResponse& response, void* customData);
+        void GroupsTestLoginFailedCallback(const PlayFab::PlayFabError& error, void* customData);
 
     protected:
         void AddTests() override;
@@ -21,7 +39,6 @@ namespace PlayFabUnit
         void ClassSetUp() override;
         void SetUp(TestContext& testContext) override;
         void Tick(TestContext& testContext) override;
-        void TearDown(TestContext& testContext) override;
         void ClassTearDown() override;
     };
 }

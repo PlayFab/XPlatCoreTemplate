@@ -23,10 +23,19 @@
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabEventTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabGroupsTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserStatic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestAlloc.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabQoSTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestAlloc.h">
@@ -76,6 +85,9 @@
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabEventTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabGroupsTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -83,6 +95,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabTestAlloc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabQoSTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="$(TestSourceDir)\TestApp\TestContext.cpp">

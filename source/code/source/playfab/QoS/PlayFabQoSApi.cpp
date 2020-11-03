@@ -138,7 +138,7 @@ namespace PlayFab
             bool allTimedOut = true;
             for(auto& regionRes: result.regionResults)
             {
-                if(regionRes.latencyMs != timeoutMs)
+                if(regionRes.latencyMs != static_cast<int>(timeoutMs))
                 {
                     allTimedOut = false;
                     break;

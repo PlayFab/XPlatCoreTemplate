@@ -8,6 +8,8 @@
 #include <playfab/PlayFabApiSettings.h>
 #include <playfab/PlayFabAuthenticationContext.h>
 
+#include "TestUtils.h"
+
 #if defined (_XBOX_ONE)
 
 // Use the C++ standard templated min/max

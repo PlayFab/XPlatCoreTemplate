@@ -16,12 +16,14 @@
 #include "PlatformLoginTest.h"
 #include "PlayFabApiTest.h"
 #include "PlayFabEventTest.h"
+#include "PlayFabGroupsTest.h"
 #include "PlayFabTestMultiUserStatic.h"
 #include "PlayFabTestMultiUserInstance.h"
-#endif
 
-// possible disable qos thing
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #include "PlayFabQoSTest.h"
+#endif // defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+#endif // !defined(DISABLE_PLAYFABCLIENT_API)
 
 #include <playfab/PlayFabJsonHeaders.h>
 
@@ -105,6 +107,10 @@ namespace PlayFabUnit
         PlayFabTestMultiUserInstance pfMultiUserInstanceTest;
         pfMultiUserInstanceTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfMultiUserInstanceTest);
+
+        PlayFabGroupsTest pfGroupTest;
+        pfGroupTest.SetTitleInfo(testTitleData);
+        testRunner.Add(pfGroupTest);
 
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
         PlayFabQoSTest pfQosTest;
