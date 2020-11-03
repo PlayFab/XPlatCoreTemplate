@@ -34,7 +34,7 @@ namespace PlayFabUnit
         groupApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsTestGroupCallback), Callback(&PlayFabGroupsTest::GroupsTestLoginFailedCallback), customData);
     }
 
-    void PlayFabGroupsTest::GroupsTestGroupCallback(const GroupsModels::CreateGroupResponse& response, void* customData)
+    void PlayFabGroupsTest::GroupsTestGroupCallback(const GroupsModels::CreateGroupResponse&, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Pass();
