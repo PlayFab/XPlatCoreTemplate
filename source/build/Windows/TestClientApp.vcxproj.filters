@@ -38,9 +38,6 @@
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabQoSTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestAlloc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="$(TestSourceDir)\TestApp\TestCase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
