@@ -8,8 +8,9 @@
 
 namespace PlayFabUnit
 {
-    
-    std::string GenerateUuidV4() {
+    // source: https://stackoverflow.com/questions/24365331/how-can-i-generate-uuid-in-c-without-using-boost-library
+    // note this is not sufficiently random enough to be guid's, but random strings is the original need for our tests.
+    std::string GenerateRandomString() {
         std::random_device              rd;
         std::mt19937                    gen(rd());
         std::uniform_int_distribution<> dis(0, 15);

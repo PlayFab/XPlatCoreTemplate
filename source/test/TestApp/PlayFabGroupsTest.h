@@ -16,7 +16,6 @@ namespace PlayFabUnit
     private:
         // Fixed values provided from testInputs
         bool TITLE_INFO_SET;
-        std::string USER_EMAIL;
 
         void GroupsApiTest(TestContext& testContext);
 
@@ -28,7 +27,7 @@ namespace PlayFabUnit
 
         void GroupsTestLoginCallback(const PlayFab::ClientModels::LoginResult& result, void* customData);
         void GroupsTestGroupCallback(const PlayFab::GroupsModels::CreateGroupResponse& response, void* customData);
-        void GroupsTestLoginFailedCallback(const PlayFab::PlayFabError& error, void* customData);
+        void GroupsTestSharedFailureCallback(const PlayFab::PlayFabError& error, void* customData);
 
     protected:
         void AddTests() override;

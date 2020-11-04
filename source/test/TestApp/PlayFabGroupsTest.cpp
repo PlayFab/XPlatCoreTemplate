@@ -18,7 +18,7 @@ namespace PlayFabUnit
         auto req = ClientModels::LoginWithCustomIDRequest();
         req.CustomId = PlayFabSettings::buildIdentifier;
 
-        clientApi->LoginWithCustomID(req, Callback(&PlayFabGroupsTest::GroupsTestLoginCallback), Callback(&PlayFabGroupsTest::GroupsTestLoginFailedCallback), &testContext);
+        clientApi->LoginWithCustomID(req, Callback(&PlayFabGroupsTest::GroupsTestLoginCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), &testContext);
     }
 
     void PlayFabGroupsTest::GroupsTestLoginCallback(const ClientModels::LoginResult& result, void* customData)
@@ -30,8 +30,8 @@ namespace PlayFabUnit
         // TODO Bug 29786037: this map is required to be filled to not get a 500 error with the CreateGroup api call
         req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
 
-        req.GroupName = GenerateUuidV4();
-        groupApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsTestGroupCallback), Callback(&PlayFabGroupsTest::GroupsTestLoginFailedCallback), customData);
+        req.GroupName = GenerateRandomString();
+        groupApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsTestGroupCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), customData);
     }
 
     void PlayFabGroupsTest::GroupsTestGroupCallback(const GroupsModels::CreateGroupResponse&, void* customData)
@@ -40,10 +40,10 @@ namespace PlayFabUnit
         testContext->Pass();
     }
 
-    void PlayFabGroupsTest::GroupsTestLoginFailedCallback(const PlayFabError& error, void* customData)
+    void PlayFabGroupsTest::GroupsTestSharedFailureCallback(const PlayFabError& error, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
-        testContext->Fail("Expected Group Login to succeed. Got error " + error.ErrorMessage);
+        testContext->Fail("Expected call to succeed but instead got the error: " + error.GenerateErrorReport());
     }
 
     void PlayFabGroupsTest::AddTests()
@@ -55,10 +55,9 @@ namespace PlayFabUnit
     {
         clientApi = std::make_shared<PlayFabClientInstanceAPI>(PlayFabSettings::staticPlayer);
         PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
-        USER_EMAIL = testTitleData.userEmail;
 
         // Verify all the inputs won't cause crashes in the tests
-        TITLE_INFO_SET = !PlayFabSettings::staticSettings->titleId.empty() && !USER_EMAIL.empty();
+        TITLE_INFO_SET = !PlayFabSettings::staticSettings->titleId.empty();
 
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
