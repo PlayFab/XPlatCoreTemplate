@@ -9,6 +9,9 @@
 #include "playfab/PlayFabGroupsInstanceApi.h"
 #include "playfab/PlayFabGroupsDataModels.h"
 
+
+#include "playfab/PlayFabApiSettings.h"
+
 namespace PlayFabUnit
 {
     class PlayFabGroupsTest : public PlayFabApiTestCase
@@ -16,6 +19,8 @@ namespace PlayFabUnit
     private:
         // Fixed values provided from testInputs
         bool TITLE_INFO_SET;
+        
+        std::shared_ptr<PlayFab::PlayFabApiSettings> groupsTestSettings;
 
         void GroupsApiTest(TestContext& testContext);
 

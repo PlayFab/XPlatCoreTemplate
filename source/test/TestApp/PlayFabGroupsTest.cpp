@@ -13,8 +13,6 @@ namespace PlayFabUnit
     // GROUPS API
     void PlayFabGroupsTest::GroupsApiTest(TestContext& testContext)
     {
-        auto settings = std::make_shared<PlayFabApiSettings>();
-
         auto req = ClientModels::LoginWithCustomIDRequest();
         req.CustomId = PlayFabSettings::buildIdentifier;
 
@@ -53,11 +51,14 @@ namespace PlayFabUnit
 
     void PlayFabGroupsTest::ClassSetUp()
     {
-        clientApi = std::make_shared<PlayFabClientInstanceAPI>(PlayFabSettings::staticPlayer);
+        groupsTestSettings = std::make_shared<PlayFabApiSettings>();
+        groupsTestSettings->titleId = testTitleData.titleId;
+
+        clientApi = std::make_shared<PlayFabClientInstanceAPI>(groupsTestSettings);
         PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
 
         // Verify all the inputs won't cause crashes in the tests
-        TITLE_INFO_SET = !PlayFabSettings::staticSettings->titleId.empty();
+        TITLE_INFO_SET = testTitleData.titleId != "";
 
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
