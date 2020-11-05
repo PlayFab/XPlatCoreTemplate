@@ -55,6 +55,8 @@ namespace PlayFabUnit
         groupsTestSettings->titleId = testTitleData.titleId;
 
         clientApi = std::make_shared<PlayFabClientInstanceAPI>(groupsTestSettings);
+
+        // Bug 45669 - this is required for groups tests to pass.
         PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
 
         // Verify all the inputs won't cause crashes in the tests
