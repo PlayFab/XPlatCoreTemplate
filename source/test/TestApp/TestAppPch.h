@@ -8,6 +8,9 @@
 #include <playfab/PlayFabApiSettings.h>
 #include <playfab/PlayFabAuthenticationContext.h>
 
+#include <random>
+#include <sstream>
+
 #include "TestUtils.h"
 
 #if defined (_XBOX_ONE)
