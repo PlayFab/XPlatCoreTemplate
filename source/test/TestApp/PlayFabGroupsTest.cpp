@@ -29,10 +29,10 @@ namespace PlayFabUnit
         req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
 
         req.GroupName = GenerateRandomString();
-        groupApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsTestGroupCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), customData);
+        groupApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsTestSuccessCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), customData);
     }
 
-    void PlayFabGroupsTest::GroupsTestGroupCallback(const GroupsModels::CreateGroupResponse&, void* customData)
+    void PlayFabGroupsTest::GroupsTestSuccessCallback(const GroupsModels::CreateGroupResponse&, void* customData)
     {
         TestContext* testContext = static_cast<TestContext*>(customData);
         testContext->Pass();

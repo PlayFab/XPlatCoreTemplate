@@ -31,7 +31,7 @@ namespace PlayFabUnit
         }
 
         void GroupsTestLoginCallback(const PlayFab::ClientModels::LoginResult& result, void* customData);
-        void GroupsTestGroupCallback(const PlayFab::GroupsModels::CreateGroupResponse& response, void* customData);
+        void GroupsTestSuccessCallback(const PlayFab::GroupsModels::CreateGroupResponse& response, void* customData);
         void GroupsTestSharedFailureCallback(const PlayFab::PlayFabError& error, void* customData);
 
     protected:
