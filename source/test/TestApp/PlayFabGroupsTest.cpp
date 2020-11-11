@@ -89,7 +89,7 @@ namespace PlayFabUnit
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
 
-        auto context = std::make_shared<PlayFabApiSettings>();
+        auto context = std::make_shared<PlayFabLoginContext>();
         auto settings = std::make_shared<PlayFabApiSettings>();
         groupsTestSettings->titleId = testTitleData.titleId;
 
