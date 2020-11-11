@@ -27,21 +27,13 @@ namespace PlayFabUnit
 
     void PlayFabGroupsTest::GroupsCreateTest(TestContext& testContext)
     {
-        auto req = ClientModels::LoginWithCustomIDRequest();
-        req.CustomId = PlayFabSettings::buildIdentifier;
-
-        clientApi->LoginWithCustomID(req, Callback(&PlayFabGroupsTest::GroupsCreateLoginCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), &testContext);
-    }
-
-    void PlayFabGroupsTest::GroupsCreateLoginCallback(const ClientModels::LoginResult&, void* customData)
-    {
         auto req = GroupsModels::CreateGroupRequest();
         req.CustomTags = std::map<std::string, std::string>();
 
         // TODO Bug 29786037: this map is required to be filled to not get a 500 error with the CreateGroup api call
         req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
 
-        req.GroupName = groupName;
+        req.GroupName = GenerateRandomString();
         groupsApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsCreateTestSuccessCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), customData);
     }
 
@@ -94,40 +86,24 @@ namespace PlayFabUnit
 
     void PlayFabGroupsTest::ClassSetUp()
     {
-        groupName = GenerateRandomString();
-
-        groupsTestSettings = std::make_shared<PlayFabApiSettings>();
-        groupsTestSettings->titleId = testTitleData.titleId;
-
-        clientApi = std::make_shared<PlayFabClientInstanceAPI>(groupsTestSettings);
-
-        auto req = ClientModels::LoginWithCustomIDRequest();
-        req.CustomId = PlayFabSettings::buildIdentifier;
-
-        clientApi->LoginWithCustomID(req,
-                Callback(&PlayFabGroupsTest::ClassSetupLoginSucceeded),
-                Callback(&PlayFabGroupsTest::ClassSetupLoginFailed));
-
-        // Verify all the inputs won't cause crashes in the tests
-        TITLE_INFO_SET = testTitleData.titleId != "";
-
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
+
+        auto context = std::make_shared<PlayFabApiSettings>();
+        auto settings = std::make_shared<PlayFabApiSettings>();
+        groupsTestSettings->titleId = testTitleData.titleId;
+
+        clientApi = std::make_shared<PlayFabClientInstanceAPI>(settings, context);
+        groupsApi = std::make_shared<PlayFabGroupsInstanceAPI>(settings, context);
     }
 
     void PlayFabGroupsTest::ClassSetupLoginSucceeded(const PlayFab::ClientModels::LoginResult& result, void* )
     {
-        groupsApi = std::make_shared<PlayFabGroupsInstanceAPI>(groupsTestSettings, result.authenticationContext);
-    }
-
-    void PlayFabGroupsTest::ClassSetupLoginFailed(const PlayFab::PlayFabError& error, void*)
-    {
-        throw PlayFabException(PlayFabExceptionCode::NotLoggedIn, error.GenerateErrorReport().c_str());
     }
 
     void PlayFabGroupsTest::SetUp(TestContext& testContext)
     {
-        if (!TITLE_INFO_SET)
+        if (testTitleData.titleId == "")
         {
             testContext.Skip(); // We cannot do client tests if the titleId is not given
         }
