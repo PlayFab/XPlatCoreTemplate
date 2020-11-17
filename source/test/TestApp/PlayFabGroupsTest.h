@@ -43,7 +43,7 @@ namespace PlayFabUnit
         void AddTests() override;
 
     public:
-       void ClassSetUp() override;
+        void ClassSetUp() override;
         void SetUp(TestContext& testContext) override;
         void Tick(TestContext& testContext) override;
         void ClassTearDown() override;
