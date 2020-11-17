@@ -34,7 +34,7 @@ namespace PlayFabUnit
         req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
 
         req.GroupName = GenerateRandomString();
-        groupsApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsCreateTestSuccessCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), customData);
+        groupsApi->CreateGroup(req, Callback(&PlayFabGroupsTest::GroupsCreateTestSuccessCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), &testContext);
     }
 
     void PlayFabGroupsTest::GroupsCreateTestSuccessCallback(const GroupsModels::CreateGroupResponse& response, void* customData)
@@ -46,23 +46,14 @@ namespace PlayFabUnit
 
     void PlayFabGroupsTest::GroupsRemoveTest(TestContext& testContext)
     {
-        auto req = ClientModels::LoginWithCustomIDRequest();
-        req.CustomId = PlayFabSettings::buildIdentifier;
-
-        clientApi->LoginWithCustomID(req, Callback(&PlayFabGroupsTest::GroupsRemoveLoginCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), &testContext);
-    }
-
-    void PlayFabGroupsTest::GroupsRemoveLoginCallback(const ClientModels::LoginResult&, void* customData)
-    {
         auto req = GroupsModels::DeleteGroupRequest();
         req.CustomTags = std::map<std::string, std::string>();
 
-        // CHECK IS THIS STILL REQUIRED?
         // TODO Bug 29786037: this map is required to be filled to not get a 500 error with the CreateGroup api call
         req.CustomTags.insert(std::pair<std::string, std::string>("One", "Two"));
 
         req.Group = createdGroupKey;
-        groupsApi->DeleteGroup(req, Callback(&PlayFabGroupsTest::GroupsRemoveTestSuccessCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), customData);
+        groupsApi->DeleteGroup(req, Callback(&PlayFabGroupsTest::GroupsRemoveTestSuccessCallback), Callback(&PlayFabGroupsTest::GroupsTestSharedFailureCallback), &testContext);
     }
 
     void PlayFabGroupsTest::GroupsRemoveTestSuccessCallback(const GroupsModels::EmptyResponse&, void* customData)
@@ -89,16 +80,12 @@ namespace PlayFabUnit
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
 
-        auto context = std::make_shared<PlayFabLoginContext>();
+        auto context = std::make_shared<PlayFabAuthenticationContext>();
         auto settings = std::make_shared<PlayFabApiSettings>();
-        groupsTestSettings->titleId = testTitleData.titleId;
+        settings->titleId = testTitleData.titleId;
 
         clientApi = std::make_shared<PlayFabClientInstanceAPI>(settings, context);
         groupsApi = std::make_shared<PlayFabGroupsInstanceAPI>(settings, context);
-    }
-
-    void PlayFabGroupsTest::ClassSetupLoginSucceeded(const PlayFab::ClientModels::LoginResult& result, void* )
-    {
     }
 
     void PlayFabGroupsTest::SetUp(TestContext& testContext)
