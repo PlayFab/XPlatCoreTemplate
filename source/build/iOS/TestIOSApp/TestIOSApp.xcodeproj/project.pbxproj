@@ -27,6 +27,7 @@
 		5A3F0ADC2241D92600AC0816 /* TestAppIOS.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5A3F0ADB2241D92600AC0816 /* TestAppIOS.mm */; };
 		5A3F0AEE2241F0BF00AC0816 /* log_bridge.c in Sources */ = {isa = PBXBuildFile; fileRef = 5A3F0AED2241F0BF00AC0816 /* log_bridge.c */; };
 		A68966B822A9E719004FF38A /* TestTitleData in Resources */ = {isa = PBXBuildFile; fileRef = A68966B722A9E719004FF38A /* TestTitleData */; };
+		D393499C2565DC9E00182455 /* PlayFabGroupsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D393499B2565DC9E00182455 /* PlayFabGroupsTest.cpp */; };
 		DA8BD9C92386019F00D38691 /* PlayFabTestMultiUserStatic.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA8BD9C62386019F00D38691 /* PlayFabTestMultiUserStatic.cpp */; };
 		DA8BD9CA2386019F00D38691 /* PlayFabTestAlloc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA8BD9C72386019F00D38691 /* PlayFabTestAlloc.cpp */; };
 		DA8BD9CB2386019F00D38691 /* PlayFabTestMultiUserInstance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DA8BD9C82386019F00D38691 /* PlayFabTestMultiUserInstance.cpp */; };
@@ -100,6 +101,8 @@
 		5A3F0AED2241F0BF00AC0816 /* log_bridge.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = log_bridge.c; sourceTree = "<group>"; };
 		5A3F0AEF2241F39000AC0816 /* TestAppIOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestAppIOS.h; sourceTree = "<group>"; };
 		A68966B722A9E719004FF38A /* TestTitleData */ = {isa = PBXFileReference; lastKnownFileType = folder; path = TestTitleData; sourceTree = "<group>"; };
+		D393499A2565DC4600182455 /* PlayFabGroupsTest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PlayFabGroupsTest.h; path = ../../../test/TestApp/PlayFabGroupsTest.h; sourceTree = "<group>"; };
+		D393499B2565DC9E00182455 /* PlayFabGroupsTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = PlayFabGroupsTest.cpp; path = ../../../test/TestApp/PlayFabGroupsTest.cpp; sourceTree = "<group>"; };
 		DA8BD9C12386013800D38691 /* PlayFabTestAlloc.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayFabTestAlloc.h; path = ../../../test/TestApp/PlayFabTestAlloc.h; sourceTree = "<group>"; };
 		DA8BD9C22386015800D38691 /* PlayFabTestMultiUserStatic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayFabTestMultiUserStatic.h; path = ../../../test/TestApp/PlayFabTestMultiUserStatic.h; sourceTree = "<group>"; };
 		DA8BD9C32386016C00D38691 /* PlayFabTestMultiUserInstance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PlayFabTestMultiUserInstance.h; path = ../../../test/TestApp/PlayFabTestMultiUserInstance.h; sourceTree = "<group>"; };
@@ -187,6 +190,7 @@
 		5A3F0AB02241BDA100AC0816 /* source */ = {
 			isa = PBXGroup;
 			children = (
+				D393499B2565DC9E00182455 /* PlayFabGroupsTest.cpp */,
 				DA8BD9C72386019F00D38691 /* PlayFabTestAlloc.cpp */,
 				DA8BD9C82386019F00D38691 /* PlayFabTestMultiUserInstance.cpp */,
 				DA8BD9C62386019F00D38691 /* PlayFabTestMultiUserStatic.cpp */,
@@ -207,6 +211,7 @@
 		5A3F0AB12241BDA800AC0816 /* include */ = {
 			isa = PBXGroup;
 			children = (
+				D393499A2565DC4600182455 /* PlayFabGroupsTest.h */,
 				DA8BD9C32386016C00D38691 /* PlayFabTestMultiUserInstance.h */,
 				DA8BD9C22386015800D38691 /* PlayFabTestMultiUserStatic.h */,
 				DA8BD9C12386013800D38691 /* PlayFabTestAlloc.h */,
@@ -338,6 +343,7 @@
 				5A3F0ACB2241BDF100AC0816 /* TestApp.cpp in Sources */,
 				5A3F0A892241BB0200AC0816 /* ViewController.m in Sources */,
 				5A3F0A972241BB0700AC0816 /* main.m in Sources */,
+				D393499C2565DC9E00182455 /* PlayFabGroupsTest.cpp in Sources */,
 				5A3F0ACC2241BDF100AC0816 /* PlayFabApiTest.cpp in Sources */,
 				5A3F0AD42241BDF100AC0816 /* TestAppPch.cpp in Sources */,
 				5A3F0A862241BB0200AC0816 /* AppDelegate.m in Sources */,
