@@ -1,10 +1,9 @@
 #include <stdafx.h>
 
-#if defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #include <playfab/QoS/XPlatSocket.h>
 #include <playfab/QoS/QoS.h>
 
-#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #include <sys/utime.h>
 #else
 #include <sys/ioctl.h>
@@ -222,4 +221,3 @@ namespace PlayFab
 
     }
 }
-#endif // defined (PLAYFAB_PLATFORM_WINDOWS) || defined (PLAYFAB_PLATFORM_XBOX)
