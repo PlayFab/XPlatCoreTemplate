@@ -3,12 +3,11 @@
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #include <playfab/QoS/XPlatSocket.h>
 #include <playfab/QoS/QoS.h>
-
 #include <sys/utime.h>
 #else
 #include <sys/ioctl.h>
 #include <utime.h>
-#endif
+#endif // #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 
 using namespace std;
 
@@ -29,7 +28,7 @@ namespace PlayFab
             WSACleanup();
 #else
             close(s);
-#endif
+#endif // defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
         }
 
         int XPlatSocket::InitializeSocket()
