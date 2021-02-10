@@ -24,7 +24,8 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         vsVer: "v141", // As C++ versions change, we may need to update this
         vsYear: "2017", // As VS versions change, we may need to update this
         getVerticalNameDefault: getVerticalNameDefault,
-        winSdkVersion: "10.0.17763.0" // Which version of the Windows SDK (A VS installation option) to use
+        winSdkVersion: "10.0.17763.0", // Which version of the Windows SDK (A VS installation option) to use
+        ifNeedsExtraTests: ifNeedsExtraTests
     };
 
     templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir);
@@ -52,7 +53,8 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
         ifHasProps: ifHasProps,
         remStaticDefine: remStaticDefine,
         sdkVersion: sdkGlobals.sdkVersion,
-        sortedClasses: getSortedClasses(api.datatypes)
+        sortedClasses: getSortedClasses(api.datatypes),
+        ifNeedsExtraTests: ifNeedsExtraTests
     };
 
     var apihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.h.ejs"));
@@ -293,6 +295,11 @@ function ifHasProps(datatype, displayText) {
     if (datatype.properties.length === 0)
         return "";
     return displayText;
+}
+
+function ifNeedsExtraTests()
+{
+    return "true";
 }
 
 function getVerticalNameDefault() {
