@@ -24,8 +24,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         vsVer: "v141", // As C++ versions change, we may need to update this
         vsYear: "2017", // As VS versions change, we may need to update this
         getVerticalNameDefault: getVerticalNameDefault,
-        winSdkVersion: "10.0.17763.0", // Which version of the Windows SDK (A VS installation option) to use
-        ifNeedsExtraTests: "true"
+        winSdkVersion: "10.0.17763.0" // Which version of the Windows SDK (A VS installation option) to use
     };
 
     templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir);
@@ -53,8 +52,7 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
         ifHasProps: ifHasProps,
         remStaticDefine: remStaticDefine,
         sdkVersion: sdkGlobals.sdkVersion,
-        sortedClasses: getSortedClasses(api.datatypes),
-        ifNeedsExtraTests: "true"
+        sortedClasses: getSortedClasses(api.datatypes)
     };
 
     var apihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.h.ejs"));
