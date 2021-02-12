@@ -27,7 +27,7 @@ jobs:
   steps:
   - bash: echo CppMacOsJobTemplate
 - job: CppMacOsTemplate
-  pool: 
+  pool: PFMacs
   steps:
   - template: CppMacOsStepTemplate.yml
     parameters:
