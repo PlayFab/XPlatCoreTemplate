@@ -1,0 +1,42 @@
+# JOB LEVEL TEMPLATE:
+# Used to build XPlatCppSdk
+# Reusable
+# Meant to be run from the single CppIOSTemplate pipeline (default), or
+#   from a multi-pipeline such as publishing (should specify alternate params)
+
+parameters:
+- name: ApiSpecSource
+  displayName: ApiSpecSource
+  type: string
+  default: -apiSpecGitUrl https://raw.githubusercontent.com/PlayFab/API_Specs/master/
+- name: CommitMessage
+  displayName: CommitMessage
+  type: string
+  default: Automated build from ADO Pipeline
+- name: GitDestBranch
+  displayName: GitDestBranch
+  type: string
+  default: doNotCommit
+- name: isVersioned
+  displayName: isVersioned
+  type: boolean
+  default: false
+- name: SelfTemplateResource
+  displayName: SelfTemplateResource
+  type: string
+  default: self
+
+jobs:
+- job: CppIOSJobTemplate
+  steps:
+  - bash: echo CppIOSJobTemplate
+- job: CppIOSTemplate
+  pool: XPlatMacOS
+  steps:
+  - template: CppIOSStepTemplate.yml
+    parameters:
+      ApiSpecSource: ${{ parameters.ApiSpecSource }}
+      CommitMessage: ${{ parameters.CommitMessage }}
+      GitDestBranch: ${{ parameters.GitDestBranch }}
+      isVersioned: ${{ parameters.isVersioned }}
+      SelfTemplateResource: ${{ parameters.SelfTemplateResource }}
