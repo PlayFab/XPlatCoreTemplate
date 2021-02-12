@@ -92,7 +92,7 @@ namespace PlayFabUnit
         pfApiTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfApiTest);
 
-#if false // These tests are still too unstable, and despite passing nearly 100% in debug, still fail 100% in release
+#if !defined(PLAYFAB_PLATFORM_GDK) && false // These tests are still too unstable, and despite passing nearly 100% in debug, still fail 100% in release
         PlayFabEventTest pfEventTest;
         pfEventTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfEventTest);
@@ -105,13 +105,11 @@ namespace PlayFabUnit
         PlayFabTestMultiUserInstance pfMultiUserInstanceTest;
         pfMultiUserInstanceTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfMultiUserInstanceTest);
-
-#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
+#if !defined(PLAYFAB_PLATFORM_GDK) && (defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX))
         PlayFabQoSTest pfQosTest;
         pfQosTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfQosTest);
 #endif //defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
-
 #endif // !defined(DISABLE_PLAYFABCLIENT_API)
 
         // Run the tests (blocks until all tests have finished).
