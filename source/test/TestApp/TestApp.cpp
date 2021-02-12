@@ -81,7 +81,7 @@ namespace PlayFabUnit
         // Set this up for use when the tests finish
         this->clientApi = std::make_shared<PlayFab::PlayFabClientInstanceAPI>(PlayFab::PlayFabSettings::staticPlayer);
 
-#if !defined(PLAYFAB_PLATFORM_GDK) && !defined(PLAYFAB_PLATFORM_IOS) // IOS proj doesn't include PlatformLoginTest files yet
+#if !defined(PLAYFAB_PLATFORM_GDK) && !defined(PLAYFAB_PLATFORM_IOS) // IOS & GDK proj doesn't include PlatformLoginTest files yet
         PlatformLoginTest loginTest;
         loginTest.SetTitleInfo(testTitleData);
         testRunner.Add(loginTest);
