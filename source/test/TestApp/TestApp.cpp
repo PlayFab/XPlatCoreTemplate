@@ -81,7 +81,7 @@ namespace PlayFabUnit
         // Set this up for use when the tests finish
         this->clientApi = std::make_shared<PlayFab::PlayFabClientInstanceAPI>(PlayFab::PlayFabSettings::staticPlayer);
 
-#if !defined(PLAYFAB_PLATFORM_IOS) // IOS proj doesn't include PlatformLoginTest files yet
+#if !defined(PLAYFAB_PLATFORM_GDK) && !defined(PLAYFAB_PLATFORM_IOS) // IOS proj doesn't include PlatformLoginTest files yet
         PlatformLoginTest loginTest;
         loginTest.SetTitleInfo(testTitleData);
         testRunner.Add(loginTest);
@@ -92,7 +92,7 @@ namespace PlayFabUnit
         pfApiTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfApiTest);
 
-#if !defined(PLAYFAB_PLATFORM_GDK) && false // These tests are still too unstable, and despite passing nearly 100% in debug, still fail 100% in release
+#if false // These tests are still too unstable, and despite passing nearly 100% in debug, still fail 100% in release
         PlayFabEventTest pfEventTest;
         pfEventTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfEventTest);
