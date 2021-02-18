@@ -61,7 +61,7 @@ steps:
     cd "$WORKSPACE/SDKGenerator/SDKBuildScripts"
     . ./shared_build.sh
 
-    cd "$WORKSPACE\\sdks\\$SdkName"
+    cd "$WORKSPACE/sdks/$SdkName"
     if [ -f set-gitmodules.bat ] ;
     then
       echo set-gitmodules.bat file detected, running it...
@@ -69,11 +69,11 @@ steps:
     fi
 
     cd "$WORKSPACE/SDKGenerator/SDKBuildScripts"
-    export PF_TEST_TITLE_DATA_JSON="$WORKSPACE\JenkinsSdkSetupScripts\Creds\testTitleData.json"
+    export PF_TEST_TITLE_DATA_JSON="$WORKSPACE/JenkinsSdkSetupScripts/Creds/testTitleData.json"
 
     . "$WORKSPACE/JenkinsSdkSetupScripts/JenkinsScripts/Pipeline/util.sh"
 
-    cd "$WORKSPACE\\sdks\\$SdkName\\build\\iOS\\"
+    cd "$WORKSPACE/sdks/$SdkName/build/iOS/"
     echo === list possible workspaces for logging purposes ===
     xcodebuild -list -workspace XPlatCppIOS.xcworkspace
 
