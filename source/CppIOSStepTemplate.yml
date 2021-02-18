@@ -62,10 +62,10 @@ steps:
     . ./shared_build.sh
 
     cd "$WORKSPACE/sdks/$SdkName"
-    if [ -f set-gitmodules.bat ] ;
+    if [ -f set-gitmodules.sh ] ;
     then
-      echo set-gitmodules.bat file detected, running it...
-      cmd <<< call set-gitmodules.bat
+      echo set-gitmodules.sh file detected, running it...
+      . ./set-gitmodules.sh
     fi
 
     cd "$WORKSPACE/SDKGenerator/SDKBuildScripts"
