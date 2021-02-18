@@ -19,21 +19,27 @@ parameters:
   default: doNotCommit
 - name: SecureAppleCertName
   displayName: SecureAppleCertName
+  type: string
   default: FILLINYOURSELF
 - name: SecureAppleCertKeyChain
   displayName: SecureAppleCertKeyChain
+  type: string
   default: FILLINYOURSELF
 - name: SecureMobileProvisionProfileName
   displayName: SecureMobileProvisionProfileName
+  type: string
   default: FILLINYOURSELF
 - name: appleTeamId
   displayName: appleTeamId
+  type: string
   default: FILLINYOURSELF
 - name: iosDeviceId
   displayName: iosDeviceId
+  type: string
   default: FILLINYOURSELF
 - name: iosSdkVersion
   displayName: iosSdkVersion
+  type: string
   default: 14.0
 - name: SelfTemplateResource
   displayName: SelfTemplateResource
@@ -55,6 +61,7 @@ jobs:
       SecureAppleCertName: ${{ parameters.SecureAppleCertName }}
       SecureAppleCertKeyChain: ${{ parameters.SecureAppleCertKeyChain }}
       SecureMobileProvisionProfileName: ${{ parameters.SecureMobileProvisionProfileName }}
+      iosSdkVersion: ${{ parameters.iosSdkVersion }}
       appleTeamId: ${{ parameters.appleTeamId }}
       iosDeviceId: ${{ parameters.iosDeviceId }}
       SelfTemplateResource: ${{ parameters.SelfTemplateResource }}
