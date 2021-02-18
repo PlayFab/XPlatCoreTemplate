@@ -61,7 +61,7 @@ jobs:
       SecureAppleCertName: ${{ parameters.SecureAppleCertName }}
       SecureAppleCertKeyChain: ${{ parameters.SecureAppleCertKeyChain }}
       SecureMobileProvisionProfileName: ${{ parameters.SecureMobileProvisionProfileName }}
-      iosSdkVersion: ${{ parameters.iosSdkVersion }}
       appleTeamId: ${{ parameters.appleTeamId }}
       iosDeviceId: ${{ parameters.iosDeviceId }}
+      iosSdkVersion: ${{ parameters.iosSdkVersion }}
       SelfTemplateResource: ${{ parameters.SelfTemplateResource }}
