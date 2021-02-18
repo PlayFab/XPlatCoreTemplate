@@ -58,10 +58,4 @@ jobs:
       ApiSpecSource: ${{ parameters.ApiSpecSource }}
       CommitMessage: ${{ parameters.CommitMessage }}
       GitDestBranch: ${{ parameters.GitDestBranch }}
-      SecureAppleCertName: ${{ parameters.SecureAppleCertName }}
-      SecureAppleCertKeyChain: ${{ parameters.SecureAppleCertKeyChain }}
-      SecureMobileProvisionProfileName: ${{ parameters.SecureMobileProvisionProfileName }}
-      appleTeamId: ${{ parameters.appleTeamId }}
-      iosDeviceId: ${{ parameters.iosDeviceId }}
-      iosSdkVersion: ${{ parameters.iosSdkVersion }}
       SelfTemplateResource: ${{ parameters.SelfTemplateResource }}
