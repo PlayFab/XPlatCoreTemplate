@@ -21,10 +21,6 @@ parameters:
   displayName: SdkName
   type: string
   default: XPlatCppSdk
-- name: isVersioned
-  displayName: isVersioned
-  type: boolean
-  default: false
 - name: SelfTemplateResource
   displayName: SelfTemplateResource
   type: string
@@ -81,19 +77,48 @@ steps:
     xcodebuild -scheme lib_json build
     xcodebuild -scheme XPlatCppIOS build
     xcodebuild -scheme TestIOSApp_Debug build
-    
-    echo === Test the Cpp Project ===
-    mkdir MyOutput
-    xcodebuild test -workspace XPlatCppIOS.xcworkspace -destination MyOutput
 
+    #echo === Test the Cpp Project ===
+    #mkdir MyOutput
+    #xcodebuild test -workspace XPlatCppIOS.xcworkspace -destination MyOutput -allowProvisioningUpdates
+
+    #. "$WORKSPACE/JenkinsSdkSetupScripts/JenkinsScripts/Pipeline/sdkUtil.sh"
+    #ListenCsJCU
+
+  displayName: 'Build/Test/Report'
+
+- task: InstallAppleCertificate@2
+  displayName: AddingAppleCert
+  inputs:
+    certSecureFile: '{{ parameters.SecureAppleCertName }}'
+    keychain: '{{ parameters.SecureAppleCertKeyChain }}'
+
+- task: InstallAppleProvisioningProfile@1
+  displayName: AddingAppleProv
+  inputs:
+    provisioningProfileLocation: 'secureFiles'
+    provProfileSecureFile: '{{ parameters.SecureMobileProvisionProfileName }}'
+
+- task: Xcode@5
+  displayName: ShortCut Unity On Phone
+  inputs:
+    actions: 'test'
+    sdk: 'iOS {{ parameters.iosSdkVersion }}'
+    xcWorkspacePath: 'sdks/XPlatCppSdk/build/iOS/XPlatCppIOS.xcworkspace'
+    scheme: 'TestIOSApp_Debug'
+    packageApp: false
+    signingOption: 'auto'
+    teamId: '{{ parameters.appleTeamId }}'
+    args: '-destination "platform=iOS,id={{ parameters.iosDeviceId }}"'
+
+- bash: |
+    set -e
+    WORKSPACE=$(pwd)
+    export WORKSPACE="$WORKSPACE"
     . "$WORKSPACE/JenkinsSdkSetupScripts/JenkinsScripts/Pipeline/sdkUtil.sh"
     ListenCsJCU
+  displayName: 'Final Console Utiltiy Listen'
 
-    if [ $isVersioned = "True" ] ;
-    then
-      echo consider packaging for nuget or vcpack
-    fi
-  displayName: 'Build/Test/Report'
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'

@@ -17,10 +17,24 @@ parameters:
   displayName: GitDestBranch
   type: string
   default: doNotCommit
-- name: isVersioned
-  displayName: isVersioned
-  type: boolean
-  default: false
+- name: SecureAppleCertName
+  displayName: SecureAppleCertName
+  default: FILLINYOURSELF
+- name: SecureAppleCertKeyChain
+  displayName: SecureAppleCertKeyChain
+  default: FILLINYOURSELF
+- name: SecureMobileProvisionProfileName
+  displayName: SecureMobileProvisionProfileName
+  default: FILLINYOURSELF
+- name: appleTeamId
+  displayName: appleTeamId
+  default: FILLINYOURSELF
+- name: iosDeviceId
+  displayName: iosDeviceId
+  default: FILLINYOURSELF
+- name: iosSdkVersion
+  displayName: iosSdkVersion
+  default: 14.0
 - name: SelfTemplateResource
   displayName: SelfTemplateResource
   type: string
@@ -38,5 +52,9 @@ jobs:
       ApiSpecSource: ${{ parameters.ApiSpecSource }}
       CommitMessage: ${{ parameters.CommitMessage }}
       GitDestBranch: ${{ parameters.GitDestBranch }}
-      isVersioned: ${{ parameters.isVersioned }}
+      SecureAppleCertName: ${{ parameters.SecureAppleCertName }}
+      SecureAppleCertKeyChain: ${{ parameters.SecureAppleCertKeyChain }}
+      SecureMobileProvisionProfileName: ${{ parameters.SecureMobileProvisionProfileName }}
+      appleTeamId: ${{ parameters.appleTeamId }}
+      iosDeviceId: ${{ parameters.iosDeviceId }}
       SelfTemplateResource: ${{ parameters.SelfTemplateResource }}

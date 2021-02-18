@@ -21,10 +21,6 @@ parameters:
   displayName: SdkName
   type: string
   default: XPlatCppSdk
-- name: isVersioned
-  displayName: isVersioned
-  type: boolean
-  default: false
 - name: SelfTemplateResource
   displayName: SelfTemplateResource
   type: string
@@ -89,10 +85,6 @@ steps:
     . "$WORKSPACE/JenkinsSdkSetupScripts/JenkinsScripts/Pipeline/sdkUtil.sh"
     ListenCsJCU
 
-    if [ $isVersioned = "True" ] ;
-    then
-      echo consider packaging for nuget or vcpack
-    fi
   displayName: 'Build/Test/Report'
 - task: PublishTestResults@2
   inputs:
