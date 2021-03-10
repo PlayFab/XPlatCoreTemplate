@@ -111,18 +111,6 @@ steps:
 
   displayName: 'Build/Test/Report'
 
-- task: InstallAppleCertificate@2
-  displayName: AddingAppleCert
-  inputs:
-    certSecureFile: 'b.p12'
-    keychain: '{{ parameters.SecureAppleCertKeyChain }}'
-
-- task: InstallAppleProvisioningProfile@1
-  displayName: AddingAppleProv
-  inputs:
-    provisioningProfileLocation: 'secureFiles'
-    provProfileSecureFile: 'b.mobileprovision'
-
 - task: Xcode@5
   displayName: ShortCut Unity On Phone
   inputs:
