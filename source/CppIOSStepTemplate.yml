@@ -98,9 +98,9 @@ steps:
     xcodebuild -list -workspace XPlatCppIOS.xcworkspace
 
     echo === Build the XPlatCpp Project for IOS === 
-    xcodebuild -scheme lib_json build
-    xcodebuild -scheme XPlatCppIOS build
-    xcodebuild -scheme TestIOSApp_Debug build
+    xcodebuild -scheme lib_json build -allowProvisioningUpdates
+    xcodebuild -scheme XPlatCppIOS build -allowProvisioningUpdates
+    xcodebuild -scheme TestIOSApp_Debug build -allowProvisioningUpdates
 
     #echo === Test the Cpp Project ===
     #mkdir MyOutput
