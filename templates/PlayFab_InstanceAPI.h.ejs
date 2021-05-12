@@ -66,10 +66,7 @@ namespace PlayFab
 <% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx];
 %>        void On<%- apiCall.name %>Result(int httpCode, const std::string& result, const std::shared_ptr<CallRequestContainerBase>& reqContainer);
 <% }
-if (hasClientOptions) { %>
-        // Private, Client-Specific
-        void MultiStepClientLogin(std::shared_ptr<PlayFabAuthenticationContext> context, bool needsAttribution);
-<% } %>        bool ValidateResult(PlayFabResultCommon& resultCommon, const CallRequestContainer& container);
+        bool ValidateResult(PlayFabResultCommon& resultCommon, const CallRequestContainer& container);
     };
 }
 
