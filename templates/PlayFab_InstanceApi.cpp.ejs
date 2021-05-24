@@ -159,23 +159,6 @@ namespace PlayFab
         return !this->m_context->clientSessionTicket.empty();
     }
 
-    void PlayFabClientInstanceAPI::MultiStepClientLogin(std::shared_ptr<PlayFabAuthenticationContext> context, bool needsAttribution)
-    {
-        if (needsAttribution && !context->disableAdvertising && context->advertisingIdType.length() > 0 && context->advertisingIdValue.length() > 0)
-        {
-            AttributeInstallRequest request;
-            if (context->advertisingIdType == PlayFabSettings::AD_TYPE_IDFA)
-            {
-                request.Idfa = context->advertisingIdValue;
-                AttributeInstall(request, nullptr, nullptr);
-            }
-            else if (context->advertisingIdType == PlayFabSettings::AD_TYPE_ANDROID_ID)
-            {
-                request.Adid = context->advertisingIdValue;
-                AttributeInstall(request, nullptr, nullptr);
-            }
-        }
-    }
 <% } %>
     bool PlayFab<%- api.name %>InstanceAPI::ValidateResult(PlayFabResultCommon& resultCommon, const CallRequestContainer& container)
     {

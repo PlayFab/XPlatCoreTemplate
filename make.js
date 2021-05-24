@@ -278,13 +278,9 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.result === "LoginResult")
         return tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n" +
             tabbing + "outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n" +
-            tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n" +
-            tabbing + "MultiStepClientLogin(context, outResult.SettingsForUser->NeedsAttribution);\n";
+            tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
     if (apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-            + tabbing + "MultiStepClientLogin(context, outResult.SettingsForUser->NeedsAttribution);\n";
-    if (apiCall.result === "AttributeInstallResult")
-        return tabbing + "context->advertisingIdType += \"_Successful\";\n";
 
     return "";
 }
