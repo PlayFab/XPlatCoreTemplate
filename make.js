@@ -278,17 +278,17 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.result === "LoginResult")
         return 
             "\n" 
-            + tabbing + "if(outResult.EntityToken.notNull())\n"
-            + tabbing + "{\n"
-            + tabbing + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
-            + tabbing + tabbing + "outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-            + tabbing + tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-            + tabbing + "}\n"
-            + tabbing + "else\n"
-            + tabbing + "{\n"
-            + tabbing + tabbing + "// TODO: return error that EntityToken is null and we didn't expect it"
-            + tabbing + tabbing + "return;\n"
-            + tabbing + "}\n";
+            //+ tabbing + "if(outResult.EntityToken.notNull())\n"
+            //+ tabbing + "{\n"
+            + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
+            + tabbing + "outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            + tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            //+ tabbing + "}\n"
+            //+ tabbing + "else\n"
+            //+ tabbing + "{\n"
+            //+ tabbing + tabbing + "// TODO: return error that EntityToken is null and we didn't expect it"
+            //+ tabbing + tabbing + "return;\n"
+            //+ tabbing + "}\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
 
