@@ -276,19 +276,9 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.url === "/Authentication/GetEntityToken")
         return tabbing + "context->HandlePlayFabLogin(\"\", \"\", outResult.Entity->Id, outResult.Entity->Type, outResult.EntityToken);\n";
     if (apiCall.result === "LoginResult")
-        return 
-            "\n" 
-            //+ tabbing + "if(outResult.EntityToken.notNull())\n"
-            //+ tabbing + "{\n"
-            + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
+        return tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
             + tabbing + "outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-            + tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-            //+ tabbing + "}\n"
-            //+ tabbing + "else\n"
-            //+ tabbing + "{\n"
-            //+ tabbing + tabbing + "// TODO: return error that EntityToken is null and we didn't expect it"
-            //+ tabbing + tabbing + "return;\n"
-            //+ tabbing + "}\n";
+            + tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
 
