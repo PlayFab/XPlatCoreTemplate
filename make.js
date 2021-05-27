@@ -285,7 +285,6 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + "}\n"
             + tabbing + "else\n"
             + tabbing + "{\n"
-            + tabbing + "    // TODO: handle failure, this should NEVER be null\n"
             + tabbing + "    if (container.errorCallback != nullptr)\n"
             + tabbing + "    {\n"
             + tabbing + "         PlayFabError error;\n"
