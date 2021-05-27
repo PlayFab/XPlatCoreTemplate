@@ -282,6 +282,10 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + "{\n"
             + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
             + tabbing + "    context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            + tabbing + "}\n"
+            + tabbing + "else\n"
+            + tabbing + "{\n"
+            + tabbing + "    // TODO: handle failure, this should NEVER be null\n"
             + tabbing + "}\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
