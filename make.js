@@ -276,9 +276,24 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.url === "/Authentication/GetEntityToken")
         return tabbing + "context->HandlePlayFabLogin(\"\", \"\", outResult.Entity->Id, outResult.Entity->Type, outResult.EntityToken);\n";
     if (apiCall.result === "LoginResult")
-        return tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
-            + tabbing + "outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-            + tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n";
+        return tabbing + "\n" 
+            + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
+            + tabbing + "if (outResult.EntityToken.notNull())\n"
+            + tabbing + "{\n"
+            + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            + tabbing + "    context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            + tabbing + "}\n"
+            + tabbing + "else\n"
+            + tabbing + "{\n"
+            + tabbing + "    if (container.errorCallback != nullptr)\n"
+            + tabbing + "    {\n"
+            + tabbing + "         PlayFabError error;\n"
+            + tabbing + "         error.ErrorCode = PlayFabErrorCode::PlayFabErrorEntityTokenMissing;\n"
+            + tabbing + "         error.ErrorMessage = \"The Login Attempt returned a null EntityToken. This was a mistake. Please try the login again in a moment.\";\n"
+            + tabbing + "         container.errorCallback(error, container.GetCustomData());\n"
+            + tabbing + "         return;\n"
+            + tabbing + "    }\n"
+            + tabbing + "}\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
 
