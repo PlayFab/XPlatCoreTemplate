@@ -286,6 +286,14 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + "else\n"
             + tabbing + "{\n"
             + tabbing + "    // TODO: handle failure, this should NEVER be null\n"
+            + tabbing + "    if (container.errorCallback != nullptr)\n"
+            + tabbing + "    {\n"
+            + tabbing + "         PlayFabError error;\n"
+            + tabbing + "         error.ErrorCode = PlayFabErrorCode::PlayFabErrorEntityTokenMissing;\n"
+            + tabbing + "         error.ErrorMessage = \"The Login Attempt returned a null EntityToken. This was a mistake. Please try the login again in a moment.\";\n"
+            + tabbing + "         container.errorCallback(error, container.GetCustomData());\n"
+            + tabbing + "         return;\n"
+            + tabbing + "    }\n"
             + tabbing + "}\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
