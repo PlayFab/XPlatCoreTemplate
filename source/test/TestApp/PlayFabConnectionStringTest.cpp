@@ -105,7 +105,7 @@ namespace PlayFabUnit
     {
         queueTestCount++;
 
-        if(queueTestCount >= c_numQueueTestConnectionStringEvents)
+        if(queueTestCount >= c_numQueueTestEvents)
         {
             auto pfEvent = std::dynamic_pointer_cast<const TestConnectionStringEvent>(event);
             pfEvent->testContext->Pass("Private member called back!");
@@ -393,9 +393,9 @@ namespace PlayFabUnit
 
     std::unique_ptr<PlayFab::PlayFabEvent> PlayFabConnectionStringTest::MakeEvent(TestContext& testContext, PlayFab::PlayFabEventType eventType)
     {
-        auto TestConnectionStringEvent = new TestConnectionStringEvent();
-        TestConnectionStringEvent->testContext = &testContext;
-        auto event = std::unique_ptr<PlayFab::PlayFabEvent>(TestConnectionStringEvent);
+        auto testEvent = new TestConnectionStringEvent();
+        testEvent->testContext = &testContext;
+        auto event = std::unique_ptr<PlayFab::PlayFabEvent>(testEvent);
 
         int i = eventCounter.fetch_add(1);
 
