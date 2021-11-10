@@ -25,7 +25,7 @@ namespace PlayFabUnit
     struct TestContext;
 
     // A wrapper around TestEvents, so we can track it back to the test that launched the event
-    class TestEvent : public PlayFab::PlayFabEvent
+    class TestConnectionStringEvent : public PlayFab::PlayFabEvent
     {
     public:
         TestContext* testContext;

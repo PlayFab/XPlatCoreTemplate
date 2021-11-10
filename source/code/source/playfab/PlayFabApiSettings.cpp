@@ -48,6 +48,7 @@ namespace PlayFab
         }
         else
         {
+            fullUrl.reserve(PlayFabSettings::connectionString.size());
             fullUrl = PlayFabSettings::connectionString;
         }
 
