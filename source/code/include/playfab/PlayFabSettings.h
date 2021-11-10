@@ -21,8 +21,6 @@ namespace PlayFab
         static bool threadedCallbacks;
         // Used to override the PlayFab endpoint url - Not typical
         static std::string productionEnvironmentURL;
-        // Used for direct connection 
-        static std::string connectionString;
         // Used to receive a callback for every failed PlayFab API call - Parallel to the individual error callbacks
         static ErrorCallback globalErrorHandler;
 
