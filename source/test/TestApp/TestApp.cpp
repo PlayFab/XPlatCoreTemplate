@@ -15,6 +15,7 @@
 
 #include "PlatformLoginTest.h"
 #include "PlayFabApiTest.h"
+#include "PlayFabConnectionStringTest.h"
 #include "PlayFabEventTest.h"
 #include "PlayFabTestMultiUserStatic.h"
 #include "PlayFabTestMultiUserInstance.h"
@@ -91,6 +92,10 @@ namespace PlayFabUnit
         PlayFabApiTest pfApiTest;
         pfApiTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfApiTest);
+
+        PlayFabConnectionStringTest pfConnectionStrTest;
+        pfConnectionStrTest.SetTitleInfo(testTitleData);
+        testRunner.Add(pfConnectionStrTest);
 
 #if false // These tests are still too unstable, and despite passing nearly 100% in debug, still fail 100% in release
         PlayFabEventTest pfEventTest;

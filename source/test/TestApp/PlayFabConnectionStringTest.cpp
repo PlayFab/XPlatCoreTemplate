@@ -97,7 +97,7 @@ namespace PlayFabUnit
 
     void PlayFabConnectionStringTest::NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> /*response*/)
     {
-        auto pfEvent = std::dynamic_pointer_cast<const TestEvent>(event);
+        auto pfEvent = std::dynamic_pointer_cast<const TestConnectionStringEvent>(event);
         pfEvent->testContext->Pass("Private member called back!");
     }
 
@@ -107,14 +107,14 @@ namespace PlayFabUnit
 
         if(queueTestCount >= c_numQueueTestEvents)
         {
-            auto pfEvent = std::dynamic_pointer_cast<const TestEvent>(event);
+            auto pfEvent = std::dynamic_pointer_cast<const TestConnectionStringEvent>(event);
             pfEvent->testContext->Pass("Private member called back!");
         }
     }
 
     void PlayFabConnectionStringTest::EmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response)
     {
-        auto pfEvent = std::dynamic_pointer_cast<const TestEvent>(event);
+        auto pfEvent = std::dynamic_pointer_cast<const TestConnectionStringEvent>(event);
         auto pfResponse = std::dynamic_pointer_cast<const PlayFab::PlayFabEmitEventResponse>(response);
 
         if (pfResponse->playFabError != nullptr)
@@ -393,7 +393,7 @@ namespace PlayFabUnit
 
     std::unique_ptr<PlayFab::PlayFabEvent> PlayFabConnectionStringTest::MakeEvent(TestContext& testContext, PlayFab::PlayFabEventType eventType)
     {
-        auto testEvent = new TestEvent();
+        auto testEvent = new TestConnectionStringEvent();
         testEvent->testContext = &testContext;
         auto event = std::unique_ptr<PlayFab::PlayFabEvent>(testEvent);
 
