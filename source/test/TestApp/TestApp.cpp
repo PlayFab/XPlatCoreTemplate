@@ -93,10 +93,6 @@ namespace PlayFabUnit
         pfApiTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfApiTest);
 
-        PlayFabConnectionStringTest pfConnectionStrTest;
-        pfConnectionStrTest.SetTitleInfo(testTitleData);
-        testRunner.Add(pfConnectionStrTest);
-
 #if false // These tests are still too unstable, and despite passing nearly 100% in debug, still fail 100% in release
         PlayFabEventTest pfEventTest;
         pfEventTest.SetTitleInfo(testTitleData);
@@ -116,6 +112,10 @@ namespace PlayFabUnit
         testRunner.Add(pfQosTest);
 #endif //defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #endif // !defined(DISABLE_PLAYFABCLIENT_API)
+
+        PlayFabConnectionStringTest pfConnectionStrTest;
+        pfConnectionStrTest.SetTitleInfo(testTitleData);
+        testRunner.Add(pfConnectionStrTest);
 
         // Run the tests (blocks until all tests have finished).
         testRunner.Run();
@@ -178,6 +178,7 @@ namespace PlayFabUnit
             titleData.titleId = titleDataJson["titleId"].asString();
             titleData.userEmail = titleDataJson["userEmail"].asString();
             titleData.developerSecretKey = titleDataJson["developerSecretKey"].asString();
+            titleData.connectionString = titleDataJson["connectionString"].asString();
         }
 
         return parsedSuccessfully;

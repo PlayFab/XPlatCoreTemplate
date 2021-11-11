@@ -28,28 +28,28 @@ namespace PlayFab
             fullUrl += titleId;
             fullUrl += baseServiceHost;
             fullUrl += urlPath;
-
-            bool firstParam = true;
-            for (auto const& paramPair : requestGetParams)
-            {
-                if (firstParam)
-                {
-                    fullUrl += "?";
-                    firstParam = false;
-                }
-                else
-                {
-                    fullUrl += "&";
-                }
-                fullUrl += paramPair.first;
-                fullUrl += "=";
-                fullUrl += paramPair.second;
-            }
         }
         else
         {
-            fullUrl.reserve(PlayFabSettings::connectionString.size());
+            fullUrl.reserve(PlayFabSettings::connectionString.size() + 1000);
             fullUrl = PlayFabSettings::connectionString;
+        }
+
+        bool firstParam = true;
+        for (auto const& paramPair : requestGetParams)
+        {
+            if (firstParam)
+            {
+                fullUrl += "?";
+                firstParam = false;
+            }
+            else
+            {
+                fullUrl += "&";
+            }
+            fullUrl += paramPair.first;
+            fullUrl += "=";
+            fullUrl += paramPair.second;
         }
 
         return fullUrl;

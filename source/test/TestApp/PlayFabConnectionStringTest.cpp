@@ -30,7 +30,7 @@ namespace PlayFabUnit
     void PlayFabConnectionStringTest::BasicLogin(TestContext& testContext)
     {
         LoginWithCustomIDRequest request;
-        request.CustomId = PlayFabSettings::buildIdentifier;
+        request.CustomId = PlayFabSettings::buildIdentifier + "ConnectionStringTest";
         request.CreateAccount = true;
 
         clientApi->LoginWithCustomID(request,
@@ -334,8 +334,7 @@ namespace PlayFabUnit
 
     void PlayFabConnectionStringTest::ClassSetUp()
     {
-        // TODO: add this to titleData.json
-        PlayFabSettings::connectionString = "https://6195.playfabapi.com";
+        PlayFabSettings::connectionString = testTitleData.connectionString;
         clientApi = std::make_shared<PlayFabClientInstanceAPI>(PlayFabSettings::staticPlayer);
         eventsApi = std::make_shared<PlayFabEventsInstanceAPI>(PlayFabSettings::staticPlayer);
 
@@ -345,7 +344,7 @@ namespace PlayFabUnit
 
     void PlayFabConnectionStringTest::SetUp(TestContext& /*testContext*/)
     {
-        PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
+        // PlayFabSettings::staticSettings->titleId = testTitleData.titleId;
         // Reset event test values.
         eventBatchMax = 0;
         eventPassCount = 0;
