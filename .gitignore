@@ -1,0 +1,10 @@
+**/*[Tt]estTitleData.json*
+
+# Intermediate files
+.vs/
+bin/
+obj/
+
+*.suo
+*.user
+*.nupkg
