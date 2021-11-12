@@ -1,0 +1,11 @@
+**/*[Tt]estTitleData.json*
+
+# Intermediate files
+.vs/
+bin/
+obj/
+.vscode/
+
+*.suo
+*.user
+*.nupkg
