@@ -20,7 +20,7 @@ namespace PlayFab
     std::string PlayFabApiSettings::GetUrl(const std::string& urlPath) const
     {
         std::string fullUrl;
-        if(PlayFabSettings::connectionString == "" && connectionString == "")
+        if(connectionString == "")
         {
             fullUrl.reserve(1000);
 
@@ -31,12 +31,8 @@ namespace PlayFab
         }
         else
         {
-            if(PlayFabSettings::connectionString == "")
-            {
-                PlayFabSettings::connectionString = connectionString;
-            }
-            fullUrl.reserve(PlayFabSettings::connectionString.size() + 1000);
-            fullUrl = PlayFabSettings::connectionString;
+            fullUrl.reserve(connectionString.size() + 1000);
+            fullUrl = connectionString;
         }
 
         bool firstParam = true;

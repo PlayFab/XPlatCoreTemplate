@@ -334,9 +334,9 @@ namespace PlayFabUnit
 
     void PlayFabConnectionStringTest::ClassSetUp()
     {
-        PlayFabSettings::connectionString = testTitleData.connectionString;
-        clientApi = std::make_shared<PlayFabClientInstanceAPI>(PlayFabSettings::staticPlayer);
-        eventsApi = std::make_shared<PlayFabEventsInstanceAPI>(PlayFabSettings::staticPlayer);
+        PlayFabSettings::staticSettings->connectionString = testTitleData.connectionString;
+        clientApi = std::make_shared<PlayFabClientInstanceAPI>(PlayFabSettings::staticSettings, PlayFabSettings::staticPlayer);
+        eventsApi = std::make_shared<PlayFabEventsInstanceAPI>(PlayFabSettings::staticSettings, PlayFabSettings::staticPlayer);
 
         // Make sure PlayFab state is clean.
         PlayFabSettings::ForgetAllCredentials();
@@ -359,7 +359,6 @@ namespace PlayFabUnit
 
     void PlayFabConnectionStringTest::TearDown(TestContext& /*testContext*/)
     {
-        PlayFabSettings::connectionString = "";
         for (auto& thread : testThreadPool)
         {
             thread.join();
