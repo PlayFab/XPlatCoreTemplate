@@ -38,8 +38,9 @@ namespace PlayFab
             fullUrl += "https://";
             fullUrl += titleId;
             fullUrl += baseServiceHost;
-            fullUrl += urlPath;
         }
+        
+        fullUrl += urlPath;
 
         bool firstParam = true;
         for (auto const& paramPair : requestGetParams)
