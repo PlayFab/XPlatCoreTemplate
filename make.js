@@ -249,7 +249,17 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.result === "LoginResult" || apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "if (request.TitleId.empty())\n"
             + tabbing + "{\n"
-            + tabbing + "    request.TitleId = settings->titleId;\n"
+            + tabbing + tabbing + "if (!settings->titleId.empty())\n"
+            + tabbing + tabbing + "{\n"
+            + tabbing + tabbing +"        request.TitleId = settings->titleId;\n"
+            + tabbing + tabbing + "}\n"
+            + tabbing + tabbing + "else\n"
+            + tabbing + tabbing + "{\n"
+            + tabbing + tabbing + tabbing + "if (!PlayFabSettings::staticSettings->connectionString.empty())\n"
+            + tabbing + tabbing + tabbing + "{\n"
+            + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->connectionString;\n"
+            + tabbing + tabbing + tabbing + "}\n"
+            + tabbing + tabbing + "}\n"
             + tabbing + "}\n";
 
     if (apiCall.url === "/Authentication/GetEntityToken")
