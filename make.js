@@ -257,7 +257,7 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + tabbing + "{\n"
             + tabbing + tabbing + tabbing + "if (!PlayFabSettings::staticSettings->connectionString.empty())\n"
             + tabbing + tabbing + tabbing + "{\n"
-            + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->connectionString.substr(8,4);\n"
+            + tabbing + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->connectionString.substr(8,4);\n"
             + tabbing + tabbing + tabbing + "}\n"
             + tabbing + tabbing + "}\n"
             + tabbing + "}\n";
