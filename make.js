@@ -11,6 +11,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     var libDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;" + removeStatic;
     var clientDefines = "" + removeStatic;
     var serverDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;DISABLE_PLAYFABCLIENT_API;" + removeStatic;
+    var azureDefines = "DISABLE_PLAYFABCLIENT_API;" + removeStatic;
 
     var locals = {
         apis: apis,
@@ -18,14 +19,20 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         clientDefines: clientDefines,
         libDefines: libDefines,
         serverDefines: serverDefines,
+        azureDefines: azureDefines,
         sdkVersion: sdkGlobals.sdkVersion,
         sdkDate: sdkGlobals.sdkVersion.split(".")[2],
         sdkYear: sdkGlobals.sdkVersion.split(".")[2].substr(0, 2),
+        azureSdk: false,
         vsVer: "v141", // As C++ versions change, we may need to update this
         vsYear: "2017", // As VS versions change, we may need to update this
         getVerticalNameDefault: getVerticalNameDefault,
         winSdkVersion: "10.0.17763.0" // Which version of the Windows SDK (A VS installation option) to use
     };
+
+    if(sdkGlobals.buildFlags.includes("azure")){
+        locals.azureSdk = true;
+    }
 
     templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir);
     for (var a = 0; a < apis.length; a++)
@@ -138,11 +145,11 @@ function getAuthParams(apiCall, isInstanceApi) {
     throw Error("getAuthParams: Unknown auth type: " + apiCall.auth + " for " + apiCall.name);
 }
 function getBaseType(datatype) {
-    if (datatype.className.toLowerCase().endsWith("request"))
+    if (datatype.className.endsWith("Request"))
         return "PlayFabRequestCommon";
-    if (datatype.className.toLowerCase().endsWith("loginresult"))
+    if (datatype.className.endsWith("LoginResult") || datatype.className.endsWith("AuthenticateIdentityResult"))
         return "PlayFabLoginResultCommon";
-    if (datatype.className.toLowerCase().endsWith("response") || datatype.className.toLowerCase().endsWith("result"))
+    if (datatype.className.toLowerCase().endsWith("Response") || datatype.className.toLowerCase().endsWith("Result"))
         return "PlayFabResultCommon";
     return "PlayFabBaseModel";
 }
@@ -262,6 +269,30 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + tabbing + "}\n"
             + tabbing + "}\n";
 
+    if (apiCall.result === "AuthenticateIdentityResult")
+        return tabbing + "if (request.TitleId.empty())\n"
+            + tabbing + "{\n"
+            + tabbing + tabbing + "if (!settings->titleId.empty())\n"
+            + tabbing + tabbing + "{\n"
+            + tabbing + tabbing +"        request.TitleId = settings->titleId;\n"
+            + tabbing + tabbing + "}\n"
+            + tabbing + tabbing + "else\n"
+            + tabbing + tabbing + "{\n"
+            + tabbing + tabbing + tabbing + "if (!PlayFabSettings::staticSettings->connectionString.empty())\n"
+            + tabbing + tabbing + tabbing + "{\n"
+            + tabbing + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->connectionString.substr(8,4);\n"
+            + tabbing + tabbing + tabbing + "}\n"
+            + tabbing + tabbing + "}\n"
+            + tabbing + "}\n";
+            + tabbing + "if (request.PlayerAccountPoolId.empty())\n"
+            + tabbing + "{\n"
+            + tabbing + tabbing + "if (!settings->playerAccountPoolId.empty())\n"
+            + tabbing + tabbing + "{\n"
+            + tabbing + tabbing +"        request.PlayerAccountPoolId = settings->playerAccountPoolId;\n"
+            + tabbing + tabbing + "}\n"
+            + tabbing + "}\n";
+
+
     if (apiCall.url === "/Authentication/GetEntityToken")
         return tabbing + "std::string authKey, authValue;\n" +
             tabbing + "if (context->entityToken.length() > 0)\n" +
@@ -304,9 +335,28 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + "         return;\n"
             + tabbing + "    }\n"
             + tabbing + "}\n";
+    if (apiCall.result === "AuthenticateIdentityResult")
+        return tabbing + "\n" 
+            + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
+            + tabbing + "if (outResult.EntityToken.notNull())\n"
+            + tabbing + "{\n"
+            + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(null, null, outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
+            + tabbing + "    context->HandlePlayFabLogin(null, null, outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
+            + tabbing + "}\n"
+            + tabbing + "else\n"
+            + tabbing + "{\n"
+            + tabbing + "    if (container.errorCallback != nullptr)\n"
+            + tabbing + "    {\n"
+            + tabbing + "         PlayFabError error;\n"
+            + tabbing + "         error.ErrorCode = PlayFabErrorCode::PlayFabErrorEntityTokenMissing;\n"
+            + tabbing + "         error.ErrorMessage = \"The Login Attempt returned a null EntityToken. This was a mistake. Please try the login again in a moment.\";\n"
+            + tabbing + "         container.errorCallback(error, container.GetCustomData());\n"
+            + tabbing + "         return;\n"
+            + tabbing + "    }\n"
+            + tabbing + "}\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
         return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-
+    
     return "";
 }
 

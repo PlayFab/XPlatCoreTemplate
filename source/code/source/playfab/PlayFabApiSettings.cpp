@@ -14,6 +14,7 @@ namespace PlayFab
         if (PlayFabSettings::staticSettings != nullptr)
         {
             titleId = PlayFabSettings::staticSettings->titleId;
+            playerAccountPoolId = PlayFabSettings::staticPlayer->playerAccountPoolId;
         }
     }
 
