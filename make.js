@@ -147,9 +147,9 @@ function getAuthParams(apiCall, isInstanceApi) {
 function getBaseType(datatype) {
     if (datatype.className.endsWith("Request"))
         return "PlayFabRequestCommon";
-    if (datatype.className.endsWith("LoginResult") || datatype.className.endsWith("AuthenticateIdentityResult"))
+    if (datatype.className.endsWith("LoginResult"))
         return "PlayFabLoginResultCommon";
-    if (datatype.className.toLowerCase().endsWith("Response") || datatype.className.toLowerCase().endsWith("Result"))
+    if (datatype.className.endsWith("Response") || datatype.className.endsWith("Result"))
         return "PlayFabResultCommon";
     return "PlayFabBaseModel";
 }
@@ -315,14 +315,14 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
 
 function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.url === "/Authentication/GetEntityToken")
-        return tabbing + "context->HandlePlayFabLogin(\"\", \"\",  nullptr, outResult.Entity->Id, outResult.Entity->Type, outResult.EntityToken);\n";
+        return tabbing + "context->HandlePlayFabLogin(\"\", \"\",  \"\", outResult.Entity->Id, outResult.Entity->Type, outResult.EntityToken);\n";
     if (apiCall.result === "LoginResult")
         return tabbing + "\n" 
             + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
             + tabbing + "if (outResult.EntityToken.notNull())\n"
             + tabbing + "{\n"
-            + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, nullptr, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
-            + tabbing + "    context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, nullptr, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, \"\", outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+            + tabbing + "    context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, \"\", outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
             + tabbing + "}\n"
             + tabbing + "else\n"
             + tabbing + "{\n"
@@ -337,11 +337,9 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + "}\n";
     if (apiCall.result === "AuthenticateIdentityResult")
         return tabbing + "\n" 
-            + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
             + tabbing + "if (outResult.TitlePlayerAccount.notNull())\n"
             + tabbing + "{\n"
-            + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(\"\", \"\", outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
-            + tabbing + "    context->HandlePlayFabLogin(\"\", \"\", outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
+            + tabbing + "    context->HandlePlayFabLogin(\"\", \"\", outResult.TitlePlayerAccount->Entity->Id, \"\", outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
             + tabbing + "}\n"
             + tabbing + "else\n"
             + tabbing + "{\n"
@@ -355,7 +353,7 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + "    }\n"
             + tabbing + "}\n";
     if (apiCall.result === "RegisterPlayFabUserResult")
-        return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, nullptr, outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
+        return tabbing + "context->HandlePlayFabLogin(outResult.PlayFabId, outResult.SessionTicket, \"\", outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n"
     
     return "";
 }
