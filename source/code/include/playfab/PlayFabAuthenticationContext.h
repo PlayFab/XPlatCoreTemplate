@@ -16,6 +16,7 @@ namespace PlayFab
 #endif
         std::string playFabId; // Master_Player_Entity Id for the Player that logged in
         std::string clientSessionTicket; // Client session ticket that is used as an authentication token in many PlayFab API methods.
+        std::string playerAccountPoolId; 
 
     public:
         std::string entityId; // Entity Id for the active entity

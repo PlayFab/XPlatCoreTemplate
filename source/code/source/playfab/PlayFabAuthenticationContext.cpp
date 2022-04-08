@@ -14,6 +14,7 @@ namespace PlayFab
 #if !defined(DISABLE_PLAYFABCLIENT_API)
         playFabId.clear();
         clientSessionTicket.clear();
+        playerAccountPoolId.clear();
 #endif
         entityId.clear();
         entityType.clear();
@@ -31,6 +32,7 @@ namespace PlayFab
     void PlayFabAuthenticationContext::HandlePlayFabLogin(
         const std::string& _playFabId,
         const std::string& _clientSessionTicket,
+        const std::string& _playerAccountPoolId,
         const std::string& _entityId,
         const std::string& _entityType,
         const std::string& _entityToken
@@ -38,6 +40,7 @@ namespace PlayFab
     {
         SetIfNotNull(_playFabId, playFabId);
         SetIfNotNull(_clientSessionTicket, clientSessionTicket);
+        SetIfNotNull(_playerAccountPoolId, playerAccountPoolId);
         SetIfNotNull(_entityId, entityId);
         SetIfNotNull(_entityType, entityType);
         SetIfNotNull(_entityToken, entityToken);
