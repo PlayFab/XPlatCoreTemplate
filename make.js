@@ -338,10 +338,10 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.result === "AuthenticateIdentityResult")
         return tabbing + "\n" 
             + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
-            + tabbing + "if (outResult.EntityToken.notNull())\n"
+            + tabbing + "if (outResult.TitlePlayerAccount.notNull())\n"
             + tabbing + "{\n"
-            + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(null, null, outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
-            + tabbing + "    context->HandlePlayFabLogin(null, null, outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
+            + tabbing + "    outResult.authenticationContext->HandlePlayFabLogin(nullptr, nullptr, outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
+            + tabbing + "    context->HandlePlayFabLogin(nullptr, nullptr, outResult.TitlePlayerAccount->Entity->Id, outResult.TitlePlayerAccount->Entity->Type, outResult.TitlePlayerAccount->EntityToken);\n"
             + tabbing + "}\n"
             + tabbing + "else\n"
             + tabbing + "{\n"
