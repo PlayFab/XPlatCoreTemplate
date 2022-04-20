@@ -1,4 +1,3 @@
-const { writeFile } = require("fs");
 var path = require("path");
 
 // Making resharper less noisy - These are defined in Generate.js
