@@ -1,3 +1,4 @@
+const { writeFile } = require("fs");
 var path = require("path");
 
 // Making resharper less noisy - These are defined in Generate.js
@@ -11,7 +12,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     var libDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;" + removeStatic;
     var clientDefines = "" + removeStatic;
     var serverDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;DISABLE_PLAYFABCLIENT_API;" + removeStatic;
-    var azureDefines = "DISABLE_PLAYFABCLIENT_API;" + removeStatic;
+    var azureDefines = "DISABLE_PLAYFABCLIENT_API;";
 
     var locals = {
         apis: apis,
@@ -19,11 +20,11 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         clientDefines: clientDefines,
         libDefines: libDefines,
         serverDefines: serverDefines,
-        azureDefines: azureDefines,
+        azureSdk: false,
+        azureDefines: "",
         sdkVersion: sdkGlobals.sdkVersion,
         sdkDate: sdkGlobals.sdkVersion.split(".")[2],
         sdkYear: sdkGlobals.sdkVersion.split(".")[2].substr(0, 2),
-        azureSdk: false,
         vsVer: "v141", // As C++ versions change, we may need to update this
         vsYear: "2017", // As VS versions change, we may need to update this
         getVerticalNameDefault: getVerticalNameDefault,
@@ -32,6 +33,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
 
     if(sdkGlobals.buildFlags.includes("azure")){
         locals.azureSdk = true;
+        locals.azureDefines = azureDefines;
     }
 
     templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir);
@@ -76,6 +78,18 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
 
     var dataModelTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_DataModels.h.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "DataModels.h"), dataModelTemplate(locals));
+
+    // var settingsHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.h.ejs"));
+    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), settingsHTemplate(locals));
+
+    // var settingsCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.cpp.ejs"));
+    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.cpp"), settingsCppTemplate(locals));
+
+    // var authContextHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.h.ejs"));
+    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextHTemplate(locals));
+
+    // var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.cpp.ejs"));
+    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextCppTemplate(locals));
 }
 
 // *************************** Internal utility methods ***************************

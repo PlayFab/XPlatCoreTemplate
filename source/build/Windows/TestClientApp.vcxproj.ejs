@@ -62,7 +62,7 @@
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32;<% if(azureSdk){ %> <%- azureDefines %> <% } %><%- clientDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;WIN32;<%- azureDefines %><%- clientDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(TestSourceDir)\TestApp;$(SdkSourceDir)\include;$(ExternalDir)\jsoncpp\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>TestAppPch.h</PrecompiledHeaderFile>
@@ -86,7 +86,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_CONSOLE;WIN32;<% if(azureSdk){ %> <%- azureDefines %> <% } %><%- clientDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CONSOLE;WIN32;<%- azureDefines %><%- clientDefines %>%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>$(TestSourceDir)\TestApp;$(SdkSourceDir)\include;$(ExternalDir)\jsoncpp\include</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>TestAppPch.h</PrecompiledHeaderFile>
