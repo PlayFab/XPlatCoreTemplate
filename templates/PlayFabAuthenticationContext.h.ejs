@@ -18,9 +18,9 @@ namespace PlayFab
         std::string clientSessionTicket; // Client session ticket that is used as an authentication token in many PlayFab API methods.
 
     public:
-        <%- if(azureSdk) { %>
+        <% if(azureSdk) { %>
         std::string playerAccountPoolId; 
-        <%- } %>
+        <% } %>
         std::string entityId; // Entity Id for the active entity
         std::string entityType; // Entity Type for the active entity
         std::string entityToken; // User's entity token. Entity tokens are required by all Entity API methods.

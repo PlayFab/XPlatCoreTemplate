@@ -45,6 +45,7 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
 
     var locals = {
         api: api,
+        azureSdk: isAzureSdk,
         enumtypes: getEnumTypes(api.datatypes),
         getApiDefine: getApiDefine,
         getAuthParams: getAuthParams,
@@ -82,13 +83,13 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), settingsHTemplate(locals));
 
     var settingsCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.cpp.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.cpp"), settingsCppTemplate(locals));
+    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFabApiSettings.cpp"), settingsCppTemplate(locals));
 
     var authContextHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.h.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextHTemplate(locals));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabAuthenticationContext.h"), authContextHTemplate(locals));
 
     var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.cpp.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextCppTemplate(locals));
+    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFabAuthenticationContext.cpp"), authContextCppTemplate(locals));
 }
 
 // *************************** Internal utility methods ***************************
@@ -382,4 +383,8 @@ function getVerticalNameDefault() {
         return sdkGlobals.verticalName;
     }
     return "";
+}
+
+function isAzureSdk(){
+    return sdkGlobals.buildFlags.includes("azure");
 }
