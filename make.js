@@ -78,17 +78,17 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
     var dataModelTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_DataModels.h.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "DataModels.h"), dataModelTemplate(locals));
 
-    // var settingsHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.h.ejs"));
-    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), settingsHTemplate(locals));
+    var settingsHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.h.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), settingsHTemplate(locals));
 
-    // var settingsCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.cpp.ejs"));
-    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.cpp"), settingsCppTemplate(locals));
+    var settingsCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.cpp.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.cpp"), settingsCppTemplate(locals));
 
-    // var authContextHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.h.ejs"));
-    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextHTemplate(locals));
+    var authContextHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.h.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextHTemplate(locals));
 
-    // var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.cpp.ejs"));
-    // writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextCppTemplate(locals));
+    var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.cpp.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), authContextCppTemplate(locals));
 }
 
 // *************************** Internal utility methods ***************************
