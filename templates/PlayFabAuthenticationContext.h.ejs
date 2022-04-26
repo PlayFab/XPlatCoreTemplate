@@ -31,8 +31,8 @@ namespace PlayFab
         PlayFabAuthenticationContext& operator=(const PlayFabAuthenticationContext& other) = delete;
         PlayFabAuthenticationContext& operator=(PlayFabAuthenticationContext&& other) = delete;
         ~PlayFabAuthenticationContext() = default;
-
-        void HandlePlayFabLogin(const std::string& _playFabId, const std::string& _clientSessionTicket, const std::string& _playerAccountPoolId, const std::string& _entityId, const std::string& _entityType, const std::string& _entityToken);
+        
+        void HandlePlayFabLogin(const std::string& _playFabId, const std::string& _clientSessionTicket, <% if(azureSdk) { %>const std::string& _playerAccountPoolId,<% } %> const std::string& _entityId, const std::string& _entityType, const std::string& _entityToken);
         void ForgetAllCredentials();
         bool IsClientLoggedIn();
         bool IsEntityLoggedIn();
