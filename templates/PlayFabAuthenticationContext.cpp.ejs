@@ -34,9 +34,6 @@
         void PlayFabAuthenticationContext::HandlePlayFabLogin(
             const std::string& _playFabId,
             const std::string& _clientSessionTicket,
-            <% if(azureSdk) { %>
-            const std::string& _playerAccountPoolId,
-            <% } %>
             const std::string& _entityId,
             const std::string& _entityType,
             const std::string& _entityToken
@@ -44,9 +41,6 @@
         {
             SetIfNotNull(_playFabId, playFabId);
             SetIfNotNull(_clientSessionTicket, clientSessionTicket);
-            <% if(azureSdk) { %>
-            SetIfNotNull(_playerAccountPoolId, playerAccountPoolId);
-            <% } %>
             SetIfNotNull(_entityId, entityId);
             SetIfNotNull(_entityType, entityType);
             SetIfNotNull(_entityToken, entityToken);
