@@ -14,7 +14,7 @@
             if (PlayFabSettings::staticSettings != nullptr)
             {
                 titleId = PlayFabSettings::staticSettings->titleId;
-                <% if(azureSdk) { %>
+                <% if(locals.azureSdk) { %>
                 playerAccountPoolId = PlayFabSettings::staticPlayer->playerAccountPoolId;
                 <% } %>
             }

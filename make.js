@@ -45,7 +45,7 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
 
     var locals = {
         api: api,
-        azureSdk: isAzureSdk,
+        azureSdk: isAzureSdk(),
         enumtypes: getEnumTypes(api.datatypes),
         getApiDefine: getApiDefine,
         getAuthParams: getAuthParams,
