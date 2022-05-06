@@ -30,7 +30,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         winSdkVersion: "10.0.17763.0" // Which version of the Windows SDK (A VS installation option) to use
     };
 
-    if(sdkGlobals.buildFlags.includes("azure")){
+    if(isAzureSdk()){
         locals.azureSdk = true;
         locals.azureDefines = azureDefines;
     }
