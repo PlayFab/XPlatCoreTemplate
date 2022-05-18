@@ -9,6 +9,7 @@
 
 #pragma once
 
+#define PLAYFAB_PLATFORM_GDK
 #ifdef _DURANGO
 #define PLAYFAB_PLATFORM_XBOX
 #endif // _DURANGO

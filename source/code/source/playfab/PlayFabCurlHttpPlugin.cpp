@@ -19,6 +19,12 @@ namespace PlayFab
         activeRequestCount = 0;
         threadRunning = true;
         workerThread = std::thread(&PlayFabCurlHttpPlugin::WorkerThread, this);
+        
+#if defined(PLAYFAB_PLATFORM_GDK)
+        // BUG: This will not be required after the next GDK update 
+        // (curl_easy_perform or easy_init should call this global function with appropriate flags upon the first time called)
+        curl_global_init(CURL_GLOBAL_DEFAULT);
+#endif
     };
 
     PlayFabCurlHttpPlugin::~PlayFabCurlHttpPlugin()
@@ -133,11 +139,15 @@ namespace PlayFab
             return nitems * size; // The return expected by curl for this callback
         }
 
+size_t headerKeyLength = size;
+#if defined(PLAYFAB_PLATFORM_GDK)
+        headerKeyLength = nitems;
+#endif
         // If this header-line is long enough, and the header starts with the key we expect
-        if ((nitems > requestIdheaderKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, requestIdheaderKeyLen) == 0))
+        if ((headerKeyLength > requestIdheaderKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, requestIdheaderKeyLen) == 0))
         {
             // The value is the requestId
-            std::string requestId = std::string(buffer + requestIdheaderKeyLen, nitems - requestIdheaderKeyLen);
+            std::string requestId = std::string(buffer + requestIdheaderKeyLen, headerKeyLength - requestIdheaderKeyLen);
             size_t offset = requestId.find_first_not_of(whitespace);
             if (offset != std::string::npos)
             {
