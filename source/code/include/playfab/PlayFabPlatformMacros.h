@@ -9,7 +9,7 @@
 
 #pragma once
 
-// TODO: is there areplacement that we can test isntead?
+// TODO: is there a replacement that we can test instead?
 // #define PLAYFAB_PLATFORM_GDK
 #ifdef _DURANGO
 #define PLAYFAB_PLATFORM_XBOX
