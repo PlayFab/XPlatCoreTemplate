@@ -67,7 +67,7 @@ namespace PlayFab
         this->eventContents.Payload[name] = (Json::Int64)value;
 #elif defined(PLAYFAB_PLATFORM_GDK)
         this->eventContents.Payload[name] = (Json::Int)value;
-#else
+#else // PLAYFAB_PLATFORM_ANDROID
         this->eventContents.Payload[name] = (long long int)value;
 #endif
     }
@@ -97,7 +97,7 @@ namespace PlayFab
         this->eventContents.Payload[name] = (Json::UInt64)value;
 #elif defined(PLAYFAB_PLATFORM_GDK)
         this->eventContents.Payload[name] = (Json::UInt)value;
-#else
+#else // PLAYFAB_PLATFORM_ANDROID
         this->eventContents.Payload[name] = (long long unsigned int)value;
 #endif
     }
