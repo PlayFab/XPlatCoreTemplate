@@ -12,6 +12,8 @@ char(*__countof_helper(_CountofType(&_Array)[_SizeOfArray]))[_SizeOfArray];
 #define _countof(_Array) (sizeof(*__countof_helper(_Array)) + 0)
 #endif
 
+#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+
 namespace PlayFab
 {
     PlayFabCurlHttpPlugin::PlayFabCurlHttpPlugin()
@@ -139,15 +141,11 @@ namespace PlayFab
             return nitems * size; // The return expected by curl for this callback
         }
 
-size_t headerKeyLength = size;
-#if defined(PLAYFAB_PLATFORM_GDK)
-        headerKeyLength = nitems;
-#endif
         // If this header-line is long enough, and the header starts with the key we expect
-        if ((headerKeyLength > requestIdheaderKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, requestIdheaderKeyLen) == 0))
+        if ((nitems > requestIdheaderKeyLen) && (strncasecmp(buffer, requestIdHeaderKey, requestIdheaderKeyLen) == 0))
         {
             // The value is the requestId
-            std::string requestId = std::string(buffer + requestIdheaderKeyLen, headerKeyLength - requestIdheaderKeyLen);
+            std::string requestId = std::string(buffer + requestIdheaderKeyLen, nitems - requestIdheaderKeyLen);
             size_t offset = requestId.find_first_not_of(whitespace);
             if (offset != std::string::npos)
             {

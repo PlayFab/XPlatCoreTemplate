@@ -5,6 +5,5 @@
 		<ExternalDir>$(SdkRootDir)external</ExternalDir>
 		<SdkSourceDir>$(SdkRootDir)code</SdkSourceDir>
 		<TestSourceDir>$(SdkRootDir)test</TestSourceDir>
-		<XCurlLibPath>$(GameDKLatest)\GRDK\ExtensionLibraries\Xbox.XCurl.API\DesignTime\CommonConfiguration\neutral\Lib\XCurl.lib</XCurlLibPath>
 	</PropertyGroup>
 </Project>
