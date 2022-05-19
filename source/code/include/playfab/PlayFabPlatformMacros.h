@@ -10,7 +10,9 @@
 #pragma once
 
 // TODO: is there a replacement that we can test instead?
-// #define PLAYFAB_PLATFORM_GDK
+#ifdef _GAMING_DESKTOP
+#define PLAYFAB_PLATFORM_GDK
+#endif
 #ifdef _DURANGO
 #define PLAYFAB_PLATFORM_XBOX
 #endif // _DURANGO
