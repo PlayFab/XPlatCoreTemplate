@@ -10,7 +10,7 @@
 #pragma once
 
 // TODO: is there a replacement that we can test instead?
-#ifdef _GAMING_DESKTOP
+#if defined(_GAMING_DESKTOP) || defined(_GAMING_XBOX) || defined(_GAMING_XBOX_XBOXONE) || defined(_GAMING_XBOX_SCARLETT)
 #define PLAYFAB_PLATFORM_GDK
 #endif
 #ifdef _DURANGO
