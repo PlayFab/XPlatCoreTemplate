@@ -121,7 +121,8 @@
     <ClInclude Include="$(TestSourceDir)\TestApp\TestReport.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\TestRunner.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\TestUtils.h" />
-    <ClInclude Include="$(TestSourceDir\TestApp\PlayFabQoSTest.h" />
+<% if(!locals.azureSdk) { %>
+    <ClInclude Include="$(TestSourceDir\TestApp\PlayFabQoSTest.h" /><% } %>
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabApiSettings.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabAuthenticationContext.h" />
   </ItemGroup>
