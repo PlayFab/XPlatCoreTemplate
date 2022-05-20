@@ -97,10 +97,10 @@
     <ClCompile Include="$(TestSourceDir)\TestApp\TestUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainWin32.cpp">
+    <ClCompile Include="(TestSourceDir)\TestApp\MainWin32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestAppWin32.cpp">
+    <ClCompile Include="(TestSourceDir)\TestApp\TestAppWin32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
