@@ -12,6 +12,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     var clientDefines = "" + removeStatic;
     var serverDefines = "ENABLE_PLAYFABADMIN_API;ENABLE_PLAYFABSERVER_API;DISABLE_PLAYFABCLIENT_API;" + removeStatic;
     var azureDefines = "DISABLE_PLAYFABCLIENT_API;";
+    var excludedFolders = null;
 
     var locals = {
         apis: apis,
@@ -33,9 +34,10 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
     if(isAzureSdk()){
         locals.azureSdk = true;
         locals.azureDefines = azureDefines;
+        excludedFolders = ["QoS"]
     }
 
-    templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir);
+    templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir, excludedFolders);
     for (var a = 0; a < apis.length; a++)
         makeApiFiles(apis[a], sourceDir, apiOutputDir);
 };
