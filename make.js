@@ -26,7 +26,7 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         sdkDate: sdkGlobals.sdkVersion.split(".")[2],
         sdkYear: sdkGlobals.sdkVersion.split(".")[2].substr(0, 2),
         vsVer: "v143", // As C++ versions change, we may need to update this
-        vsYear: "2017", // As VS versions change, we may need to update this
+        vsYear: "2022", // As VS versions change, we may need to update this
         getVerticalNameDefault: getVerticalNameDefault,
         winSdkVersion: "10.0" // Which version of the Windows SDK (A VS installation option) to use
     };
