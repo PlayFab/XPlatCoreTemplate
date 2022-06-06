@@ -102,7 +102,7 @@ namespace PlayFab
 
             char port[5];
             char hostNameChar[256];
-            if (sscanf(socketAddr, "%[^:]:%d", hostNameChar, port) != 2)
+            if (sscanf_s(socketAddr, "%[^:]:%[^:]", hostNameChar, port) != 2)
             {
                 // It did not work.
                 // scanf() returns the number of matched tokens.
