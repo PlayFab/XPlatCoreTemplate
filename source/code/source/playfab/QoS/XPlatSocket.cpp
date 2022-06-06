@@ -100,16 +100,24 @@ namespace PlayFab
                 return -1;
             }
 
+            ong int port;
+            char hostNameChar[256];
+            if (sscanf(socketAddr, "%[^:]:%d", hostNameChar, &port) != 2)
+            {
+                // It did not work.
+                // scanf() returns the number of matched tokens.
+                fprintf(stdout, "Fail\n");
+                exit(1);
+            }
+
             addrinfo *addr;
             addrinfo hints = { 0 };
             hints.ai_family = AF_INET;
 
-            getaddrinfo(socketAddr, nullptr, &hints, &addr);
-
             // TODO : Optimization
             //	Find a way to cache the hostent as we can have the same address being set again.
             //	Might look into using an unordered_map<socketAddr, hostent> but that might be expensive.
-            int status = getaddrinfo(socketAddr, nullptr, &hints, &addr);
+            int status = getaddrinfo(hostNameChar, port, &hints, &addr);
 
             if (status != 0)
             {
