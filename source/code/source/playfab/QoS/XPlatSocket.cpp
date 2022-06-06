@@ -100,18 +100,14 @@ namespace PlayFab
                 return -1;
             }
 
-            char port[5];
+            
             char hostNameChar[256];
-            if (sscanf_s(socketAddr, "%[^:]:%[^:]", hostNameChar, port) != 2)
-            {
-                // It did not work.
-                // scanf() returns the number of matched tokens.
-                fprintf(stdout, "Fail\n");
-                exit(1);
-            }
+            char port[5];
+            const char * colon = strchr(hostName, ':');
+            memcpy(hostNameChar, socketAddr, colon - socketAddr);
+            memcpy(port, socketAddr, socketAddr - colon);
 
-            addrinfo *addr;
-            addrinfo hints = { 0 };
+            struct addrinfo hints = { 0 }, *addr;
             hints.ai_family = AF_INET;
 
             // TODO : Optimization
