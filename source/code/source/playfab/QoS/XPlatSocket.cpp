@@ -99,14 +99,14 @@ namespace PlayFab
             {
                 return -1;
             }
-            
+
             struct addrinfo hints = { 0 }, *addr;
             hints.ai_family = AF_INET;
 
             // TODO : Optimization
             //	Find a way to cache the hostent as we can have the same address being set again.
             //	Might look into using an unordered_map<socketAddr, hostent> but that might be expensive.
-            int status = getaddrinfo(hostNameChar, port, &hints, &addr);
+            int status = getaddrinfo(socketAddr, NULL, &hints, &addr);
 
             if (status != 0)
             {
