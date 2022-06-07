@@ -100,30 +100,19 @@ namespace PlayFab
                 return -1;
             }
 
-            char hostNameChar[256];
-            char port[5];
-            if (sscanf_s(socketAddr, "%[^:]:%[*]", hostNameChar, 256, port, 5) != 2)
-            {
-                // It did not work.
-                // scanf() returns the number of matched tokens.
-                fprintf(stdout, "Fail\n");
-                exit(1);
-            }
-
             struct addrinfo hints = { 0 }, *addr;
-            hints.ai_family = AF_INET;
-
+            
             // TODO : Optimization
             //	Find a way to cache the hostent as we can have the same address being set again.
             //	Might look into using an unordered_map<socketAddr, hostent> but that might be expensive.
-            int status = getaddrinfo(hostNameChar, port, &hints, &addr);
+            int status = getaddrinfo(socketAddr, NULL, &hints, &addr);
 
             if (status != 0)
             {
                 return GetLastErrorCode();
             }
 
-            in_addr* inAddr = reinterpret_cast<in_addr*>(addr->ai_addr);
+            in_addr* inAddr = &reinterpret_cast<sockaddr_in*>(addr->ai_addr)->sin_addr;
 
 #if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
             if (inAddr->S_un.S_addr == 0)
