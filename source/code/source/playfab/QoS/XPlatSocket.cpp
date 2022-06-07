@@ -99,14 +99,7 @@ namespace PlayFab
             {
                 return -1;
             }
-
             
-            char hostNameChar[256];
-            char port[5];
-            const char * colon = strchr(hostName, ':');
-            memcpy(hostNameChar, socketAddr, colon - socketAddr);
-            memcpy(port, socketAddr, socketAddr - colon);
-
             struct addrinfo hints = { 0 }, *addr;
             hints.ai_family = AF_INET;
 
