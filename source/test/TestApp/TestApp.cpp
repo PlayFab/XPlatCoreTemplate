@@ -177,7 +177,7 @@ namespace PlayFabUnit
         {
             titleData.titleId = titleDataJson["titleId"].asString();
             titleData.userEmail = titleDataJson["userEmail"].asString();
-            titleData.developerSecretKey = titleDataJson["developerSecretKey"].asString();
+            titleData.developerSecretKey = titleDataJson["developerKey"].asString();
             titleData.connectionString = titleDataJson["connectionString"].asString();
         }
 
