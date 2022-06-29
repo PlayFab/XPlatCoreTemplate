@@ -319,7 +319,7 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
             tabbing + "{\n" +
             tabbing + "    authKey = \"X-Authorization\"; authValue = context->clientSessionTicket;\n" +
             tabbing + "}\n" +
-            "#if defined(ENABLE_PLAYFABSERVER_API) || defined(ENABLE_PLAYFABADMIN_API)\n" +
+            "#if defined(ENABLE_PLAYFABSERVER_API) || defined(ENABLE_PLAYFABADMIN_API) || defined(ENABLE_PLAYFAB_SECRETKEY)\n" +
             tabbing + "else if (settings->developerSecretKey.length() > 0)\n" +
             tabbing + "{\n" +
             tabbing + "    authKey = \"X-SecretKey\"; authValue = settings->developerSecretKey;\n" +
