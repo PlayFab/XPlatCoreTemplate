@@ -12,7 +12,9 @@ namespace PlayFabUnit
         std::string titleId;
         std::string developerSecretKey;
         std::string userEmail;
-        std::string connectionString;
+<% if (locals.azureSdk) { %>
+        std::string endpoint;
+<% } %>
     };
 
     enum class TestActiveState

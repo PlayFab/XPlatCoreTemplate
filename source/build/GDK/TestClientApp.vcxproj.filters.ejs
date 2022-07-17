@@ -17,15 +17,14 @@
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabApiTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="$(TestSourceDir)\TestApp\PlatformLoginTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabEventTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabConnectionStringTest.h">
+<% if (locals.azureSdk) { %>
+    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabEndpointTest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+<% } %>
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserInstance.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -73,15 +72,14 @@
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabApiTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="$(TestSourceDir)\TestApp\PlatformLoginTest_default.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabEventTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabConnectionStringTest.cpp">
+<% if (locals.azureSdk) { %>
+    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabEndpointTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+<% } %>
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserInstance.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,10 +101,10 @@
     <ClCompile Include="$(TestSourceDir)\TestApp\TestUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="MainWin32.cpp">
+    <ClCompile Include="$(TestSourceDir)\TestApp\MainWin32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TestAppWin32.cpp">
+    <ClCompile Include="$(TestSourceDir)\TestApp\TestAppWin32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

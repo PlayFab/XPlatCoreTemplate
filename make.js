@@ -81,17 +81,12 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
     var dataModelTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_DataModels.h.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "DataModels.h"), dataModelTemplate(locals));
 
-    var settingsHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.h.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabApiSettings.h"), settingsHTemplate(locals));
-
-    var settingsCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabApiSettings.cpp.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFabApiSettings.cpp"), settingsCppTemplate(locals));
-
-    var authContextHTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.h.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFabAuthenticationContext.h"), authContextHTemplate(locals));
-
-    var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabAuthenticationContext.cpp.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFabAuthenticationContext.cpp"), authContextCppTemplate(locals));
+    if (locals.azureSdk){
+        var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabEndpointTest.h.ejs"));
+        writeFile(path.resolve(apiOutputDir, "test/TestApp", "PlayFabEndpointTest.h"), authContextCppTemplate(locals));
+        var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabEndpointTest.cpp.ejs"));
+        writeFile(path.resolve(apiOutputDir, "test/TestApp", "PlayFabEndpointTest.cpp"), authContextCppTemplate(locals));
+    }
 }
 
 // *************************** Internal utility methods ***************************
@@ -269,37 +264,43 @@ function getPropertySafeName(property) {
 function getRequestActions(tabbing, apiCall, isInstanceApi) {
     //TODO Bug 6594: add to this titleId check.
     // If this titleId does not exist we should be throwing an error informing the user MUST have a titleId.
-    if (apiCall.result === "LoginResult" || apiCall.result === "RegisterPlayFabUserResult")
-        return tabbing + "if (request.TitleId.empty())\n"
+    result = "";
+    if (apiCall.result === "LoginResult" || apiCall.result === "RegisterPlayFabUserResult") {
+        result = tabbing + "if (request.TitleId.empty())\n"
             + tabbing + "{\n"
             + tabbing + tabbing + "if (!settings->titleId.empty())\n"
             + tabbing + tabbing + "{\n"
             + tabbing + tabbing +"        request.TitleId = settings->titleId;\n"
-            + tabbing + tabbing + "}\n"
-            + tabbing + tabbing + "else\n"
+            + tabbing + tabbing + "}\n";
+        if (isAzureSdk()) {
+            result += tabbing + tabbing + "else\n"
             + tabbing + tabbing + "{\n"
-            + tabbing + tabbing + tabbing + "if (!PlayFabSettings::staticSettings->connectionString.empty())\n"
+            + tabbing + tabbing + tabbing + "if (!PlayFabSettings::staticSettings->endpoint.empty())\n"
             + tabbing + tabbing + tabbing + "{\n"
-            + tabbing + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->connectionString.substr(8,4);\n"
+            + tabbing + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->endpoint.substr(8,4);\n"
             + tabbing + tabbing + tabbing + "}\n"
             + tabbing + tabbing + "}\n"
-            + tabbing + "}\n";
-
-    if (apiCall.result === "AuthenticateIdentityResult")
-        return tabbing + "if (request.TitleId.empty())\n"
-            + tabbing + "{\n"
-            + tabbing + tabbing + "if (!settings->titleId.empty())\n"
+        }
+        result += tabbing + "}\n";
+        return result;
+    }
+    if (apiCall.result === "AuthenticateIdentityResult") {
+        result = tabbing + "if (request.TitleId.empty())\n"
+        + tabbing + "{\n"
+        + tabbing + tabbing + "if (!settings->titleId.empty())\n"
+        + tabbing + tabbing + "{\n"
+        + tabbing + tabbing +"        request.TitleId = settings->titleId;\n"
+        + tabbing + tabbing + "}\n";
+        if (isAzureSdk()) {
+            result += tabbing + tabbing + "else\n"
             + tabbing + tabbing + "{\n"
-            + tabbing + tabbing +"        request.TitleId = settings->titleId;\n"
-            + tabbing + tabbing + "}\n"
-            + tabbing + tabbing + "else\n"
-            + tabbing + tabbing + "{\n"
-            + tabbing + tabbing + tabbing + "if (!PlayFabSettings::staticSettings->connectionString.empty())\n"
+            + tabbing + tabbing + tabbing + "if (!PlayFabSettings::staticSettings->endpoint.empty())\n"
             + tabbing + tabbing + tabbing + "{\n"
-            + tabbing + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->connectionString.substr(8,4);\n"
+            + tabbing + tabbing + tabbing + tabbing + "request.TitleId = PlayFabSettings::staticSettings->endpoint.substr(8,4);\n"
             + tabbing + tabbing + tabbing + "}\n"
             + tabbing + tabbing + "}\n"
-            + tabbing + "}\n";
+        }
+        result += tabbing + "}\n";
             + tabbing + "if (request.PlayerAccountPoolId.empty())\n"
             + tabbing + "{\n"
             + tabbing + tabbing + "if (!settings->playerAccountPoolId.empty())\n"
@@ -307,8 +308,8 @@ function getRequestActions(tabbing, apiCall, isInstanceApi) {
             + tabbing + tabbing +"        request.PlayerAccountPoolId = settings->playerAccountPoolId;\n"
             + tabbing + tabbing + "}\n"
             + tabbing + "}\n";
-
-
+        return result;
+    }
     if (apiCall.url === "/Authentication/GetEntityToken")
         return tabbing + "std::string authKey, authValue;\n" +
             tabbing + "if (context->entityToken.length() > 0)\n" +
