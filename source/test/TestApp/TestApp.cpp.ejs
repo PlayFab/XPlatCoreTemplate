@@ -114,9 +114,9 @@ namespace PlayFabUnit
         testRunner.Add(pfQosTest);
 
 <% if (locals.azureSdk) { %>
-        PlayFabEndpointTest pfConnectionStrTest;
-        pfConnectionStrTest.SetTitleInfo(testTitleData);
-        testRunner.Add(pfConnectionStrTest);
+        PlayFabEndpointTest pfEndpointTest;
+        pfEndpointTest.SetTitleInfo(testTitleData);
+        testRunner.Add(pfEndpointTest);
 <% } %>
 #endif //defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #endif // !defined(DISABLE_PLAYFABCLIENT_API)
