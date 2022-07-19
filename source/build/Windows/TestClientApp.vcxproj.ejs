@@ -116,7 +116,9 @@
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabApiTest.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\PlatformLoginTest.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabEventTest.h" />
-    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabConnectionStringTest.h" />
+<% if (locals.azureSdk) { %>
+    <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabEndpointTest.h" />
+<% } %>
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserInstance.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserStatic.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\PlayFabTestAlloc.h" />
@@ -127,8 +129,9 @@
     <ClInclude Include="$(TestSourceDir)\TestApp\TestReport.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\TestRunner.h" />
     <ClInclude Include="$(TestSourceDir)\TestApp\TestUtils.h" />
-<% if(!locals.azureSdk) { %>
-    <ClInclude Include="$(TestSourceDir\TestApp\PlayFabQoSTest.h" /><% } %>
+<% if (!locals.azureSdk) { %>
+    <ClInclude Include="$(TestSourceDir\TestApp\PlayFabQoSTest.h" />
+<% } %>
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabApiSettings.h" />
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabAuthenticationContext.h" />
   </ItemGroup>
@@ -140,7 +143,9 @@
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabApiTest.cpp" />
     <ClCompile Include="$(TestSourceDir)\TestApp\PlatformLoginTest_default.cpp" />
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabEventTest.cpp" />
-    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabConnectionStringTest.cpp" />
+<% if (locals.azureSdk) { %>
+    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabEndpointTest.cpp" />
+<% } %>
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserInstance.cpp" />
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabTestMultiUserStatic.cpp" />
     <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabTestAlloc.cpp" />
@@ -149,7 +154,8 @@
     <ClCompile Include="$(TestSourceDir)\TestApp\TestRunner.cpp" />
     <ClCompile Include="$(TestSourceDir)\TestApp\TestUtils.cpp" />
 <% if(!locals.azureSdk) { %>
-    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabQoSTest.cpp" /><% } %>
+    <ClCompile Include="$(TestSourceDir)\TestApp\PlayFabQoSTest.cpp" />
+<% } %>
     <ClCompile Include="MainWin32.cpp" />
     <ClCompile Include="TestAppWin32.cpp" />
   </ItemGroup>

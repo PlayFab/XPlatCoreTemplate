@@ -25,13 +25,13 @@ namespace PlayFabUnit
     struct TestContext;
 
     // A wrapper around TestEvents, so we can track it back to the test that launched the event
-    class TestConnectionStringEvent : public PlayFab::PlayFabEvent
+    class TestEndpointEvent : public PlayFab::PlayFabEvent
     {
     public:
         TestContext* testContext;
     };
 
-    class PlayFabConnectionStringTest : public PlayFabApiTestCase
+    class PlayFabEndpointTest : public PlayFabApiTestCase
     {
     private:
         std::shared_ptr<PlayFab::PlayFabClientInstanceAPI> clientApi;
@@ -89,11 +89,11 @@ namespace PlayFabUnit
         void NonStaticEmitEventCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
         void QueueTestCallback(std::shared_ptr<const PlayFab::IPlayFabEvent> event, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse> response);
 
-        template<typename T> std::function<void(const T&, void*)> ApiCallback(void(PlayFabConnectionStringTest::* func)(const T&, void*))
+        template<typename T> std::function<void(const T&, void*)> ApiCallback(void(PlayFabEndpointTest::* func)(const T&, void*))
         {
             return std::bind(func, this, std::placeholders::_1, std::placeholders::_2);
         }
-        std::function<void(std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)> EmitCallback(void(PlayFabConnectionStringTest::* func)(std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>))
+        std::function<void(std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>)> EmitCallback(void(PlayFabEndpointTest::* func)(std::shared_ptr<const PlayFab::IPlayFabEvent>, std::shared_ptr<const PlayFab::IPlayFabEmitEventResponse>))
         {
             return std::bind(func, this, std::placeholders::_1, std::placeholders::_2);
         }
