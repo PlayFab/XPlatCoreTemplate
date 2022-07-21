@@ -1,0 +1,72 @@
+#include <stdafx.h>
+
+    #include <playfab/PlayFabApiSettings.h>
+    #include <playfab/PlayFabSettings.h>
+    
+    namespace PlayFab
+    {
+        PlayFabApiSettings::PlayFabApiSettings() :
+            baseServiceHost(PlayFabSettings::productionEnvironmentURL)
+        {
+            requestGetParams["sdk"] = PlayFabSettings::versionString;
+    
+            // Don't let PlayFabSettings::staticSettings pull titleId from itself
+            if (PlayFabSettings::staticSettings != nullptr)
+            {
+                titleId = PlayFabSettings::staticSettings->titleId;
+                <% if(locals.azureSdk) { %>
+                playerAccountPoolId = PlayFabSettings::staticPlayer->playerAccountPoolId;
+                <% } %>
+            }
+        }
+    
+        std::string PlayFabApiSettings::GetUrl(const std::string& urlPath) const
+        {
+            std::string fullUrl;
+            const size_t kDefaultUrlCharSize = 1000;
+<% if(locals.azureSdk) { %>
+            if(endpoint != "")
+            {
+                fullUrl.reserve(endpoint.size() + kDefaultUrlCharSize);
+                fullUrl = endpoint;
+            }
+            else if(PlayFabSettings::staticSettings->endpoint != "")
+            {
+                fullUrl.reserve(PlayFabSettings::staticSettings->endpoint.size() + kDefaultUrlCharSize);
+                fullUrl = PlayFabSettings::staticSettings->endpoint;
+            }
+            else
+            {
+<% } %>
+                fullUrl.reserve(kDefaultUrlCharSize);
+    
+                fullUrl += "https://";
+                fullUrl += titleId;
+                fullUrl += baseServiceHost;
+<% if(locals.azureSdk) { %>
+            }
+<% } %>
+            
+            fullUrl += urlPath;
+    
+            bool firstParam = true;
+            for (auto const& paramPair : requestGetParams)
+            {
+                if (firstParam)
+                {
+                    fullUrl += "?";
+                    firstParam = false;
+                }
+                else
+                {
+                    fullUrl += "&";
+                }
+                fullUrl += paramPair.first;
+                fullUrl += "=";
+                fullUrl += paramPair.second;
+            }
+    
+            return fullUrl;
+        }
+    }
+    

@@ -15,7 +15,9 @@
 
 #include "PlatformLoginTest.h"
 #include "PlayFabApiTest.h"
-#include "PlayFabConnectionStringTest.h"
+<% if (locals.azureSdk) { %>
+#include "PlayFabEndpointTest.h"
+<% } %>
 #include "PlayFabEventTest.h"
 #include "PlayFabTestMultiUserStatic.h"
 #include "PlayFabTestMultiUserInstance.h"
@@ -110,11 +112,13 @@ namespace PlayFabUnit
         PlayFabQoSTest pfQosTest;
         pfQosTest.SetTitleInfo(testTitleData);
         testRunner.Add(pfQosTest);
-#endif //defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 
-        PlayFabConnectionStringTest pfConnectionStrTest;
-        pfConnectionStrTest.SetTitleInfo(testTitleData);
-        testRunner.Add(pfConnectionStrTest);
+<% if (locals.azureSdk) { %>
+        PlayFabEndpointTest pfEndpointTest;
+        pfEndpointTest.SetTitleInfo(testTitleData);
+        testRunner.Add(pfEndpointTest);
+<% } %>
+#endif //defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_XBOX)
 #endif // !defined(DISABLE_PLAYFABCLIENT_API)
 
         // Run the tests (blocks until all tests have finished).
@@ -178,7 +182,9 @@ namespace PlayFabUnit
             titleData.titleId = titleDataJson["titleId"].asString();
             titleData.userEmail = titleDataJson["userEmail"].asString();
             titleData.developerSecretKey = titleDataJson["developerSecretKey"].asString();
-            titleData.connectionString = titleDataJson["connectionString"].asString();
+<% if (locals.azureSdk) { %>
+            titleData.endpoint = titleDataJson["endpoint"].asString();
+<% } %>
         }
 
         return parsedSuccessfully;

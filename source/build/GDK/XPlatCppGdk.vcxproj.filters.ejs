@@ -96,7 +96,6 @@
     <ClInclude Include="$(SdkSourceDir)\include\playfab\PlayFabJsonHeaders.h">
       <Filter>Header Files\playfab</Filter>
     </ClInclude>
-<% if(!locals.azureSdk) { %>
     <ClInclude Include="$(SdkSourceDir)\include\playfab\QoS\RegionResult.h">
       <Filter>Header Files\playfab\QoS</Filter>
     </ClInclude>
@@ -117,7 +116,7 @@
     </ClInclude>
     <ClInclude Include="$(SdkSourceDir)\include\playfab\QoS\XPlatSocket.h">
       <Filter>Header Files\playfab\QoS</Filter>
-    </ClInclude><% } %>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFabAuthenticationContext.cpp">
@@ -172,7 +171,6 @@
     <ClCompile Include="$(SdkSourceDir)\source\playfab\PlayFabEventPipeline.cpp">
       <Filter>Source Files\playfab</Filter>
     </ClCompile>
-<% if(!locals.azureSdk) { %>
     <ClCompile Include="$(SdkSourceDir)\source\playfab\QoS\RegionResult.cpp">
       <Filter>Source Files\playfab\QoS</Filter>
     </ClCompile>
@@ -184,6 +182,6 @@
     </ClCompile>
     <ClCompile Include="$(SdkSourceDir)\source\playfab\QoS\XPlatSocket.cpp">
       <Filter>Source Files\playfab\QoS</Filter>
-    </ClCompile><% } %>
+    </ClCompile>
   </ItemGroup>
 </Project>
