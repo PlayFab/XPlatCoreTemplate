@@ -7,7 +7,7 @@
         <owners>Microsoft</owners>
         <projectUrl>http://github.com/PlayFab/XPlatCppSdk</projectUrl>
         <license type="expression">Apache-2.0</license>
-        <icon>images/icon.png</icon>
+        <icon>./images/icon.png</icon>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <releaseNotes>https://api.playfab.com/releaseNotes/#<%- sdkVersion %></releaseNotes>
         <description>Microsoft Azure PlayFab XPlatCppSdk</description>
@@ -15,6 +15,7 @@
         <tags>Microsoft Azure PlayFab Baas Paas JSON REST HTTP SSL API cloud liveops game gamedev native nativepackage</tags>
     </metadata>
     <files>
+        <file src=".\images\icon.png" target="images\icon.png" />
         <file src=".\com.playfab.xplatcppsdk.<%- vsVer %>.targets" target="build\native\com.playfab.xplatcppsdk.<%- vsVer %>.targets" />
         <file src=".\external\jsoncpp-build\x64\Release\lib_json.lib" target="build\native\lib\x64\Release\lib_json.lib" />
         <file src=".\external\jsoncpp-build\x64\Debug\lib_json.lib" target="build\native\lib\x64\Debug\lib_json.lib" />
@@ -25,10 +26,10 @@
         <file src=".\external\jsoncpp-gdk-build\Gaming.Desktop.x64\Release\lib_json.lib" target="build\native\lib\Gaming.Desktop.x64\Release\lib_json.lib" />
         <file src=".\external\jsoncpp-gdk-build\Gaming.Desktop.x64\Debug\lib_json.lib" target="build\native\lib\Gaming.Desktop.x64\Debug\lib_json.lib" />
         <file src=".\build\GDK\Gaming.Desktop.x64\Release\XPlatCppGdk\XPlatCppGdk.pdb" target="build\native\lib\Gaming.Desktop.x64\Release\XPlatCppGdk.pdb" />
-        <file src=".\build\GDK\Gaming.Desktop.x64\Release\XPlatCppGdk\XPlatCppGdk.lib" target="build\native\lib\Gaming.Desktop.x64\Release\XPlatCppGdk.lib" />
-        <file src=".\build\GDK\Gaming.Desktop.x64\Debug\XPlatCppGdk\XPlatCppGdk.pdb" target="build\native\lib\Gaming.Desktop.x64\Debug\XPlatCppGdk.pdb" />
-        <file src=".\build\GDK\Gaming.Desktop.x64\Debug\XPlatCppGdk\XPlatCppGdk.lib" target="build\native\lib\Gaming.Desktop.x64\Debug\XPlatCppGdk.lib" />
+        <file src=".\build\GDK\Gaming.Desktop.x64\Release\XPlatCppGdk\Lib\XPlatCppGdk.lib" target="build\native\lib\Gaming.Desktop.x64\Release\XPlatCppGdk.lib" />
+        <file src=".\build\GDK\Gaming.Desktop.x64\Debug\XPlatCppGdk\Lib\XPlatCppGdk.pdb" target="build\native\lib\Gaming.Desktop.x64\Debug\XPlatCppGdk.pdb" />
+        <file src=".\build\GDK\Gaming.Desktop.x64\Debug\XPlatCppGdk\Lib\XPlatCppGdk.lib" target="build\native\lib\Gaming.Desktop.x64\Debug\XPlatCppGdk.lib" />
         <file src=".\code\include\playfab\**\*.h" target="build\native\include\playfab" />
         <file src=".\external\jsoncpp\include\json\**\*.h" target="build\native\include\json" />
     </files>
-</package> 
+</package>
