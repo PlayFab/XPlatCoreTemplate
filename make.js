@@ -1,7 +1,8 @@
+var ejs = require('ejs');
 var path = require("path");
 
 // Making resharper less noisy - These are defined in Generate.js
-if (typeof getCompiledTemplate === "undefined") getCompiledTemplate = function () { };
+// if (typeof getCompiledTemplate === "undefined") getCompiledTemplate = function () { };
 if (typeof templatizeTree === "undefined") templatizeTree = function () { };
 
 exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
@@ -66,26 +67,34 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
         sortedClasses: getSortedClasses(api.datatypes)
     };
 
-    var apihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.h.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "Api.h"), apihTemplate(locals));
+    var apihTemplateFileAsString = readFile(path.resolve(sourceDir, "templates/PlayFab_Api.h.ejs"));
+    var apihTemplate = ejs.render(apihTemplateFileAsString, locals); //getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.h.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "Api.h"), apihTemplate);
 
-    var iapihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.h.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "InstanceApi.h"), iapihTemplate(locals));
+    var iapihTemplateAsString = readFile(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.h.ejs"));
+    var iapihTemplate = ejs.render(iapihTemplateAsString, locals); //getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.h.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "InstanceApi.h"), iapihTemplate);
 
-    var apiCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.cpp.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFab" + api.name + "Api.cpp"), apiCppTemplate(locals));
+    var apiCppTemplateAsString = readFile(path.resolve(sourceDir, "templates/PlayFab_Api.cpp.ejs"));
+    var apiCppTemplate = ejs.render(apiCppTemplateAsString, locals);//getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.cpp.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFab" + api.name + "Api.cpp"), apiCppTemplate);
 
-    var iapiCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.cpp.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFab" + api.name + "InstanceApi.cpp"), iapiCppTemplate(locals));
-
-    var dataModelTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_DataModels.h.ejs"));
-    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "DataModels.h"), dataModelTemplate(locals));
+    var iapiCppTemplateFileAsString = readFile(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.cpp.ejs"));
+    var iapiCppTemplate = ejs.render(iapiCppTemplateFileAsString, locals);// getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.cpp.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFab" + api.name + "InstanceApi.cpp"), iapiCppTemplate);
+    
+    var dataModelTemplateAsString = readFile(path.resolve(sourceDir, "templates/PlayFab_DataModels.h.ejs"));
+    var dataModelTemplate = ejs.render(dataModelTemplateAsString, locals);//getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_DataModels.h.ejs"));
+    writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "DataModels.h"), dataModelTemplate);
 
     if (locals.azureSdk){
-        var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabEndpointTest.h.ejs"));
-        writeFile(path.resolve(apiOutputDir, "test/TestApp", "PlayFabEndpointTest.h"), authContextCppTemplate(locals));
-        var authContextCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabEndpointTest.cpp.ejs"));
-        writeFile(path.resolve(apiOutputDir, "test/TestApp", "PlayFabEndpointTest.cpp"), authContextCppTemplate(locals));
+        var authContextCppTemplateAsString = readFile(path.resolve(sourceDir, "templates/PlayFabEndpointTest.h.ejs"));
+        var authContextCppTemplate = ejs.render(authContextCppTemplateAsString, locals);// getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabEndpointTest.h.ejs"));
+        writeFile(path.resolve(apiOutputDir, "test/TestApp", "PlayFabEndpointTest.h"), authContextCppTemplate);
+        
+        var authContextCppTemplateFileAsString = readFile(path.resolve(sourceDir, "templates/PlayFabEndpointTest.cpp.ejs"));
+        var authContextCppTemplate = ejs.render(authContextCppTemplateFileAsString, locals);//getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFabEndpointTest.cpp.ejs"));
+        writeFile(path.resolve(apiOutputDir, "test/TestApp", "PlayFabEndpointTest.cpp"), authContextCppTemplate);
     }
 }
 
