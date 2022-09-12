@@ -12,6 +12,18 @@
         %(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Gaming.Desktop.x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Release\lib_json.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Release\XPlatCppWindows.lib;
+        %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\x64\Debug\lib_json.lib" />
     <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\x64\Debug\XPlatCppWindows.lib" />
@@ -28,8 +40,20 @@
         %(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\x64\Debug\lib_json.lib" />
-    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\x64\Debug\XPlatCppWindows.lib" />
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Desktop.x64'">
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\lib_json.lib" />
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\XPlatCppWindows.lib" />
   </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Desktop.x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\lib_json.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\XPlatCppWindows.lib;
+        %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
 </Project>
