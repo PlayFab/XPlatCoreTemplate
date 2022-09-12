@@ -20,7 +20,7 @@
       <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>
         $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Release\lib_json.lib;
-        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Release\XPlatCppWindows.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Release\XPlatCppGdk.lib;
         %(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -42,7 +42,7 @@
   </ItemDefinitionGroup>
   <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Desktop.x64'">
     <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\lib_json.lib" />
-    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\XPlatCppWindows.lib" />
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\XPlatCppGdk.lib" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Desktop.x64'">
     <ClCompile>
@@ -52,7 +52,7 @@
       <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>
         $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\lib_json.lib;
-        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\XPlatCppWindows.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\XPlatCppGdk.lib;
         %(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
