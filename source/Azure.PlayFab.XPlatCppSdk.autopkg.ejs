@@ -39,8 +39,6 @@ nuget {
             lib: {
                 build\Windows\x64\Release\XPlatCppWindows\XPlatCppWindows.lib; 
                 external\jsoncpp-build\x64\Release\lib_json.lib;
-                build\GDK\Gaming.Desktop.x64\Release\XPlatCppGdk\Lib\XPlatCppGdk.lib;
-                external\jsoncpp-gdk-build\Gaming.Desktop.x64\Release\lib_json.lib
             }
         };
 
@@ -48,8 +46,48 @@ nuget {
             lib: {
                 build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.lib;
                 external\jsoncpp-build\x64\Debug\lib_json.lib;
+            }
+        };
+
+        [Gaming.Desktop.x64,v142,release] {
+            lib: {
+                build\GDK\Gaming.Desktop.x64\Release\XPlatCppGdk\Lib\XPlatCppGdk.lib;
+                external\jsoncpp-gdk-build\Gaming.Desktop.x64\Release\lib_json.lib;
+            }
+        };
+
+        [Gaming.Desktop.x64,v142,debug] {
+            lib: {
                 build\GDK\Gaming.Desktop.x64\Debug\XPlatCppGdk\Lib\XPlatCppGdk.lib;
                 external\jsoncpp-gdk-build\Gaming.Desktop.x64\Debug\lib_json.lib
+            }
+        };
+
+        [Gaming.Xbox.Scarlett.x64,v142,release] {
+            lib: {
+                build\GDK\Gaming.Xbox.Scarlett.x64\Release\XPlatCppGdk\Lib\XPlatCppGdk.lib;
+                external\jsoncpp-gdk-build\Gaming.Xbox.Scarlett.x64\Release\lib_json.lib;
+            }
+        };
+
+        [Gaming.Xbox.Scarlett.x64,v142,debug] {
+            lib: {
+                build\GDK\Gaming.Xbox.Scarlett.x64\Debug\XPlatCppGdk\Lib\XPlatCppGdk.lib;
+                external\jsoncpp-gdk-build\Gaming.Xbox.Scarlett.x64\Debug\lib_json.lib
+            }
+        };
+
+        [Gaming.Xbox.XboxOne.x64,v142,release] {
+            lib: {
+                build\GDK\Gaming.Xbox.XboxOne.x64\Release\XPlatCppGdk\Lib\XPlatCppGdk.lib;
+                external\jsoncpp-gdk-build\Gaming.Xbox.XboxOne.x64\Release\lib_json.lib;
+            }
+        };
+
+        [Gaming.Xbox.XboxOne.x64,v142,debug] {
+            lib: {
+                build\GDK\Gaming.Xbox.XboxOne.x64\Debug\XPlatCppGdk\Lib\XPlatCppGdk.lib;
+                external\jsoncpp-gdk-build\Gaming.Xbox.XboxOne.x64\Debug\lib_json.lib
             }
         };
 
@@ -57,8 +95,12 @@ nuget {
             #destination: ${d_lib};
             build\Windows\x64\Debug\XPlatCppWindows\XPlatCppWindows.pdb;
             build\GDK\Gaming.Desktop.x64\Debug\XPlatCppGdk\XPlatCppGdk.pdb;
+            build\GDK\Gaming.Xbox.Scarlett.x64\Debug\XPlatCppGdk\XPlatCppGdk.pdb;
+            build\GDK\Gaming.Xbox.XboxOne.x64\Debug\XPlatCppGdk\XPlatCppGdk.pdb;
             external\jsoncpp-build\x64\Debug\lib_json.pdb;
-            external\jsoncpp-gdk-build\Gaming.Desktop.x64\Debug\lib_json.pdb
+            external\jsoncpp-gdk-build\Gaming.Desktop.x64\Debug\lib_json.pdb;
+            external\jsoncpp-gdk-build\Gaming.Xbox.Scarlett.x64\Debug\lib_json.pdb;
+            external\jsoncpp-gdk-build\Gaming.Xbox.XboxOne.x64\Debug\lib_json.pdb;
         };
     };
 

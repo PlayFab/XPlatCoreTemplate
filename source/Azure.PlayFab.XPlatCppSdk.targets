@@ -24,6 +24,30 @@
         %(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Gaming.Xbox.Scarlett.x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Release\lib_json.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Release\XPlatCppGdk.lib;
+        %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Gaming.Xbox.XboxOne.x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Release\lib_json.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Release\XPlatCppGdk.lib;
+        %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
   <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\x64\Debug\lib_json.lib" />
     <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\x64\Debug\XPlatCppWindows.lib" />
@@ -53,6 +77,38 @@
       <AdditionalDependencies>
         $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\lib_json.lib;
         $(MSBuildThisFileDirectory)lib\Gaming.Desktop.x64\Debug\XPlatCppGdk.lib;
+        %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Xbox.Scarlett.x64'">
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Debug\lib_json.lib" />
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Debug\XPlatCppGdk.lib" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Xbox.Scarlett.x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Debug\lib_json.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.Scarlett.x64\Debug\XPlatCppGdk.lib;
+        %(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Xbox.XboxOne.x64'">
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Debug\lib_json.lib" />
+    <ReferenceCopyLocalPaths Include="$(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Debug\XPlatCppGdk.lib" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Gaming.Xbox.XboxOne.x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Debug\lib_json.lib;
+        $(MSBuildThisFileDirectory)lib\Gaming.Xbox.XboxOne.x64\Debug\XPlatCppGdk.lib;
         %(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
