@@ -37,6 +37,12 @@ exports.makeCombinedAPI = function (apis, sourceDir, apiOutputDir) {
         excludedFolders = ["QoS"]
     }
 
+    if(updatedVsVer())
+    {
+        locals.vsVer = "v142";
+        locals.vsYear = "2019";
+    }
+
     templatizeTree(locals, path.resolve(sourceDir, "source"), apiOutputDir, excludedFolders);
     for (var a = 0; a < apis.length; a++)
         makeApiFiles(apis[a], sourceDir, apiOutputDir);
@@ -390,4 +396,8 @@ function getVerticalNameDefault() {
 
 function isAzureSdk(){
     return sdkGlobals.buildFlags.includes("azure");
+}
+
+function updatedVsVer(){
+    return sdkGlobals.buildFlags.includes("updatedVsVer");
 }
