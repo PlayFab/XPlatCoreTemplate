@@ -340,7 +340,9 @@ function getResultActions(tabbing, apiCall, isInstanceApi) {
     if (apiCall.url === "/Authentication/GetEntityToken")
         return tabbing + "context->HandlePlayFabLogin(\"\", \"\", outResult.Entity->Id, outResult.Entity->Type, outResult.EntityToken);\n";
     if (apiCall.url === "/GameServerIdentity/AuthenticateGameServerWithCustomId")
-        return tabbing + "context->HandlePlayFabLogin(\"\", \"\", outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n";
+        return tabbing + "context->HandlePlayFabGameServerLogin(\"\", \"\", outResult.EntityToken->Entity->Id, outResult.EntityToken->Entity->Type, outResult.EntityToken->EntityToken);\n";
+    if (apiCall.url === "/GameServerIdentity/Delete")
+        return tabbing + "context->HandlePlayFabGameServerLogin(\"\", \"\", \"\", \"\", \"\");\n";
     if (apiCall.result === "LoginResult")
         return tabbing + "\n" 
             + tabbing + "outResult.authenticationContext = std::make_shared<PlayFabAuthenticationContext>();\n"
