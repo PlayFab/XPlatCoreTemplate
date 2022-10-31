@@ -60,6 +60,7 @@ namespace PlayFabUnit
     {
         // Load the TestTitleData
         TestTitleData testTitleData;
+        printf("FLAG TEST \n");
         bool loadSuccessful = LoadTitleData(testTitleData);
 
         // If the title data fails to load, and you want to use custom hard-coded data, you can
@@ -176,6 +177,8 @@ namespace PlayFabUnit
         JSONCPP_STRING jsonParseErrors;
         Json::Value titleDataJson;
         const bool parsedSuccessfully = jsonReader->parse(*titleJsonPtr, *titleJsonPtr + size + 1, &titleDataJson, &jsonParseErrors);
+        
+        printf("FLAG parse: %s \n", jsonParseErrors);
 
         if (parsedSuccessfully)
         {
