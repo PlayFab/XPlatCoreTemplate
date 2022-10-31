@@ -178,7 +178,7 @@ namespace PlayFabUnit
         Json::Value titleDataJson;
         const bool parsedSuccessfully = jsonReader->parse(*titleJsonPtr, *titleJsonPtr + size + 1, &titleDataJson, &jsonParseErrors);
         
-        printf("FLAG parse: %s \n", jsonParseErrors);
+        printf("FLAG parse:\n");
 
         if (parsedSuccessfully)
         {
