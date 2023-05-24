@@ -1,0 +1,75 @@
+#pragma once
+
+<%- getApiDefine(api) %>
+
+#include <playfab/PlayFab<%- api.name %>DataModels.h>
+#include <playfab/PlayFabError.h>
+
+namespace PlayFab
+{
+    class CallRequestContainerBase;
+    class CallRequestContainer;
+    class PlayFabApiSettings;
+    class PlayFabAuthenticationContext;
+
+    /// <summary>
+    /// Main interface for PlayFab Sdk, specifically all <%- api.name %> APIs
+    /// </summary>
+    class PlayFab<%- api.name %>InstanceAPI
+    {
+    private:
+        std::shared_ptr<PlayFabApiSettings> m_settings;
+        std::shared_ptr<PlayFabAuthenticationContext> m_context;
+
+    public:
+<% if( api.name === "Admin" || api.name === "Server" ) {
+%>        PlayFab<%- api.name %>InstanceAPI();
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+<% } else if( api.name === "Client" || api.name === "Authentication" ) {
+%>        PlayFab<%- api.name %>InstanceAPI();
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+<% } else {
+%>        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+        PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext);
+<% } %>
+        ~PlayFab<%- api.name %>InstanceAPI() = default;
+        PlayFab<%- api.name %>InstanceAPI(const PlayFab<%- api.name %>InstanceAPI& source) = delete; // disable copy
+        PlayFab<%- api.name %>InstanceAPI(PlayFab<%- api.name %>InstanceAPI&&) = delete; // disable move
+        PlayFab<%- api.name %>InstanceAPI& operator=(const PlayFab<%- api.name %>InstanceAPI& source) = delete; // disable assignment
+        PlayFab<%- api.name %>InstanceAPI& operator=(PlayFab<%- api.name %>InstanceAPI&& other) = delete; // disable move assignment
+
+        std::shared_ptr<PlayFabApiSettings> GetSettings() const;
+        std::shared_ptr<PlayFabAuthenticationContext> GetAuthenticationContext() const;
+        /// <summary>
+        /// Calls the Update function on your implementation of the IHttpPlugin to check for responses to HTTP requests.
+        /// All api's (Client, Server, Admin etc.) share the same IHttpPlugin. 
+        /// This means that you only need to call Update() on one API to retrieve the responses for all APIs.
+        /// Additional calls to Update (on any API) during the same tick are unlikely to retrieve additional responses.
+        /// Call Update when your game ticks as follows:
+        ///     <%- api.name %>.Update();
+        /// </summary>
+        size_t Update();
+        void ForgetAllCredentials();
+<% if (hasClientOptions) { %>
+        // Public, Client-Specific
+        bool IsClientLoggedIn();
+<% } %>
+        // ------------ Generated API calls
+<% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx];
+%>        void <%- apiCall.name %>(<%- api.name %>Models::<%- apiCall.request %>& request, const ProcessApiCallback<<%- api.name %>Models::<%- apiCall.result %>> callback, const ErrorCallback errorCallback = nullptr, void* customData = nullptr);
+<% if (apiCall.name == "WriteTelemetryEvents") { 
+    %>        void <%- apiCall.name %>(<%- api.name %>Models::<%- apiCall.request %>& request, std::string telemetryKey, const ProcessApiCallback<<%- api.name %>Models::<%- apiCall.result %>> callback, const ErrorCallback errorCallback = nullptr, void* customData = nullptr);
+<% } %><% } %>
+        // ------------ Generated result handlers
+<% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx];
+%>        void On<%- apiCall.name %>Result(int httpCode, const std::string& result, const std::shared_ptr<CallRequestContainerBase>& reqContainer);
+<% } %>
+        bool ValidateResult(PlayFabResultCommon& resultCommon, const CallRequestContainer& container);
+    };
+}
+
+#endif

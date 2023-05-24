@@ -72,16 +72,19 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
         sortedClasses: getSortedClasses(api.datatypes)
     };
 
-    var apihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.h.ejs"));
+    var templateName = api.name == "Events" ? "PlayFab_Events_Api" : "PlayFab_Api";
+    var instTemplateName = api.name == "Events" ? "PlayFab_Events_InstanceApi" : "PlayFab_InstanceApi";
+
+    var apihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/" + templateName + ".h.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "Api.h"), apihTemplate(locals));
 
-    var iapihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.h.ejs"));
+    var iapihTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/" + instTemplateName + ".h.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/include/playfab", "PlayFab" + api.name + "InstanceApi.h"), iapihTemplate(locals));
 
-    var apiCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_Api.cpp.ejs"));
+    var apiCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/" + templateName + ".cpp.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFab" + api.name + "Api.cpp"), apiCppTemplate(locals));
 
-    var iapiCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_InstanceApi.cpp.ejs"));
+    var iapiCppTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/" + instTemplateName + ".cpp.ejs"));
     writeFile(path.resolve(apiOutputDir, "code/source/playfab", "PlayFab" + api.name + "InstanceApi.cpp"), iapiCppTemplate(locals));
 
     var dataModelTemplate = getCompiledTemplate(path.resolve(sourceDir, "templates/PlayFab_DataModels.h.ejs"));
