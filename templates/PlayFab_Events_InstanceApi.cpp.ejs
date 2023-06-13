@@ -1,0 +1,225 @@
+#include <stdafx.h>
+
+<%- getApiDefine(api) %>
+
+#include <playfab/PlayFab<%- api.name %>InstanceApi.h>
+#include <playfab/PlayFabPluginManager.h>
+#include <playfab/PlayFabSettings.h>
+
+#if defined(PLAYFAB_PLATFORM_WINDOWS)
+#pragma warning (disable: 4100) // formal parameters are part of a public interface
+#endif // defined(PLAYFAB_PLATFORM_WINDOWS)
+
+namespace PlayFab
+{
+    using namespace <%- api.name %>Models;
+<% if( api.name === "Admin" || api.name === "Server" ) { %>
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI()
+    {
+    }
+
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings)
+    {
+        this->m_settings = apiSettings;
+    }
+
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
+    {
+        this->m_context = authenticationContext;
+    }
+
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
+    {
+        this->m_settings = apiSettings;
+        this->m_context = authenticationContext;
+    }
+<% } else if( api.name === "Client" || api.name === "Authentication" ) { %>
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI()
+    {
+        this->m_context = std::make_shared<PlayFabAuthenticationContext>();
+    }
+
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings)
+    {
+        this->m_settings = apiSettings;
+        this->m_context = std::make_shared<PlayFabAuthenticationContext>();
+    }
+
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
+    {
+        this->m_context = authenticationContext;
+    }
+
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
+    {
+        this->m_settings = apiSettings;
+        this->m_context = authenticationContext;
+    }
+<% } else { %>
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
+    {
+        if (authenticationContext == nullptr)
+        {
+            throw PlayFabException(PlayFabExceptionCode::AuthContextRequired, "Context cannot be null, create a PlayFabAuthenticationContext for each player in advance, or get <PlayFabClientInstanceAPI>.authenticationContext");
+        }
+        this->m_context = authenticationContext;
+    }
+
+    PlayFab<%- api.name %>InstanceAPI::PlayFab<%- api.name %>InstanceAPI(const std::shared_ptr<PlayFabApiSettings>& apiSettings, const std::shared_ptr<PlayFabAuthenticationContext>& authenticationContext)
+    {
+        if (authenticationContext == nullptr)
+        {
+            throw PlayFabException(PlayFabExceptionCode::AuthContextRequired, "Context cannot be null, create a PlayFabAuthenticationContext for each player in advance, or get <PlayFabClientInstanceAPI>.authenticationContext");
+        }
+        this->m_settings = apiSettings;
+        this->m_context = authenticationContext;
+    }
+<% } %>
+    std::shared_ptr<PlayFabApiSettings> PlayFab<%- api.name %>InstanceAPI::GetSettings() const
+    {
+        return this->m_settings;
+    }
+
+    std::shared_ptr<PlayFabAuthenticationContext> PlayFab<%- api.name %>InstanceAPI::GetAuthenticationContext() const
+    {
+        return this->m_context;
+    }
+
+    size_t PlayFab<%- api.name %>InstanceAPI::Update()
+    {
+        IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
+        return http.Update();
+    }
+
+    void PlayFab<%- api.name %>InstanceAPI::ForgetAllCredentials()
+    {
+        if (this->m_context != nullptr)
+        {
+            this->m_context->ForgetAllCredentials();
+        }
+    }
+
+    // PlayFab<%- api.name %> instance APIs
+<% for (var callIdx = 0; callIdx < api.calls.length; callIdx++) { var apiCall = api.calls[callIdx]; %>
+    void PlayFab<%- api.name %>InstanceAPI::<%- apiCall.name %>(
+        <%- apiCall.request %>& request,
+        const ProcessApiCallback<<%- apiCall.result %>> callback,
+        const ErrorCallback errorCallback,
+        void* customData
+    )
+    {
+        std::shared_ptr<PlayFabAuthenticationContext> context = request.authenticationContext != nullptr ? request.authenticationContext : this->m_context;
+        std::shared_ptr<PlayFabApiSettings> settings = this->m_settings != nullptr ? this->m_settings : PlayFabSettings::staticSettings;
+<%- getRequestActions("        ", apiCall, true) %>
+        IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
+        const Json::Value requestJson = request.ToJson();
+        std::string jsonAsString = requestJson.toStyledString();
+
+        std::shared_ptr<PlayFabAuthenticationContext> authenticationContext = request.authenticationContext == nullptr ? this->m_context : request.authenticationContext;
+        std::unordered_map<std::string, std::string> headers;
+<% if (hasAuthParams(apiCall)) {
+%>        headers.emplace(<%- getAuthParams(apiCall, true) %>);
+<% } %>
+        auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
+            "<%- apiCall.url %>",
+            headers,
+            jsonAsString,
+            std::bind(&PlayFab<%- api.name %>InstanceAPI::On<%- apiCall.name %>Result, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
+            settings,
+            context,
+            customData));
+
+        reqContainer->successCallback = std::shared_ptr<void>((callback == nullptr) ? nullptr : new ProcessApiCallback<<%- apiCall.result %>>(callback));
+        reqContainer->errorCallback = errorCallback;
+
+        http.MakePostRequest(std::unique_ptr<CallRequestContainerBase>(static_cast<CallRequestContainerBase*>(reqContainer.release())));
+    }
+    <% if (apiCall.name == "WriteTelemetryEvents") { 
+    %> 
+    void PlayFab<%- api.name %>InstanceAPI::<%- apiCall.name %>(
+        <%- apiCall.request %>& request,
+        std::string telemetryKey,
+        const ProcessApiCallback<<%- apiCall.result %>> callback,
+        const ErrorCallback errorCallback,
+        void* customData
+    )
+    {
+        std::shared_ptr<PlayFabAuthenticationContext> context = request.authenticationContext != nullptr ? request.authenticationContext : this->m_context;
+        std::shared_ptr<PlayFabApiSettings> settings = this->m_settings != nullptr ? this->m_settings : PlayFabSettings::staticSettings;
+<%- getRequestActions("        ", apiCall, true) %>
+        IPlayFabHttpPlugin& http = *PlayFabPluginManager::GetPlugin<IPlayFabHttpPlugin>(PlayFabPluginContract::PlayFab_Transport);
+        const Json::Value requestJson = request.ToJson();
+        std::string jsonAsString = requestJson.toStyledString();
+
+        std::unordered_map<std::string, std::string> headers;
+        headers.emplace("X-TelemetryKey", telemetryKey);
+
+        auto reqContainer = std::unique_ptr<CallRequestContainer>(new CallRequestContainer(
+            "<%- apiCall.url %>",
+            headers,
+            jsonAsString,
+            std::bind(&PlayFab<%- api.name %>InstanceAPI::On<%- apiCall.name %>Result, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3),
+            settings,
+            context,
+            customData));
+
+        reqContainer->successCallback = std::shared_ptr<void>((callback == nullptr) ? nullptr : new ProcessApiCallback<<%- apiCall.result %>>(callback));
+        reqContainer->errorCallback = errorCallback;
+
+        http.MakePostRequest(std::unique_ptr<CallRequestContainerBase>(static_cast<CallRequestContainerBase*>(reqContainer.release())));
+    }
+    <% } %>
+    void PlayFab<%- api.name %>InstanceAPI::On<%- apiCall.name %>Result(int /*httpCode*/, const std::string& /*result*/, const std::shared_ptr<CallRequestContainerBase>& reqContainer)
+    {
+        CallRequestContainer& container = static_cast<CallRequestContainer&>(*reqContainer);
+        std::shared_ptr<PlayFabAuthenticationContext> context = container.GetContext();
+
+        <%- apiCall.result %> outResult;
+        if (ValidateResult(outResult, container))
+        {<%- getResultActions("            ", apiCall, true)
+%>
+            std::shared_ptr<void> internalPtr = container.successCallback;
+            if (internalPtr.get() != nullptr)
+            {
+                const auto& callback = *static_cast<ProcessApiCallback<<%- apiCall.result %>> *>(internalPtr.get());
+                callback(outResult, container.GetCustomData());
+            }
+        }
+    }
+<% } %><% if (hasClientOptions) { %>
+    // Private PlayFabClientInstanceAPI specific
+    bool PlayFabClientInstanceAPI::IsClientLoggedIn()
+    {
+        return !this->m_context->clientSessionTicket.empty();
+    }
+
+<% } %>
+    bool PlayFab<%- api.name %>InstanceAPI::ValidateResult(PlayFabResultCommon& resultCommon, const CallRequestContainer& container)
+    {
+        if (container.errorWrapper.HttpCode == 200)
+        {
+            resultCommon.FromJson(container.errorWrapper.Data);
+            resultCommon.Request = container.errorWrapper.Request;
+            return true;
+        }
+        else // Process the error case
+        {
+            if (PlayFabSettings::globalErrorHandler != nullptr)
+            {
+                PlayFabSettings::globalErrorHandler(container.errorWrapper, container.GetCustomData());
+            }
+
+            if (container.errorCallback != nullptr)
+            {
+                container.errorCallback(container.errorWrapper, container.GetCustomData());
+            }
+            return false;
+        }
+    }
+}
+
+#endif
+
+#if defined(PLAYFAB_PLATFORM_WINDOWS)
+#pragma warning (default: 4100) // formal parameters are part of a public interface
+#endif // defined(PLAYFAB_PLATFORM_WINDOWS)
