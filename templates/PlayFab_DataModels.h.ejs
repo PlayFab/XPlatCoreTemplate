@@ -10,22 +10,73 @@ namespace PlayFab
     namespace <%- api.name %>Models
     {
         // <%- api.name %> Enums<%
-for (var enumIdx = 0; enumIdx < enumtypes.length; enumIdx++) { var enumtype = enumtypes[enumIdx]; %>
+for (var enumIdx = 0; enumIdx < enumtypes.length; enumIdx++) { 
+    var enumtype = enumtypes[enumIdx]; %>
         enum class <%- enumtype.name %>
-        {
-            <% for(var i=0; i<enumtype.enumvalues.length-1; i++) { var enumval = enumtype.enumvalues[i] %><%- enumtype.name %><%- enumval.name %>,
-            <% } %><%- enumtype.name %><%- enumtype.enumvalues[enumtype.enumvalues.length-1].name %>
-        };
+        {<%
+    function decimalToHex(d) {
+      var hex = d.toString(16);
+      return "0x" + hex;
+    }
 
+    var enumIntValue = 1;
+    for(var i=0; i < enumtype.enumvalues.length; i++) { 
+        var enumval = enumtype.enumvalues[i].name; 
+        var enumIntValueString = "";
+        var trailingComma = i == enumtype.enumvalues.length - 1 ? "" : ",";
+        if (enumtype.isFlagEnum) {
+            if (i == 0) {
+                if (enumval !== "None") {
+                    throw Error("Unexpected: flag enum should define None value: " + enumtype.name.toString() + ":" + enumval);
+                }
+                enumIntValueString = " = " + decimalToHex(0);
+            } else {
+                enumIntValueString = " = " + decimalToHex(enumIntValue);
+                enumIntValue = enumIntValue * 2;
+            }
+        }
+        %>
+            <%- enumtype.name %><%- enumval %><%- enumIntValueString %><%- trailingComma %><%
+    } %>
+        };
+<%  if (enumtype.isFlagEnum) { %>
+        DEFINE_ENUM_FLAG_OPERATORS(<%- enumtype.name %>);
+<%  } // endif %>
         inline void ToJsonEnum(const <%- enumtype.name %> input, Json::Value& output)
-        {
-<% for(var i=0; i<enumtype.enumvalues.length; i++) { var enumval = enumtype.enumvalues[i]
-%>            if (input == <%- enumtype.name %>::<%- enumtype.name %><%- enumval.name %>)
+        {<%
+    if (enumtype.isFlagEnum) { %>
+            std::string separator{};
+            std::stringstream ss;
+<%
+        for(var i=0; i < enumtype.enumvalues.length; i++) { 
+            var enumval = enumtype.enumvalues[i].name; 
+            if (enumval === "None") { %>
+            if (input == <%- enumtype.name %>::<%- enumtype.name %><%- enumval %>)
+            {
+                output = Json::Value{ <%- enumval.name %> };
+                return;
+            }<%
+            } else { %>
+            if ((input & <%- enumtype.name %>::<%- enumtype.name %><%- enumval %>) == <%- enumtype.name %>::<%- enumtype.name %><%- enumval %>)
+            {
+                ss << separator << "<%- enumval %>";
+                separator = ",";
+            }<%
+            } // end if
+        } // end for %>
+
+            output = Json::Value{ ss.str().data() };<%
+    } else {
+        for(var i=0; i<enumtype.enumvalues.length; i++) { 
+            var enumval = enumtype.enumvalues[i] %>
+            if (input == <%- enumtype.name %>::<%- enumtype.name %><%- enumval.name %>)
             {
                 output = Json::Value("<%- enumval.name %>");
                 return;
-            }
-<% } %>        }
+            }<%
+        } // end for
+    } // end if %>
+        }
         inline void FromJsonEnum(const Json::Value& input, <%- enumtype.name %>& output)
         {
             if (!input.isString())
