@@ -100,11 +100,22 @@ function makeApiFiles(api, sourceDir, apiOutputDir) {
 
 // *************************** Internal utility methods ***************************
 function getEnumTypes(datatypes) {
+
+    var flagEnums = ["ExternalFriendSources"];
     var enumtypes = [];
 
-    for (var typeIdx in datatypes) // Add all types and their dependencies
-        if (datatypes[typeIdx].isenum)
+    for (var typeIdx in datatypes) {
+        if (datatypes[typeIdx].isenum) {
+
+            // Add special annotation for flag enum types. This is currently exposed from the service spec, and we need to generate these
+            // enums a bit different on the client side
+            if (flagEnums.includes(datatypes[typeIdx].name)) {
+                datatypes[typeIdx].isFlagEnum = true;
+            }
+
             enumtypes.push(datatypes[typeIdx]);
+        }
+    }
     return enumtypes;
 }
 
