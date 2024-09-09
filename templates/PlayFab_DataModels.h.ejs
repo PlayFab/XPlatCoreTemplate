@@ -40,7 +40,9 @@ for (var enumIdx = 0; enumIdx < enumtypes.length; enumIdx++) {
     } %>
         };
 <%  if (enumtype.isFlagEnum) { %>
+#if defined(PLAYFAB_PLATFORM_WINDOWS) || defined(PLAYFAB_PLATFORM_GDK) || defined(PLAYFAB_PLATFORM_XBOX)
         DEFINE_ENUM_FLAG_OPERATORS(<%- enumtype.name %>);
+#endif
 <%  } // endif %>
         inline void ToJsonEnum(const <%- enumtype.name %> input, Json::Value& output)
         {<%
